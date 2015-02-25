@@ -1,0 +1,105 @@
+/**
+\page lua_api Solarus 1.4 - Référence de l'API Lua
+
+Spécification de l'API Lua des fonctions, méthodes,
+callbacks et des types définis par Solarus.
+Cette page de documentation est destinée aux créateurs
+de quêtes qui veulent écrire des scripts pour leurs
+\ref lua_api_map "maps",
+\ref lua_api_item "items",
+\ref lua_api_enemy "ennemis" et
+\ref lua_api_menu "menus".
+Pour le point de vue code C++ du moteur,
+consultez la documentation de la classe LuaContext.
+
+La plupart des types de données définis dans le moteur C++ (comme les
+\ref lua_api_sprite "sprites",
+\ref lua_api_entity "entités de map",
+\ref lua_api_movement "mouvements",
+\ref lua_api_game "sauvegardes", etc.)
+sont exportés en tant que types Lua dans l'API de script de Solarus.
+Nous donnons ici la référence complète de ces types et les fonctions
+disponibles pour chacun d'entre eux.
+L'API exporte des fonctions et types de données C++
+qui peuvent être utilisés dans vos scripts.
+Des exemples de ces fonctions sont
+\ref lua_api_sprite_create "créer un sprite",
+\ref lua_api_drawable_draw "afficher une image" ou
+\ref lua_api_movement_start "déplacer un ennemi".
+De façon opposé, Solarus va appeler vos propres fonctions Lua
+(si elles sont définies), par exemple pour informer votre script qu'un
+\ref lua_api_entity_on_obstacle_reached "ennemi a atteint un obstacle",
+qu'une \ref lua_api_switch_on_activated "plaque de pression a été activée"
+ou que le \ref lua_api_hero "héros"
+\ref lua_api_npc_on_interaction "parle à un personnage non-joueur".
+
+Les fichiers de script suivants sont chargés par le moteur quand ils existent :
+- Le script principal (\c main.lua) :
+  script global qui contrôle les \ref lua_api_menu "menus" (si nécéssaire)
+  avant de lancer une \ref lua_api_game "patie".
+- Le script d'une \ref lua_api_map "map" (\c maps/XXXX.lua) : contrôle la
+  map \c XXXX. Appelé lorsque le joueur entre dans la map.
+- Le script d'un \ref lua_api_enemy "ennemi" (\c enemies/XXXX.lua) :
+  contrôle un ennemi dont le type est \c XXXX.
+  Appelé lorsqu'un ennemi de ce type est créé dans la map.
+- Le script d'un \ref lua_api_item "item" (\c items/XXXX.lua) :
+  contrôle l'item d'équipment nommé \c XXXX.
+  Appelé lorsqu'une \ref lua_api_game "sauvegarde" est chargée ou créée.
+
+Tous ces différents scripts sont éxécutés dans le même état Lua.
+En d'autres mots, ils partagent les valeurs globales.
+
+Les interactions entre votre monde Lua et le moteur
+sont gérées par un tableau global prédéfinis nommée \c sol.
+L'ensemble de l'API Lua de Solarus est disponnible dans ce tableau \c sol.
+Il contient les fonctions, types et valeurs qui vous
+permettent d'intéragir avec le moteur C++.
+
+La plupart des types le l'API Lua
+(\ref lua_api_game "partie",
+\ref lua_api_item "item",
+\ref lua_api_map "map",
+\ref lua_api_entity "entité",
+\ref lua_api_movement "mouvement" et
+\ref lua_api_sprite "sprite")
+sont des userdata Lua qui ont quelque chose de spécial : elles peuvent aussi
+être indexées comme des tableaux.
+Ce mécanisme est utilisé par le moteur quand il a besoin d'invoquer des
+méthodes de callback que vous définissez dans vos objets.
+Mais vous pouvez aussi étendre ces objets avec vos propres fonctions et
+attributs.
+C'est vraiment utile dans la \ref lua_api_game "partie" et les objets de
+\ref lua_api_map "map"
+pour implémenter et stocker tout ce qui n'est pas inclus dans l'API Solarus :
+votre menu de pause, votre HUD, une énigme, ou certaines propriétées et
+fonctions utilitaire spécifique à votre quête.
+
+Les fonctionnalités suivantes sont définies dans le tableau global \c sol.
+Consultez la page de spécification de chaque fonctionnalité pour plus de
+détails.
+
+- \subpage lua_api_main "sol.main" : quelques fonctions générale.
+- \subpage lua_api_audio "sol.audio" : jouer des musiques et sons.
+- \subpage lua_api_video "sol.video" : régler le mode vidéo.
+- \subpage lua_api_input "sol.input" : vérifier l'état du clavier et du joypad.
+- \subpage lua_api_file "sol.file" :
+  accéder directement aux fichiers de données.
+- \subpage lua_api_menu "sol.menu" :
+  afficher différentes informations à l'écran.
+- \subpage lua_api_language "sol.language" : gérer les traductions.
+- \subpage lua_api_timer "sol.timer" :
+  éxécuter une action plus tard avec un certain délais.
+- \subpage lua_api_drawable "sol.sprite, sol.surface, sol.text_surface" :
+  afficher des images animées, des images fixes ou du texte, respectivement.
+- \subpage lua_api_movement "sol.movement" : déplacer des objets.
+- \subpage lua_api_game "sol.game" : gérer les données sauvegardées
+  (la vie, l'équipment, etc.) et lancer une partie.
+- \subpage lua_api_item "sol.item" :
+  contrôler un type particulier d'item d'équipment et sont comportement.
+- \subpage lua_api_map "sol.map" :
+  gérer la map courante et ces propriétés (seulement durant une partie).
+- \subpage lua_api_entity "sol.entity" : contrôle les entités placées dans
+  la map (seulement durant une partie), comme le héros, les ennemis,
+  les coffres, les personnages non-joueur, etc.
+
+*/
