@@ -15,6 +15,6 @@ Cette documentation est organisée en deux parties principales :
   vos scripts de maps et vos ennemis.
 - La spécification du format de tous les \ref quest "fichiers de données"
   inclus dans une quête. Certains d'entre eux sont gérés par l'Éditeur de
-  quête, les autres doivent être éditer manuellement.
+  quête, les autres doivent être édités manuellement.
 
 */
