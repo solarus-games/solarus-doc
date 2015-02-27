@@ -36,7 +36,7 @@ ou que le \ref lua_api_hero "héros"
 Les fichiers de script suivants sont chargés par le moteur quand ils existent :
 - Le script principal (\c main.lua) :
   script global qui contrôle les \ref lua_api_menu "menus" (si nécéssaire)
-  avant de lancer une \ref lua_api_game "patie".
+  avant de démarrer une \ref lua_api_game "patie".
 - Le script d'une \ref lua_api_map "map" (\c maps/XXXX.lua) : contrôle la
   map \c XXXX. Appelé lorsque le joueur entre dans la map.
 - Le script d'un \ref lua_api_enemy "ennemi" (\c enemies/XXXX.lua) :
@@ -78,8 +78,8 @@ Les fonctionnalités suivantes sont définies dans le tableau global \c sol.
 Consultez la page de spécification de chaque fonctionnalité pour plus de
 détails.
 
-- \subpage lua_api_main "sol.main" : quelques fonctions générale.
-- \subpage lua_api_audio "sol.audio" : jouer des musiques et sons.
+- \subpage lua_api_main "sol.main" : quelques fonctions générales.
+- \subpage lua_api_audio "sol.audio" : jouer des musiques et des sons.
 - \subpage lua_api_video "sol.video" : régler le mode vidéo.
 - \subpage lua_api_input "sol.input" : vérifier l'état du clavier et du joypad.
 - \subpage lua_api_file "sol.file" :
@@ -93,7 +93,7 @@ détails.
   afficher des images animées, des images fixes ou du texte, respectivement.
 - \subpage lua_api_movement "sol.movement" : déplacer des objets.
 - \subpage lua_api_game "sol.game" : gérer les données sauvegardées
-  (la vie, l'équipment, etc.) et lancer une partie.
+  (la vie, l'équipment, etc.) et démarrer une partie.
 - \subpage lua_api_item "sol.item" :
   contrôler un type particulier d'item d'équipment et sont comportement.
 - \subpage lua_api_map "sol.map" :
