@@ -1,7 +1,7 @@
 /**
 \page lua_api Solarus 1.4 - Référence de l'API Lua
 
-Spécification de l'API Lua des fonctions, méthodes,
+Nous spécifions ici l'API Lua des fonctions, méthodes,
 callbacks et des types définis par Solarus.
 Cette page de documentation est destinée aux créateurs
 de quêtes qui veulent écrire des scripts pour leurs
