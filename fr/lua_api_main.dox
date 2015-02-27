@@ -1,0 +1,478 @@
+/**
+\page lua_api_main fonctionnalités générales
+
+\tableofcontents
+
+\c sol.main contient des fonctionnalités générales et des fonctions utilitaires
+qui sont globales à l'éxécution du programme,
+peut importe si une partie ou certains menus sont en cours d'éxécution.
+
+\section lua_api_main_functions Fonctions de sol.main
+
+\subsection lua_api_main_load_file sol.main.load_file(script_name)
+
+Charge un fichier Lua (mais ne l'éxécute pas).
+
+Cette fonction remplace la fonction Lua standard \c loadfile().
+La différence est qu'elle cherche le fichier dans l'arbre de quête
+(qui peut être un dossier ou une archive) mais aussi dans le
+\ref lua_api_main_set_quest_write_dir "dossier d'enregistrement de la quête".
+Le dossier d'enregistrement de la quête est testé en premier.
+- \c script_name (chaine de caractère) : Nom du fichier Lua à charger
+  (avec ou sans extension) relatif au dossier de donnée ou au dossier
+  d'enregistrement de la quête.
+- Valeur de retour (fonction) : Une fonction qui représente le chunk chargé,
+  ou \c nil si le fichier n'existe pas ou ne peut pas être chargé
+  comme étant du Lua.
+
+\remark Gardez en tête que les fichiers Lua, comme tous les fichiers de
+  données de votre quête, peuvent être localisés dans une archive plutôt que
+  d'être de simples fichiers. Donc, pour les éxécuter, vous ne pouvez pas
+  utiliser les fonctions Lua standards comme \c loadfile() ou \c dofile().
+  Utilisez \ref lua_api_main_load_file "sol.main.load_file()"
+  et \ref lua_api_main_do_file "sol.main.do_file()" à la place
+  pour laisser Solarus déterminer comment localiser et ouvrir le fichier.
+
+\remark Notez cependant que \c require() peut être utilisé normalement
+  puis ce que c'est un fonction de haut niveau.
+  En effet, un chargeur spécifique est automatiquement définit par le moteur
+  de sorte que \c require() cherche dans l'archive et dans le dossier
+  d'enregistrement de la quête si nécéssaire.
+  \c require() est la méthode recommandée pour charger le code d'un autre
+  fichier, car contrairement à
+  \ref lua_api_main_load_file "sol.main.load_file()" et
+  \ref lua_api_main_do_file "sol.main.do_file()",
+  elle ne réanalyse pas le fichier à chaque fois que vous l'appelez.
+
+\subsection lua_api_main_do_file sol.main.do_file(script_name)
+
+Charge et éxécute un fichier Lua dans le contexte courant.
+
+Cette fonction remplace la fonction Lua standard \c dofile().
+La différence est qu'elle cherche le fichier dans l'arbre de quête
+(qui peut être un dossier ou une archive) mais aussi dans le
+\ref lua_api_main_set_quest_write_dir "dossier d'enregistrement de la quête".
+Le dossier d'enregistrement de la quête est testé en premier.
+Le fichier doit exister.
+
+Utilisez \ref lua_api_main_load_file "sol.main.load_file()"
+explicitement si vous avez besoin de vérifier l'existence
+d'un fichier ou pour utiliser les paramètres et valeurs de retour.
+- \c script_name (chaine de caractère) : Nom du fichier Lua à charger
+  (avec ou sans extension), relatif au dossier de donnée ou au dossier
+  d'enregistrement de la quête.
+
+\remark Cette fonction est équivalente à
+  <tt>sol.main.load_file(script_name)()</tt>.
+
+\remark \c require() est la méthode recommandée pour charger le code d'un autre
+  fichier, car contrairement à
+  \ref lua_api_main_load_file "sol.main.load_file()" et
+  \ref lua_api_main_do_file "sol.main.do_file()",
+  elle ne réanalyse pas le fichier à chaque fois que vous l'appelez.
+
+\subsection lua_api_main_reset sol.main.reset()
+
+Réinitialise l'ensemble du programme après le cycle courant.
+Lua sera entièrement arrêté puis ensuite réinitialisé.
+
+\subsection lua_api_main_exit sol.main.exit()
+
+Ferme le programme après le cycle courant.
+
+\subsection lua_api_main_get_elapsed_time sol.main.get_elapsed_time()
+
+Retourne l'intervalle de temps simulée qui s'est écoulé depuis le démarrage
+de Solarus.
+
+Cela correspond à l'intervalle de temps réelle, à moin que le système ne soit
+trop lent pour jouer à vitesse normale.
+- Valeur de retour (nombre) : L'intervalle de temps simulée qui s'est écoulé
+  depuis le démarrage du programme en milli-secondes.
+
+\remark Ce temps n'est pas réinitialisé lorsque vous appelez
+  \ref lua_api_main_reset "sol.main.reset()".
+
+\subsection lua_api_main_get_quest_write_dir sol.main.get_quest_write_dir()
+
+Retourne le sous-dossier dans lequel les fichiers spécifiques à la quête sont
+enregistrés, comme la sauvegarde et les paramètres.
+Le dossier d'enregistrement de la quête est définit dans votre fichier
+\ref quest_properties_file "quest.dat"
+et il peut être changé dynamiquement avec
+\ref lua_api_main_get_quest_write_dir "sol.main.set_quest_write_dir()".
+- Valeur de retour (chaine de caractère) : Le dossier d'enregistrement de la
+  quête, relatif au dossier d'enregistrement de Solarus,
+  ou \c nil si il n'a pas été définit.
+
+\subsection lua_api_main_set_quest_write_dir sol.main.set_quest_write_dir(quest_write_dir)
+
+Change le sous-dossier dans lequel les fichiers spécifiques à la quête sont
+enregistrés, comme la sauvegarde et les paramètres.
+Notez que le dossier d'enregistrement de la quête peut déjà être définit dans votre fichier \ref quest_properties_file "quest.dat".
+
+Vous n'avez généralement pas besoin d'appeler cette fonction, sauf si vous
+devez le changer dynamiquement pour une quelconque raison.
+
+- \c quest_write_dir (chaine de caractère) : Le dossier d'enregistrement de la
+  quête, relatif au dossier d'enregistrement de Solarus,
+  ou \c nil pour ne pas le définir.
+
+\subsection lua_api_main_load_settings sol.main.load_settings([file_name])
+
+Charge et applique les paramètres prédéfinies à partir d'un fichier
+précédemment enregistré avec
+\ref lua_api_main_save_settings "sol.main.save_settings()".
+Les paramètres prédéfinis comprennent la langue, le mode vidéo et
+le volume audio.
+
+Un dossier d'enregistrement valide doit être définit (dans votre fichier
+\ref quest_properties_file "quest.dat"
+ou en appelant
+\ref lua_api_main_set_quest_write_dir "sol.main.set_quest_write_dir()"),
+sinon cette fonction génèrera une erreur Lua.
+- \c file_name (chaine de caractère, optionnel) : Nom du fichier des
+  paramètres à charger, relatif au dossier d'enregistrement de la quête.
+  Le nom du fichier par défaut est \c settings.dat.
+- Valeur de retour (booléen) : \c true si les paramètres ont été chargés et
+  appliqués avec succès.
+
+\remark Tous ces paramètres peuvent déjà être modifiés individuellement avec
+  l'API Lua, donc vous pouvez utiliser cette fonction ou implémenter
+  quelque chose de plus adapté à vos besoins.
+
+\subsection lua_api_main_save_settings sol.main.save_settings([file_name])
+
+Enregistre les paramètres prédéfinis dans un fichier.
+Ce fichier peut être rechargé plus tard avec \ref lua_api_main_load_settings
+"sol.main.load_settings()" pour
+restaurer les paramètres enregistrés.
+Les paramètres prédéfinis comprennent la langue, le mode vidéo et
+le volume audio.
+
+Un dossier d'enregistrement valide doit être définit (dans votre fichier
+\ref quest_properties_file "quest.dat"
+ou en appelant
+\ref lua_api_main_set_quest_write_dir "sol.main.set_quest_write_dir()"),
+sinon cette fonction génèrera une erreur Lua.
+- \c file_name (chaine de caractère, optionnel) : Nom du fichier des
+  paramètres à enregistrer, relatif au dossier d'enregistrement de la quête.
+  Le nom du fichier par défaut est \c settings.dat.
+- Valeur de retour (booléen) : \c true si les paramètres ont été enregistrés
+  avec succès.
+
+\remark Tous ces paramètres peuvent déjà être modifiés individuellement avec
+  l'API Lua, donc vous pouvez utiliser cette fonction ou implémenter
+  quelque chose de plus adapté à vos besoins.
+
+\subsection lua_api_main_get_distance sol.main.get_distance(x1, y1, x2, y2)
+
+Fonction utilitaire qui calcule la distance en pixels entre deux points.
+- \c x1 (nombre): Coordonnée en X du premier point.
+- \c y1 (nombre): Coordonnée en Y du premier point.
+- \c x2 (nombre): Coordonnée en X du second point.
+- \c y2 (nombre): Coordonnée en Y du second point.
+- Valeur de retour (nombre): La distance en pixels.
+
+\subsection lua_api_main_get_angle sol.main.get_angle(x1, y1, x2, y2)
+
+Fonction utilitaire qui calcule l'angle en radians entre l'axe des X et le
+vecteur spécifié.
+- \c x1 (nombre): Coordonnée en X du premier point.
+- \c y1 (nombre): Coordonnée en Y du premier point.
+- \c x2 (nombre): Coordonnée en X du second point.
+- \c y2 (nombre): Coordonnée en Y du second point.
+- Valeur de retour (nombre): L'angle en radians entre l'axe des
+  X et le vecteur spécifié.
+
+\subsection lua_api_main_get_metatable sol.main.get_metatable(type_name)
+
+Retourne la metatable d'un type userdata de Solarus.
+
+Cette fonction est vraiment puissante et doit être utilisée avec prudence.
+
+Tous les objets userdata d'un type partagent la même metatable.
+Il y a donc une metatable pour les maps, une metatable pour les parties, des
+metatables pour les ennemis, etc.
+
+La metatable d'un type stocke ce qui est commun
+à toutes les instances de ce type. Par exemple, la metatable d'un \c "ennemi"
+a un champ \c "get_life" qui est la fonction de Solarus
+\ref lua_api_enemy_get_life "enemy:get_life()" partagée par tous les ennemis.
+
+Notez que vous pouvez déjà récupérer la metatable de n'importe quel objet
+avec la fonction Lua standard \c getmetatable(object).
+Cette fonction fait la même chose, excepté que vous n'avez pas à fournir un
+objet existant : vous devez juste fournir le nom d'un type.
+Cela vous permet de manipuler les metatable d'un type avant que les objets de
+ce type ne commencent à exister, typiquement pour définir des choses avant
+qu'une partie ne démarre.
+
+Vous pouvez utiliser la metatable pour ajouter une fonction à toutes les
+instances d'un type. Donc, vous pouvez étendre l'API Solarus avec vos
+propres fonctions. Cela fonctionne aussi pour les événements (les fonctions
+que le moteur appele automatiquement lorsqu'elles existent). Par exemple,
+vous pouvez facilement fournir une fonction \c add_overlay() à toutes vos
+maps en la définissant une seule fois dans la metatable des maps.
+
+\verbatim
+-- Quelque part dans votre script principal, au moment de l'initialisation :
+
+local map_metatable = sol.main.get_metatable("map")
+function map_metatable:add_overlay(image_file_name)
+  -- Ici, self est la map.
+  self.overlay = sol.surface.create(image_file_name)
+end
+
+function map_metatable:on_draw(dst_surface)
+  if self.overlay ~= nil then
+    self.overlay:draw(dst_surface)
+  end
+end
+
+-- Maintenant, toutes vos maps auront une fonction map:add_overlay() et un
+-- événement map:on_draw() qui permet d'afficher une image additionnelle
+-- par dessus la map
+\endverbatim
+
+Lorsque vous définissez un champ dans une metatable, tout agit comme si vous
+l'aviez définit dans toutes les instances existante ou futur de ce type.
+Cependant, une instance individuelle est toujours capable de définir un champ
+avec le même nom.
+Dans ce cas, l'instance à un la priorité : le champ de la metatable est
+remplacé pour cette instance.
+
+De même, vous pouvez également supprimer (en assignant \c nil)
+ou modifier (en assignant une nouvelle valeur) n'importe quelle fonction
+de l'API de Solarus.
+Nous ne vous recommendons pas de faire ça car introduire des différences
+avec l'API officielle pourrait surprendre les personnes qui contribuent à
+votre jeu.
+- \c type_name (chaine de caractère) :
+  Nom d'un type Lua de Solarus. Peut valoir :
+  \c "game" (\ref lua_api_game "partie"),
+  \c "map" (\ref lua_api_map "map"),
+  \c "item" (\ref lua_api_item "item"),
+  \c "surface" (\ref lua_api_surface "surface"),
+  \c "text_surface" (\ref lua_api_text_surface "surface de texte"),
+  \c "sprite" (\ref lua_api_sprite "sprite"),
+  \c "timer" (\ref lua_api_timer "timer"),
+  \c "movement" (\ref lua_api_movement "mouvement"),
+  \c "straight_movement" (\ref lua_api_straight_movement "mouvement direct"),
+  \c "target_movement" (\ref lua_api_target_movement "mouvement ciblé"),
+  \c "random_movement" (\ref lua_api_random_movement "mouvement aléatoire"),
+  \c "path_movement" (\ref lua_api_path_movement "mouvement par chemin"),
+  \c "random_path_movement"
+    (\ref lua_api_random_path_movement "mouvement par chemin aléatoire"),
+  \c "path_finding_movement"
+    (\ref lua_api_path_finding_movement "mouvement par recherche de chemin"),
+  \c "circle_movement" (\ref lua_api_circle_movement "mouvement circulaire"),
+  \c "jump_movement" (\ref lua_api_jump_movement "mouvement de saut"),
+  \c "pixel_movement" (\ref lua_api_pixel_movement "mouvement au pixel près"),
+  \c "hero" (\ref lua_api_hero "héros"),
+  \c "dynamic_tile" (\ref lua_api_dynamic_tile "tile dynamique"),
+  \c "teletransporter" (\ref lua_api_teletransporter "téléporteur"),
+  \c "destination" (\ref lua_api_destination "destination"),
+  \c "pickable" (\ref lua_api_pickable "trésor ramassable"),
+  \c "destructible" (\ref lua_api_destructible "objet destructible"),
+  \c "carried_object" (\ref lua_api_carried_object "objet porté"),
+  \c "chest" (\ref lua_api_chest "coffre"),
+  \c "shop_treasure" (\ref lua_api_shop_treasure "article de magasin"),
+  \c "enemy" (\ref lua_api_enemy "ennemi"),
+  \c "npc" (\ref lua_api_npc "personnage non-joueur"),
+  \c "block" (\ref lua_api_block "bloc"),
+  \c "jumper" (\ref lua_api_jumper "sauteur"),
+  \c "switch" (\ref lua_api_switch "bouton"),
+  \c "sensor" (\ref lua_api_sensor "capteur"),
+  \c "separator" (\ref lua_api_separator "séparateur"),
+  \c "wall" (\ref lua_api_wall "mur"),
+  \c "crystal" (\ref lua_api_crystal "cristal"),
+  \c "crystal_block" (\ref lua_api_crystal_block "plot de cristal"),
+  \c "stream" (\ref lua_api_stream "flux"),
+  \c "door" (\ref lua_api_door "porte"),
+  \c "stairs" (\ref lua_api_stairs "escaliers"),
+  \c "bomb" (\ref lua_api_bomb "bombe"),
+  \c "explosion" (\ref lua_api_explosion "explosion"),
+  \c "fire" (\ref lua_api_fire "feux"),
+  \c "arrow" (\ref lua_api_arrow "flèche"),
+  \c "hookshot" (\ref lua_api_hookshot "grappin"),
+  \c "boomerang" (\ref lua_api_boomerang "boomerang") ou
+  \c "custom_entity" (\ref lua_api_custom_entity "entité custom")
+
+- Valeur de retour (tableau) : La metatable de ce type,
+  ou \c nil si ce type n'existe pas.
+
+\remark Si vous etes un expert Lua, vous savez que les metatables sont un
+mécanisme très puissant. Elles sont la où la magie opère.
+Solarus utilise les metatables pour faire un tas de choses, comme vous
+permettre d'accèder aux userdatas comme si c'était des tableaux.
+Donc, vous ne devriez jamais toucher à aucune metamethod (champs dont le nom
+commence par deux underscores) dans les type userdata, en particulier
+\c __index, \c __newindex et \c __gc.
+Cela pourrait amener à un comportement non définit, et plus communément faire
+planter le programme.
+
+\subsection lua_api_main_api_get_os sol.main.get_os()
+
+Retourne le nom du système. Les valeurs possible sont :
+  \c "Windows",
+  \c "Mac OS X",
+  \c "Linux",
+  \c "iOS",
+  \c "Android".
+Si le nom correct du système n'est pas disponnible, retourne une chaine
+qui commence par le texte \c "Unknown".
+- Valeur de retour (chaine de caractère) : Le nom du système.
+
+\section lua_api_main_events Événements de sol.main
+
+Les événements sont des méthodes de callback automatiquement appelées par
+le moteur lorsque qu'elles sont définies.
+
+\subsection lua_api_main_on_started sol.main:on_started()
+
+Appelé au démarrage du programme.
+
+Cette fonction est appelée lorsque Lua démarre.
+En d'autres termes, la fonction est appelée lorsque le programme commence ou
+après qu'il ait été réinitialisé.
+Dans cette fonction, vous voudrez typiquement démarrer un menu initial
+comme un écran titre ou un écran de séléction de langues.
+Si vous préférez, vous pouez aussi démarrer immédiatement une partie.
+
+\subsection lua_api_main_on_finished sol.main:on_finished()
+
+Appelé à la fin du programme.
+
+Cette fonction est appelée lorsque Lua est sur le point d'être arrêté,
+par exemple, juste avant que le programme s'arrête ou se réinitialise.
+
+\subsection lua_api_main_on_update sol.main:on_update()
+
+Appelé à chaque cycle de la boucle principale du programme.
+
+\remark Cet événement est très puissant (parce qu'il est appelé au niveau
+  global du programme) mais il peut être couteux si vous faites de lourdes
+  opérations. Gardez en tête qu'il est appelé à chaque cycle. Vous pouvez
+  généralement utiliser d'autres callbacks pour être prévenu lorsqu'un
+  événement se déclenche. Vous pouvez aussi utiliser les
+  \ref lua_api_timer "timers" si vous voulez régulièrement
+  vérifier quelque chose.
+
+\subsection lua_api_main_on_draw sol.main:on_draw(dst_surface)
+
+Appelé lorsque l'écran du programme est redessiné.
+
+À ce moment, le moteur a déjà dessiner la partie (si une partie est en cours)
+et n'a pas encore dessiner les menus de
+\c sol.main (si vous avez créé des menus dans \c sol.main).
+Utilisez cet événement si vous voulez dessiner du contenu supplémentaire.
+- \c dst_surface (\ref lua_api_surface "surface") : La surface sur laquelle
+  l'écran est dessiné.
+
+\subsection lua_api_main_on_key_pressed sol.main:on_key_pressed(key, modifiers)
+
+Appelé lorsque l'utilisateur presse une touche du clavier.
+- \c key (chaine de caractère) : Nom de la touche qui a été pressée.
+- \c modifiers (tableau) : Un tableau dont les clés indiquent quels
+  modificateurs étaient pressés durant l'événement. Les clés possible
+  du tableau sont \c "shift", \c "control" et \c "alt".
+  Les valeurs du tableau n'ont pas d'importance.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (comme la partie).
+  Cepedant, si la touche correspond à un caractère, l'autre événement
+  \ref lua_api_main_on_character_pressed "sol.main:on_character_pressed()"
+  sera également appelé.
+
+\remark Cet événement indique la touche pressée. Si vous voulez connaître le
+  caractère correspondant à la place (si il y en a un), consultez
+  \ref lua_api_main_on_character_pressed "sol.main:on_character_pressed()".
+
+\subsection lua_api_main_on_key_released sol.main:on_key_released(key, modifiers)
+
+Appelé lorsque l'utilisateur relache une touche du clavier.
+- \c key (chaine de caractère) : Nom de la touche relachée.
+- \c modifiers (tableau) : Un tableau dont les clés indiquent quels
+  modificateurs étaient pressés durant l'événement. Les clés possible
+  du tableau sont \c "shift", \c "control" et \c "alt".
+  Les valeurs du tableau n'ont pas d'importance.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (comme la partie).
+
+\subsection lua_api_main_on_character_pressed sol.main:on_character_pressed(character)
+
+Appelé lorsque l'utilisateur entre du texte.
+
+- \c character (chaine de caractère) : une chaine de caractère en utf-8 qui
+  représente le caractére qui a été entré.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (comme la partie).
+
+\remark Lorsqu'un caractère est pressé, deux événements sont appelés :
+  \ref lua_api_main_on_key_pressed "sol.main:on_key_pressed()"
+  (indique la touche pressée)
+  et \ref lua_api_main_on_character_pressed "sol.main:on_character_pressed()"
+  (indique le caractère utf-8).
+  Si vous avez besoin d'un texte entré par l'utilisateur,
+  \ref lua_api_main_on_character_pressed "sol.main:on_character_pressed()"
+  est ce qu'il vous faut parce qu'elle prend en consideration la disposition
+  du clavier et donne une chaine de caractère en utf-8 internationnal.
+
+\subsection lua_api_main_on_joypad_button_pressed sol.main:on_joypad_button_pressed(button)
+
+Appelé lorsque l'utilisateur presse un bouton du joypad.
+- \c button (nombre) : Index du buton qui a été pressé.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (comme la partie).
+
+\subsection lua_api_main_on_joypad_button_released sol.main:on_joypad_button_released(button)
+
+Appelé lorsque l'utilisateur relache un bouton du joypad.
+- \c button (nombre): Index du buton qui a été relaché.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (comme la partie).
+
+\subsection lua_api_main_on_joypad_axis_moved sol.main:on_joypad_axis_moved(axis, state)
+
+Appelé lorsque l'utilisateur bouge un axe du joypad.
+- \c axis (nombre) : Index de l'axe qui a bougé. Habituelement, \c 0 est un
+  axe horizontal et \c 1 est un axe vertical.
+- \c state (nombre) : Le nouvel état de l'axe qui a été bougé. \c -1 signifie
+  gauche ou haut, \c 0 signifie le centre et \c 1 signifie droite ou bas.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (comme la partie).
+
+\subsection lua_api_main_on_joypad_hat_moved sol.main:on_joypad_hat_moved(hat, direction8)
+
+Appelé lorsque l'utilisateur bouge un bouton de type coolie hat (en forme de
+chapeau chinois) du joypad.
+- \c hat (nombre): Index du bouton de type coolie hat (en forme de chapeau
+  chinois) qui a été bougé.
+- \c direction8 (nombre) : La nouvelle direction du bouton de type coolie hat
+  (en forme de chapeau chinois). \c -1 signifie que le bouton est centré.
+  de \c 0 à \c 7 indique que le bouton est dans l'une des huit directions
+  principales.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (comme la partie).
+
+\subsection lua_api_main_on_mouse_pressed sol.main:on_mouse_pressed(button, x, y)
+
+Appelé lorsque l'utilisateur presse un bouton de la souris.
+- \c button (chaine de caractère) : Nom du bouton de la souris qui a été
+  pressé. Les valeurs possible sont \c "left", \c "middle", \c "right",
+  \c "x1" et \c "x2".
+- \c x (nombre) : La position en X de la souris dans les coordonnées du
+  \ref lua_api_video_get_quest_size "cadre de la quête".
+- \c y (nombre) : La position en Y de la souris dans les coordonnées du
+  \ref lua_api_video_get_quest_size "cadre de la quête".
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+
+*/
