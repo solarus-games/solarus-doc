@@ -1,0 +1,603 @@
+/**
+\page lua_api_entity Entités de map
+
+\tableofcontents
+
+Les objets placé dans la \ref lua_api_map "map"
+sont appelé entités de map (ou juste entités).
+
+Il existe beaucoup de types d'entités. Elles peuvent être déclarées dans le
+\ref quest_map_data_file "fichier de donnée de la map", ou créés dynamiquement
+en utilisant la méthode <tt>map:create_*</tt>
+de l'\ref lua_api_map "API de la map".
+
+\section lua_api_entity_overview Vue d'ensemble
+
+Toutes les entités ont une position dans la map (X, Y et Couche)
+et une taille.
+Dépendant de leur type,
+elles peuvent être visible ou non. Lorsqu'elles sont visible,
+elles sont généralement représentées par un ou plusieurs
+\ref lua_api_sprite "sprites".
+Certaines entités sont fixées, d'autres se déplacent selon un
+\ref lua_api_movement "mouvement".
+
+Les entités peuvent aussi avoir un nom qui les identifie de manière unique
+dans la map.
+C'est utile pour y accéder à partir de l'\ref lua_api_map "API de la map".
+Le nom est optionnel, mais si une entité a un nom, il doit être unique dans
+la map.
+
+Voici les types d'entités existantes.
+- \subpage lua_api_hero "Héros": Le personnage contrôlé par le joueur.
+- \subpage lua_api_tile "Tile": Une petite brique qui compose un morceau de la
+  \ref lua_api_map "map", avec un motif choisi du tileset.
+- \subpage lua_api_dynamic_tile "Tile dynamique": Un \ref lua_api_tile "tile"
+  spécial qui peut être activé ou désactivé dynamiquement
+  (les \ref lua_api_tile "tiles simples" sont optimisé pour l'éxécution).
+- \subpage lua_api_teletransporter "Téléporteur": Lorsque l'on marche
+  dessus, le \ref lua_api_hero "héros" est transporté quelque part,
+  dans la même \ref lua_api_map "map" ou dans une autre.
+- \subpage lua_api_destination "Destination": Une lieu de destination possible
+  pour les \ref lua_api_teletransporter "téléporteurs".
+- \subpage lua_api_pickable "Trésors ramassable": Un trésor placé sur le sol
+  et que le \ref lua_api_hero "héros" peut ramasser.
+- \subpage lua_api_destructible "Objet destructible": Une entité qui peut être
+  coupée ou soulevée par le \ref lua_api_hero "héros", et qui peut cacher un
+  \ref lua_api_pickable "trésor ramassable".
+- \subpage lua_api_carried_object "Objet porté": Un \ref lua_api_destructible
+  "objet destructible" soulevé et porté par le \ref lua_api_hero "héros".
+- \subpage lua_api_chest "Coffre": Un coffre qui contient un trésor.
+- \subpage lua_api_shop_treasure "Article de magasin": Un article que le \ref
+  lua_api_hero "héros" peut acheté pour un certain prix.
+- \subpage lua_api_enemy "Ennemi": Un méchant gars (peut être un boss) qui peut
+  aussi lacher un \ref lua_api_pickable "trésor ramassable" lorsqu'il est tué.
+- \subpage lua_api_npc "Presonnage non-joueur" (PNJ): Quelqu'un ou quelque
+  chose avec lequel le \ref lua_api_hero "héros" peut intéragir.
+- \subpage lua_api_block "Bloc": Une entité que le \ref lua_api_hero "héros"
+  peut pousser ou tirer.
+- \subpage lua_api_jumper "Sauteur": Lorsque l'on marche dessus, le
+  \ref lua_api_hero "héros" saute dans une direction.
+- \subpage lua_api_switch "Bouton": Un buton ou autre mécanisme que le \ref
+  lua_api_hero "héros" peut activer.
+- \subpage lua_api_sensor "Capteur": Un détecteur invisible qui détecte la
+  présence du \ref lua_api_hero "héros".
+- \subpage lua_api_separator "Séparateur": Une séparation horizontale ou
+  verticale entre deux parties de la map.
+- \subpage lua_api_wall "Mur": Un objet invisible qui bloque certains type
+  d'entitiés.
+- \subpage lua_api_crystal "Cristal": Un bouton qui baisse ou lève les
+  \ref lua_api_crystal_block "plots de cristal".
+- \subpage lua_api_crystal_block "Plot de Cristal": Un petit mur qui peut être
+  baissé (traversable) or levé (obstacle) utilisant un
+  \ref lua_api_crystal "cristal".
+- \subpage lua_api_stream "Flux": Lorsque l'on marche dessus, le \ref
+  lua_api_hero "héros" se déplace automatiquement dans une direction.
+- \subpage lua_api_door "Porte": Une porte à ouvrir avec un \ref lua_api_item
+  "item d'équipment" ou autre condition.
+- \subpage lua_api_stairs "Escaliers": Escaliers entre deux
+  \ref lua_api_map "maps" ou vers une plate-forme d'une même map.
+- \subpage lua_api_bomb "Bombe": Une bombe qui peut exploser après quelques
+  secondes et qui peut être soulevée par le \ref lua_api_hero "héros".
+- \subpage lua_api_explosion "Explosion": Une explosion qui peut blesser le
+  \ref lua_api_hero "héros" et les \ref lua_api_enemy "ennemis".
+- \subpage lua_api_fire "Feux": Une flamme qui peut blesser les
+  \ref lua_api_enemy "ennemis" et intéragir avec d'autres entités.
+- \subpage lua_api_arrow "Flèche": Une flèche tirée par l'arc.
+- \subpage lua_api_hookshot "Grappin": Un grappin tiré par le
+  \ref lua_api_hero "héros".
+- \subpage lua_api_boomerang "Boomerang": Un boomerang tiré par le
+  \ref lua_api_hero "héros".
+- \subpage lua_api_custom_entity "Entité custom": Une entité complètement
+  contrôlée par vos scripts Lua.
+
+\remark Notez que les \ref lua_api_sprite "sprites" et les
+\ref lua_api_movement "mouvements" ne sont pas des entités de map, mais ils
+peuvent être attachés aux entités
+(pour les afficher et pour les déplacer, respectivement).
+Les sprites et mouvements peuvent aussi être utilisé en dehors d'une
+\ref lua_api_map "map", par exemple dans votre écran titre ou autres
+\ref lua_api_menu "menus".
+
+\section lua_api_entity_methods Méthodes de toutes les types d'entités
+
+Ces méthodes existent dans tous les types d'entités.
+
+\subsection lua_api_entity_get_type entity:get_type()
+
+Retourne le type de l'entité.
+- Valeur de retour (chaîne de caractère) : Le type de cette entité.
+  Peut valoir :
+  \c "hero" (\ref lua_api_hero "héros"),
+  \c "dynamic_tile" (\ref lua_api_dynamic_tile "tile dynamique"),
+  \c "teletransporter" (\ref lua_api_teletransporter "téléporteur"),
+  \c "destination" (\ref lua_api_destination "destination"),
+  \c "pickable" (\ref lua_api_pickable "trésor ramassable"),
+  \c "destructible" (\ref lua_api_destructible "objet destructible"),
+  \c "carried_object" (\ref lua_api_carried_object "objet porté"),
+  \c "chest" (\ref lua_api_chest "coffre"),
+  \c "shop_treasure" (\ref lua_api_shop_treasure "article de magasin"),
+  \c "enemy" (\ref lua_api_enemy "ennemi"),
+  \c "npc" (\ref lua_api_npc "personnage non-joueur"),
+  \c "block" (\ref lua_api_block "bloc"),
+  \c "jumper" (\ref lua_api_jumper "sauteur"),
+  \c "switch" (\ref lua_api_switch "bouton"),
+  \c "sensor" (\ref lua_api_sensor "capteur"),
+  \c "separator" (\ref lua_api_separator "séparateur"),
+  \c "wall" (\ref lua_api_wall "mur"),
+  \c "crystal" (\ref lua_api_crystal "cristal"),
+  \c "crystal_block" (\ref lua_api_crystal_block "plot de cristal"),
+  \c "stream" (\ref lua_api_stream "flux"),
+  \c "door" (\ref lua_api_door "porte"),
+  \c "stairs" (\ref lua_api_stairs "escaliers"),
+  \c "bomb" (\ref lua_api_bomb "bombe"),
+  \c "explosion" (\ref lua_api_explosion "explosion"),
+  \c "fire" (\ref lua_api_fire "feux"),
+  \c "arrow" (\ref lua_api_arrow "flèche"),
+  \c "hookshot" (\ref lua_api_hookshot "grappin"),
+  \c "boomerang" (\ref lua_api_boomerang "boomerang") ou
+  \c "custom_entity" (\ref lua_api_custom_entity "entité custom")
+
+\remark Le type \c "tile" n'est pas dans cette liste car les
+  \ref lua_api_tile "tiles" n'existent pas durant
+  l'éxécution pour des raisons d'optimisations.
+
+\subsection lua_api_entity_get_map entity:get_map()
+
+Retourne la map à laquelle cette entitée appartient.
+- Valeur de retour (\ref lua_api_map "map") :
+  La map qui contient cette entité.
+
+\subsection lua_api_entity_get_game entity:get_game()
+
+Retourne la partie qui éxécute la map à laquelle cette entité appartient.
+- Valeur de retour (\ref lua_api_game "partie") : La partie courante.
+
+\subsection lua_api_entity_get_name entity:get_name()
+
+Retourne le nom de cette entité de map.
+
+Le nom qui identifie de manière unique l'entité dans la map.
+- Valeur de retour (chaîne de caractère) :
+  Le nom de l'entité, ou \c nil si l'entité n'a pas de nom
+  (le nom est optionnel).
+
+\subsection lua_api_entity_exists entity:exists()
+
+Vérifie si cette entité existe toujours dans la map.
+
+Une entité est détruite lorsque vous appelez
+\ref lua_api_entity_remove "entity:remove()"
+ou lorsque le moteur la supprime
+(par exemple un \ref lua_api_enemy "ennemi" qui est tué
+ou un \ref lua_api_pickable "trésor ramassable" qui est ramassé).
+Si vous faites référence depuis Lua à une entité qui n'existe plus du coté C++,
+cette méthode retourne \c false.
+- Valeur de retour (booléen): \c true si l'entité existe, \c false si elle
+  a été détruite.
+
+\subsection lua_api_entity_remove entity:remove()
+
+Supprime cette entité de la map et la détruit.
+
+Après que l'entité ait été détruite, \ref lua_api_entity_exists
+"entity:exists()" retourne \c false et il n'y a plus de raison de grader une
+référence d'elle du coté de Lua (mais sans risques).
+
+\subsection lua_api_entity_is_enabled entity:is_enabled()
+
+Vérifie si cette entité est activée.
+
+Lorsqu'une entité est désactivée, elle n'est pas affichée dans la map, elle ne
+se déplace pas et ne détecte pas les collisions.
+Mais elle reste existante, elle a toujours une position et elle peut être réactivée par la suite.
+- Valeur de retour (booléen) : \c true si cette entité est activée.
+
+\subsection lua_api_entity_set_enabled entity:set_enabled([enabled])
+
+Active ou désactive cette entité.
+
+Lorsqu'une entité est désactivée, elle n'est pas affichée dans la map, elle ne
+se déplace pas et ne détecte pas les collisions.
+Les éventuels
+\ref lua_api_movement "mouvement",
+\ref lua_api_sprite "sprites"
+et
+\ref lua_api_timer "timers"
+sont suspendus et reprendront lorsque l'entité sera à nouveau activée.
+Tant que l'entité est désactivée, elle reste existante, elle a toujours une position et elle peut être réactivée par la suite.
+- \c enabled (booléen, optionnel) : \c true pour activer l'entité,
+  \c false pour la désactiver. Aucune valeur signifie \c true.
+
+\subsection lua_api_entity_get_size entity:get_size()
+
+Retourne la taille de la bounding box de cette entité.
+
+La
+\ref lua_api_entity_get_bounding_box "bounding box"
+détermine la position de l'entité dans la map.
+C'est un rectangle dont la largeur et la hauteur sont multiples
+de 8 pixels.
+La bounding box est utilisée pour détecter si l'entité chevauche des obstacles
+ou d'autres entités.
+- Valeur de retour 1 (nombre) : Largeur de l'entité en pixels.
+- Valeur de retour 2 (nombre) : Hauteur de l'entité en pixels.
+
+\remark Notez que les \ref lua_api_sprite "sprites" d'une entité peuvent avoir
+  une taille différente de l'entité elle-même.
+
+\subsection lua_api_entity_get_origin entity:get_origin()
+
+Retourne le point d'origine de cette entité, relatif au coin suppérieur gauche
+de sa \ref lua_api_entity_get_bounding_box "bounding box".
+
+Lorsqu'une entité est située à une certaine coordonée dans la
+\ref lua_api_map "map", le point d'origine détermine quel point exacte de la
+bounding box de l'entité est à cette coordonnée.
+Ce n'est pas nécessairement le coin suppérieur gauche de la
+bounding box de l'entité.
+
+Le point d'origine est habituellement le point central de contact entre
+l'entité et le sol. Par exemple, le point d'origine du
+\ref lua_api_hero "héros", des \ref lua_api_enemy "ennemis", des
+\ref lua_api_npc "personnages non-joueur" et de la plupart des entités
+est le centre de leur ombre.
+Ainsi, pour les entités de taille (<tt>16,16</tt>), le point d'origine est
+souvent (<tt>8,13</tt>).
+
+La propriété du point d'origine permet aux entités de différentes taille
+d'avoir des points de références comparables qui peuvent être utilisés par
+le moteur.
+En effet, lorsque deux ennemis se chevauchent, le moteur a besoin de
+déterminer lequel des deux doit être affiché en premier
+(c'est toujours celui avec la plus petite coordonnée en Y).
+Parfois, le moteur a aussi besoin de calculer l'angle entre deux entités,
+par exemple pour repousser un ennemi qui vient d'être frappé.
+Utiliser le coin suppérieur gauche de leur
+\ref lua_api_entity_get_bounding_box "bounding box"
+ne donnerait pas l'angle correct (sauf si les deux entités ont la même taille).
+
+Le point d'origine est aussi le point de synchronisation d'une entitée avec ces
+\ref lua_api_sprite "sprites" (parce qu'à nouveau, une entité qui à une
+taille donnée peut avoir des sprites avec des tailles différentes).
+- Valeur de retour 1 (nombre) : Coordonnée en X du point d'origine en pixels,
+  relatif au coin suppérieur gauche de la bounding box de l'entité.
+- Valeur de retour 2 (nombre) : Coordonnée en Y du point d'origine en pixels,
+  relatif au coin suppérieur gauche de la bounding box de l'entité.
+
+\subsection lua_api_entity_get_position entity:get_position()
+
+Retourne la position de cette entité dans la \ref lua_api_map "map"
+(coordonnée et couche).
+- Valeur de retour 1 (nombre) : Coordonnée en X du
+  \ref lua_api_entity_get_origin "point d'origine" de l'entité,
+  relatif au coin suppérieur gauche de la map.
+- Valeur de retour 2 (nombre) : Coordonnée en Y du
+  \ref lua_api_entity_get_origin "point d'origine" de l'entité,
+  relatif au coin suppérieur gauche de la map.
+- Valeur de retour 3 (nombre) : Couche où l'entité est dans la map
+  (\c 0 : couche basse, \c 1 : couche intérmédiaire, \c 2 : couche haute).
+
+\subsection lua_api_entity_set_position entity:set_position(x, y, [layer]):
+
+Change instantanément la position de cette entité dans la map
+(coordonnée et couche).
+Le \ref lua_api_entity_get_origin "point d'origin" de l'entité est placé à
+cette coordonnée,
+relatif au coin suppérieur gauche de la map.
+Tout mouvement ou action précédemment éxécuté sur cette entité
+continue normalement.
+- \c x (nombre) : Nouvelle coordonnée en X.
+- \c y (nombre) : Nouvelle coordonnée en Y.
+- \c layer (nombre, optionnel) : Nouvelle couche
+  (\c 0 : couche basse, \c 1 : couche intérmédiaire, \c 2 : couche haute).
+  Par défaut, la couche n'est pas changée.
+
+\remark Faites attention : cette fonction ne vérifie pas les collisions avec
+les obstacles.
+
+\subsection lua_api_entity_get_center_position entity:get_center_position()
+
+Retourne la coordonnée du point central de cette entité dans la
+\ref lua_api_map "map".
+- Valeur de retour 1 (nombre) : Coordonnée en X du centre de la bounding box
+  de cette entité,
+  relatif au coin suppérieur gauche de la map.
+- Valeur de retour 2 (nombre) : Coordonnée en Y du centre de la bounding box
+  de cette entité,
+  relatif au coin suppérieur gauche de la map.
+
+\subsection lua_api_entity_get_bounding_box entity:get_bounding_box()
+
+Retourne le rectangle qui représente la
+\ref lua_api_entity_get_position "coordonnée"
+et la
+\ref lua_api_entity_get_size "taille" de cette entité
+dans la
+\ref lua_api_map "map".
+
+La
+\ref lua_api_entity_get_bounding_box "bounding box"
+détermine la position de l'entité dans la map.
+C'est un rectangle dont la largeur et la hauteur sont multiples de 8 pixels.
+La bounding box est utilisée pour détecter si les entités chevauchent des
+obstacles ou d'autres entités.
+- Valeur de retour 1 (nombre) : Coordonnée en X du coin suppérieur gauche de la
+  bounding box.
+- Valeur de retour 2 (nombre) : Coordonnée en Y du coin suppérieur gauche de la
+  bounding box.
+- Valeur de retour 3 (nombre) : Largeur de la bounding box.
+- Valeur de retour 4 (nombre) : Hauteur de la bounding box.
+
+\remark Les sprites de cette entité (si elle en a) peuvent être plus grand que
+la bounding box.
+
+\subsection lua_api_entity_overlaps entity:overlaps(x, y, [width, height]), entity:overlaps(other_entity)
+
+Vérifie si la
+\ref lua_api_entity_get_bounding_box "bounding box"
+de cette entitée chevauche un rectangle, un point ou une autre entité.
+
+Pour vérifier avec un rectangle ou un point :
+- \c x (nombre) : Coordonnée en X du coin suppérieur gauche du rectangle
+  à vérifier.
+- \c y (nombre) : Coordonnée en Y du coin suppérieur gauche du rectangle
+  à vérifier.
+- \c width (nombre, optionnel) : Largeur du rectangle (par défaut \c 1).
+- \c height (nombre, optionnel) : Hauteur du rectangle (par défaut \c 1).
+- Valeur de retour (booléen) : \c true si la bounding box de cette entité
+  chevauche le rectangle.
+
+Pour vérifier avec la bounding box d'une autre entité :
+- \c other_entity (\ref lua_api_entity "entité") : L'entité à vérifier.
+- Valeur de retour (booléen) : \c true si les deux bounding box
+  se chevauchent.
+
+\subsection lua_api_entity_get_distance entity:get_distance(x, y), entity:get_distance(other_entity)
+
+Retourne la distance en pixels entre cette entité et un point ou une
+autre entité.
+
+Pour calculer la distance avec un point :
+- \c x (nombre) : Coordonnée en X du point.
+- \c y (nombre) : Coordonnée en Y du point..
+- Valeur de retour (nombre) : La distance en pixels entre le point d'origine de
+  cette entité et le point spécifié.
+
+Pour calculer la distance avec une autre entité :
+- \c other_entity (\ref lua_api_entity "entitée") : L'entité avec laquelle
+  calculer la distance.
+- Valeur de retour (nombre) : La distance en pixels entre le point d'origine de
+  cette entité et le point d'origin de l'autre entité.
+
+\subsection lua_api_entity_get_angle entity:get_angle(x, y), entity:get_angle(other_entity)
+
+Retourne l'angle entre l'axe X et le vecteur qui lie cette entité à un point.
+
+Pour calculer l'angle avec un point :
+- \c x (nombre) : Coordonnée en X du point.
+- \c y (nombre) : Coordonnée en Y du point.
+- Valeur de retour (nombre) : L'angle en radians entre le point d'origine de
+  cette entité et le point spécifié.
+  L'angle est entre \c 0 et <tt>2 * math.pi</tt>.
+
+Pour calculer l'angle avec une autre entité :
+- \c other_entity (\ref lua_api_entity "entitée") : L'entité avec laquelle
+  calculer l'angle.
+- Valeur de retour (nombre) : L'angle en radians entre le point d'origine de
+  cette entité et le point d'origine de l'autre entité.
+  L'angle est entre \c 0 et <tt>2 * math.pi</tt>.
+
+\subsection lua_api_entity_get_direction4_to entity:get_direction4_to(x, y), entity:get_direction4_to(other_entity)
+
+Comme
+\ref lua_api_entity_get_angle "entity:get_angle()",
+mais plutôt q'un angle en radians,
+retourne la direction la plus proche entre les 4 directions principale.
+
+C'est une fonction utilitaire qui permet essentielement d'arrondir le
+résultat de \ref lua_api_entity_get_angle "entity:get_angle()".
+
+Pour calculer la direction avec un point :
+- \c x (nombre) : Coordonnée en X du point.
+- \c y (nombre) : Coordonnée en Y du point.
+- Valeur de retour (nombre): La direction que cette entité devrait prendre
+  pour regarder vers ce point, entre 0 (Est) and 3 (Sud).
+
+Pour calculer la direction avec une autre entité :
+- \c other_entity (\ref lua_api_entity "entitée") : Une entité à cibler.
+- Valeur de retour (nombre) : La direction que cette entité devrait prendre
+  pour regarder vers l'autre entité, entre 0 (Est) et 3 (Sud).
+
+\subsection lua_api_entity_get_direction8_to entity:get_direction8_to(x, y), entity:get_direction8_to(other_entity)
+
+Comme
+\ref lua_api_entity_get_angle "entity:get_angle()",
+mais plutôt q'un angle en radians,
+retourne la direction la plus proche entre les 8 directions principale.
+
+C'est une fonction utilitaire qui permet essentielement d'arrondir le
+résultat de \ref lua_api_entity_get_angle "entity:get_angle()".
+
+Pour calculer la direction avec un point :
+- \c x (nombre) : Coordonnée en X du point.
+- \c y (nombre) : Coordonnée en Y du point.
+- Valeur de retour (nombre): La direction que cette entité devrait prendre
+  pour regarder vers ce point, entre 0 (Est) and 7 (Sud-Est).
+
+Pour calculer la direction avec une autre entité :
+- \c other_entity (\ref lua_api_entity "entitée") : Une entité à cibler.
+- Valeur de retour (nombre) : La direction que cette entité devrait prendre
+  pour regarder vers l'autre entité, entre 0 (Est) et 7 (Sud-Est).
+
+\subsection lua_api_entity_snap_to_grid entity:snap_to_grid()
+
+S'assure que le coin suppérieur gauche de cette entité est aligné avec la
+grille de 8*8 de la \ref lua_api_map "map".
+
+\remark Faites attention : cette fonction ne vérifie pas les collisions avec
+les obstacles.
+
+\subsection lua_api_entity_bring_to_front entity:bring_to_front()
+
+Place cette entité devant toutes les autres entités de la même couche.
+
+Depuis que les entités qui ont la même couche peuvent se chevaucher,
+vous devez utiliser cette fonction pour changer leur Z-index.
+
+\remark Certaines entités comme les PNJs, ennemis, le héros
+  et certaines
+  \ref lua_api_custom_entity_is_drawn_in_y_order "entités custom"
+  ont la particularitées d'être affichées dans l'ordre des Y.
+  Le Z-index de ces entités est déjà géré par le moteur pour afficher
+  les entités plus au nord derrière celles plus au sud.
+  Donc, cette fonction n'a aucun effet sur elles.
+
+\subsection lua_api_entity_bring_to_back entity:bring_to_back()
+
+Place cette entité derrière toutes les autres entités de la même couche.
+
+Depuis que les entités qui ont la même couche peuvent se chevaucher,
+vous devez utiliser cette fonction pour changer leur Z-index.
+
+\remark Certaines entités comme les PNJs, ennemis, le héros
+  et certaines
+  \ref lua_api_custom_entity_is_drawn_in_y_order "entités custom"
+  ont la particularitées d'être affichées dans l'ordre des Y.
+  Le Z-index de ces entités est déjà géré par le moteur pour afficher
+  les entités plus au nord derrière celles plus au sud.
+  Donc, cette fonction n'a aucun effet sur elles.
+
+\subsection lua_api_entity_get_optimization_distance entity:get_optimization_distance()
+
+Retourne la distance d'optimisation de cette entité.
+
+Au dessus de cette distance de la zone visible de la map,
+les entités seront suspendus.
+La valeur \c 0 signifie une distance infine
+(l'entité n'est jamais optimisée à distance).
+- Valeur de retour (nombre) : La distance d'optimisation en pixels.
+
+\subsection lua_api_entity_set_optimization_distance entity:set_optimization_distance(optimization_distance)
+
+Change la distance d'optimisation de cette entité.
+
+Au dessus de cette distance de la zone visible de la map,
+les entités seront suspendus.
+Lorsqu'une entité est suspendue, ces
+\ref lua_api_movement "mouvements",
+\ref lua_api_sprite "sprites"
+et
+\ref lua_api_timer "timers"
+sont également suspendus.
+
+La valeur \c 0 signifie une distance infine
+(l'entité n'est jamais optimisée à distance).
+La valeur par défaut dépends du type d'entité et est habituelement suffisant,
+mais vous pouvez avoir besoin de l'augmenter dans certains cas, ou même
+de le désactiver par exemple
+pour un
+\ref lua_api_enemy "ennemi"
+dans une immense salle.
+- \c optimization_distance (nombre) : La nouvelle distance d'optimisation
+  en pixels.
+  \c 0 désactive cette suspension automatique.
+
+\subsection lua_api_entity_is_in_same_region entity:is_in_same_region(other_entity)
+
+Vérifie si une autre entité est dans la même région que celle-ci.
+
+Les régions de la map sont définies par la position des
+\ref lua_api_separator "séparateurs".
+Vous pouvez utiliser cette fonction pour vous assurez qu'un
+\ref lua_api_enemy "ennemi" proche du
+\ref lua_api_hero "héros" mais de l'autre coté d'un séparateur n'ait pas envie
+de l'attaquer.
+- \c other_entity (\ref lua_api_entity "entitée") : L'autre entité.
+- Valeur de retour (booléen) : \c true si les deux entités sont dans la
+  même région.
+
+\subsection lua_api_entity_test_obstacles entity:test_obstacles(dx, dy, [layer])
+
+Vérifie si il pourrait y avoir collision avec un obstacle
+si cette entité était déplacée.
+- \c dx (nombre): Décalage en X du déplacement en pixels
+  (\c 0 signifie la position courante en X).
+- \c dy (nombre): Décalage en Y du déplacement en pixels
+  (\c 0 signifie la position courante en Y).
+- \c layer (nombre, optionnel): Couche à vérifier.
+  Aucune valeur signifie la couche courante.
+- Valeur de retour (booléen): \c true si il pourrait y avoir collision à cette
+  position.
+
+\subsection lua_api_entity_is_visible entity:is_visible()
+
+Vérifie si cette entité est visible.
+
+Lorsque l'entité est invisible, ces sprites (si elle en a) ne sont pas affichés,
+mais tout le reste continue normalement, incluant les collisions.
+- Valeur de retour (booléen): \c true si l'entité est visible.
+
+\subsection lua_api_entity_set_visible entity:set_visible([visible])
+
+Rend l'entité visible ou non.
+
+Lorsque l'entité est invisible, ces sprites (si elle en a) ne sont pas affichés,
+mais tout le reste continue normalement, incluant les collisions.
+- \c visible (booléen, optionnel): \c true pour rendre l'entité visible,
+  \c false pour la rendre invisible. Aucune valeur signifie \c true.
+
+\subsection lua_api_entity_get_movement entity:get_movement()
+
+Retourne le mouvement courant de cette entité.
+- Valeur de retour (\ref lua_api_movement "mouvement"): Le mouvement courant,
+  ou \c nil si l'entité n'est pas en cours de déplacement.
+
+\subsection lua_api_entity_stop_movement entity:stop_movement()
+
+Arrête le mouvement courant de cette entité si elle en a.
+
+\section lua_api_entity_events Événements de tous les types d'entités
+
+Les événements sont des méthodes de callback automatiquement appelées par
+le moteur lorsque qu'elles sont définies.
+
+\subsection lua_api_entity_on_created entity:on_created()
+
+Appelé lorsque l'entité vient juste d'être crée dans la map.
+
+\subsection lua_api_entity_on_removed entity:on_removed()
+
+Appelé lorsque l'entité est sur le point d'être supprimée de la map
+(et donc détruite).
+
+\subsection lua_api_entity_on_position_changed entity:on_position_changed(x, y, layer)
+
+Appelé lorsque les coordonnées de cette entité viennent juste de changer.
+- \c x (nombre): La nouvelle coordonnée en X de cette entité.
+- \c y (nombre): La nouvelle coordonnée en Y de cette entité.
+- \c layer (nombre): La nouvelle couche de cette entité.
+
+\subsection lua_api_entity_on_obstacle_reached entity:on_obstacle_reached(movement)
+
+Appelé lorsqu'un \ref lua_api_movement "mouvement"
+de cette entité est arrêté par un obstacle.
+
+Lorsqu'un obstacle est atteint, cet événement est appelé à la place de
+\ref lua_api_entity_on_position_changed "entity:on_position_changed()".
+- \c movement (\ref lua_api_movement "mouvement"): Le mouvement de l'entité.
+
+\subsection lua_api_entity_on_movement_changed entity:on_movement_changed(movement)
+
+Appelé lorsque certains paramètres du
+\ref lua_api_movement "mouvement" de cette entité
+(comme la vitesse ou l'angle) viennent juste de changer.
+- \c movement (\ref lua_api_movement "mouvement"): Le mouvement de l'entité.
+
+\subsection lua_api_entity_on_movement_finished entity:on_movement_finished()
+
+Appelé lorsque le
+\ref lua_api_movement "mouvement"
+de l'entité est terminé (si il a une fin).
+
+*/
