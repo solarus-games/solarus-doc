@@ -29,7 +29,7 @@ The map has 3 distinct layers that are stacked: the low layer, the
 intermediate layer and the high layer.
 Each layer has its own set of entities.
 Layers allow to implement maps with multi-level content, like a bridge
-between two higher platforms. The \ref lua_api_hero "hero" 
+between two higher platforms. The \ref lua_api_hero "hero"
 (as well as \ref lua_api_enemy "enemies" and any other
 \ref lua_api_entity "map entity") is then able to
 walk either above or under the bridge, depending on his layer.
@@ -110,7 +110,7 @@ opening a \ref lua_api_door "door" when a
 making a \ref lua_api_chest "treasure chest" appear when some
 \ref lua_api_enemy "enemies" are killed,
 showing a dialog with an \ref lua_api_npc "NPC" that depends on
-whether the player has accomplished a particular action before, etc. 
+whether the player has accomplished a particular action before, etc.
 
 \subsection lua_api_map_overview_lifetime Lifetime of maps
 
@@ -223,6 +223,7 @@ local map = ...
 
 function map:on_started()
   map.next_switch_index = 1
+  map.nb_switches = map:get_entities_count("puzzle_switch_")
 end
 
 local function puzzle_switch_activated(switch)
@@ -236,7 +237,7 @@ for switch in map:get_entities("puzzle_switch_") do
 end
 
 function map:check_switch(switch)
-  if switch:get_name() == "switch_" .. map.next_switch_index then
+  if switch:get_name() == "puzzle_switch_" .. map.next_switch_index then
     -- Okay so far.
     map.next_switch_index = map.next_switch_index + 1
     if map.next_switch_index > map.nb_switches then
@@ -257,7 +258,7 @@ end
 
 This improved version is more evolutive: it does not even hardcode the number
 of \ref lua_api_switch "switches" in the puzzle.
-Thus, if you add a switch called \c "switch_4" from the editor one day,
+Thus, if you add a switch called \c "puzzle_switch_4" from the editor one day,
 the script will be directly take it into account in the puzzle.
 
 \section lua_api_map_methods Methods of the type map
@@ -412,15 +413,17 @@ During the sequence, the camera ignores
 
 The game is suspended during the whole sequence (meaning that
 the hero and other \ref lua_api_entity "map entities" cannot move).
-- x (number): X coordinate of the target, relative to the map's top-left corner.
-- y (number): Y coordinate of the target, relative to the map's top-left corner.
-- speed (number): Speed of the camera movement in pixels per second
+- \c x (number): X coordinate of the target, relative to the map's top-left
+  corner.
+- \c y (number): Y coordinate of the target, relative to the map's top-left
+  corner.
+- \c speed (number): Speed of the camera movement in pixels per second
   (a recommended value is \c 250).
-- callback (function): A function to be called when the camera reaches the
+- \c callback (function): A function to be called when the camera reaches the
   target (after \c delay_before).
-- delay_before (number, optional): A delay in milliseconds before calling
+- \c delay_before (number, optional): A delay in milliseconds before calling
   your function once the target is reached (default \c 1000).
-- delay_after (number, optional): A delay in milliseconds after calling
+- \c delay_after (number, optional): A delay in milliseconds after calling
   your function, before the camera goes back (default \c 1000).
 
 Example of use:
@@ -592,7 +595,7 @@ to notice the change, typically when your map starts
 \subsection lua_api_map_get_entity map:get_entity(name)
 
 Returns the \ref lua_api_entity "map entity" with the specified name
-if it exists on this map. 
+if it exists on this map.
 Entity names are unique (two entities cannot exist on the map
 with the same name at the same time).
 The name is optional: some entities may have no name. In this case, you cannot
@@ -981,7 +984,7 @@ on the map.
     and \c 7 (South-East).
     If the direction is horizontal, the width must be \c 8 pixels.
     If the direction is vertical, the height must be \c 8 pixels.
-    If the direction is diagonal, the size must be square. 
+    If the direction is diagonal, the size must be square.
   - \c jump_length (number): Length of the baseline of the jump in pixels
     (see the \ref lua_api_jump_movement "jump movement" page for details).
 - Return value (\ref lua_api_jumper "jumper"): The jumper created.
@@ -1449,7 +1452,7 @@ on the map.
   - \c direction (number): Direction where the stairs should be turned
     between \c 0 (East of the room) and \c 3 (South of the room).
     For stairs inside a single floor, this is the direction of going upstairs.
-  - \c subtype (number): Kind of stairs to create: 
+  - \c subtype (number): Kind of stairs to create:
     - \c 0: Spiral staircase going upstairs.
     - \c 1: Spiral staircase going downstairs.
     - \c 2: Straight staircase going upstairs.
