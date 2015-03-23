@@ -513,7 +513,7 @@ Sets the configuration of \ref lua_api_crystal_block
 This state persists accross maps of the same \ref lua_api_map_get_world
 "world". It is reset when the world changes and when the
 \ref lua_api_game "savegame" is reloaded.
-- \c inverted (boolean): \c false to set the initial configuration
+- \c state (boolean): \c false to set the initial configuration
   (orange blocks lowered), \c true to the modified one (blue blocks lowered).
 
 \subsection lua_api_map_change_crystal_state map:change_crystal_state()
