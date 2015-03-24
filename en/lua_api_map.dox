@@ -1786,6 +1786,8 @@ You can use this event to override the normal built-in behavior of the game
 command.
 - \c command (string): Name of the built-in game command that was released.
   Possible commands are
+  \c "action", \c "attack", \c "pause", \c "item_1", \c "item_2",
+  \c "right", \c "up", \c "left" and \c "down".
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects
   (you are overriding the built-in behavior of releasing this game command).
