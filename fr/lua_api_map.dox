@@ -1,0 +1,1782 @@
+/**
+\page lua_api_map Map
+
+\tableofcontents
+
+Les maps sont les zones où la \ref lua_api_game "partie" se déroule.
+Elles peuvent être des salles, des maisons, des étages entier de donjon,
+des parties du monde extérieur ou n'importe quel autre endroit.
+La map active contient de nombreux objets appelés
+\ref lua_api_entity "entités de map" (ou juste "entités" pour faire court).
+Les entités comprennent tout ce qui a une position dans la map :
+le \ref lua_api_hero "héros",
+les \ref lua_api_tile "tiles",
+les \ref lua_api_enemy "ennemis",
+les \ref lua_api_pickable "trésors ramassable", etc.
+Consultez l'\ref lua_api_entity "API des entités" pour plus de détails.
+
+\section lua_api_map_overview Vue d'ensemble
+
+\subsection lua_api_map_overview_position Coordonnées et couche
+
+Une map a une forme rectangulaire dont la taille est donnée en pixels.
+La largeur et la hauteur sont toujours multiple de 8 pixels, et la plupart des
+\ref lua_api_entity "entités de map" restent généralement alignés sur
+une grille de carrés de 8x8 pixels (excepté lorsqu'ils sont en mouvement).
+
+Ainsi, chaque \ref lua_api_entity "entité" a des coordonnées <tt>X, Y</tt>
+dans la map. Mais sa position est également définie par une troisième valeur :
+sa couche. La carte dispose de trois couches distinctes qui sont empilés :
+la couche basse, la couche intermédiaire et la couche haute.
+Chaque couche a son propre ensemble d'entités.
+Les couches permettent d'avoir du contenu sur plusieurs niveaux dans une même
+map, comme un pont entre deux plates-formes surélvées.
+Le \ref lua_api_hero "héros" (ainsi que les \ref lua_api_enemy "ennemis" et
+toute autre \ref lua_api_entity "entité de map") est alors capable de marcher
+par-dessus ou par-dessous le pont, selon sa couche.
+Les entités comme les \ref lua_api_stairs "escaliers" et les
+\ref lua_api_jumper "sauteurs" peuvent changer la couche du héros
+automatiquement, et vous pouvez aussi le faire depuis votre script Lua.
+
+\subsection lua_api_map_overview_tileset Tileset
+
+L'apparence graphique d'une map est appelé un
+\ref quest_tileset_data_file "tileset". Le tileset définit les petits motifs
+utilisés pour afficher les \ref lua_api_tile "tiles" et aussi quelques autres
+\ref lua_api_entity "entités" qui peuvent dépendre du tileset.
+Par exemple, vous pouvez avoir un tileset de forêt, un tileset du château, etc.
+Chaque map a un seul tileset, mais les tilesets n'ont pas de limite de taille.
+
+\subsection lua_api_map_overview_files Fichiers de map
+
+Une map peut contenir de nombreux types d'\ref lua_api_entity "entités".
+Les Entités de map peuvent être déclarés dans le fichier de données de la map
+ou créés dynamiquement. Ainsi, une map avec l'id \c XXXX est géré par deux
+fichiers distincts :
+- Dans le fichier de données \ref quest_map_data_file "maps/XXXX.dat"
+  sont déclarées toutes les entités qui composent votre map (le plus
+  important : les \ref lua_api_tile "tiles").
+  Vous n'avez normalement pas besoin de modifier ce fichier à la main :
+  vous pouvez utiliser l'éditeur de quête
+  (mais si vous voulez, \ref quest_map_data_file "voici la syntaxe").
+- Dans le fichier script \c "maps/XXXX.lua" (qui est optionnel),
+  vous définissez le comportement dynamique de votre map,
+  en utilisant les propriétés du type Lua map décrit sur cette page
+  (le reste de l'API Solarus est également très utile).
+
+Lorsque le joueur entre dans une map, le moteur crée d'abord les
+\ref lua_api_entity "entités" déclarées dans les fichiers de données de la map
+\ref quest_map_data_file "maps/XXXX.dat", puis il exécute votre script
+\c "maps/XXXX.lua".
+L'objet Lua map est passé comme paramètre à votre script
+(rappelez-vous que ne importe quel script Lua est implicitement une fonction
+et peut avoir des paramètres). Utilisez la notation Lua \c "..." pour obtenir
+ce paramètre et le stocker dans une variable.
+
+Voici un exemple basique de script pour une map qui ne fait rien de spécial
+excepté jouer une musique et afficher une boîte de dialogue de bienvenue
+diabolique quand le héros y entre.
+\verbatim
+-- Premièrement, on récupère le paramètre dans une variable appelée "my_map".
+-- (En Lua, la notation "..." fait référence au(x) paramètre(s) du script.)
+local my_map = ...
+
+-- Événement appelé lorsque le joueur entre dans la map,
+-- au moment de l'initialisation.
+function my_map:on_started()
+
+  -- Joue une musique diabolique.
+  sol.audio.play_music("evil")
+end
+
+-- Événement appelé lorsque le joueur entre dans la map,
+-- après la transition d'ouverture.
+function my_map:on_opening_transition_finished()
+
+  -- Affiche un dialogue de bienvenue diabolique.
+  my_map:get_game():start_dialog("welcome_to_darkness")
+end
+\endverbatim
+
+Dans la pratique, de nombreuses maps ont de petits scripts comme celui-la, ou
+pas de script du tout. Parfois, tout ce que vous définissez dans le fichier de
+données (avec l'aide de l'éditeur de quête) est suffisant. Vous avez besoin
+d'un script quand il ya quelque chose de dynamique à programmer dans votre
+map : l'ouverture d'une \ref lua_api_door "porte" lorsqu'un
+\ref lua_api_switch "bouton" est pressé, faire apparaître un
+\ref lua_api_chest "coffre" lorsque des \ref lua_api_enemy "ennemis" sont tués,
+afficher une boîte de dialogue avec un \ref lua_api_npc "PNJ" qui dépend au
+préalable de l'accomplissement d'une action particulière par le joueur , etc.
+
+\subsection lua_api_map_overview_lifetime Durée de vie des maps
+
+A tout moment, durant la \ref lua_api_game "partie", seule une map est
+active : celle qui est dessinée sur l'écran de jeu.
+Cette map est aussi celle où le \ref lua_api_hero "héros" se trouve
+actuellement. Seule la map active a ses entités actives. Les autres maps ne
+sont pas chargés. Si le joueur quitte la map et y revient plus tard, votre
+objet Lua map sera nouveau la deuxième fois. Vos entités seront rechargées
+comme spécifié dans le \ref quest_map_data_file "fichier de données de map" et
+votre script de map sera à nouveau exécuté.
+
+Si vous voulez des données ou des comportements qui persiste lorsque le joueur
+revient, comme la position d'un \ref lua_api_npc "PNJ" ou la résolution d'une
+énigme, vous pouvez stocker les informations dans la
+\ref lua_api_game_set_value "sauvegarde" de la partie.
+Sinon, si vous ne voulez pas que ces données soient sauvegardées,
+mais que vous voulez tout de même qu'elles persistent durant la
+\ref lua_api_game "partie" courante, vous pouvez stocker les informations
+comme des champs dans l'objet de la \ref lua_api_game "partie". L'objet de la
+partie persiste jusqu'à ce que le joueur arrête de jouer et retourne à l'écran
+titre ou jusqu'à ce qu'il redémarre le jeu.
+
+\remark Certaines entités sauvegarde leur état automatiquement si vous le
+  voulez, comme le fait qu'un \ref lua_api_chest "coffre" soit ouvert, qu'une
+  \ref lua_api_door "porte" soit ouverte ou qu'un \ref lua_api_enemy "ennemi"
+  ait été tué. Par conséquent, vous n'avez rien à faire pour ces entités :
+  elles gardent leur état.
+
+\subsection lua_api_map_overview_table Accès aux maps comme des tableaux
+
+Comme pour d'autres types de Solarus (y compris la \ref lua_api_game "partie",
+les \ref lua_api_item "items" et les \ref lua_api_entity "entités de map"),
+une propriété fondamentale des maps, est que même si ce sont des userdata,
+elles peuvent également être utilisés comme des tableaux Lua.
+
+Cette propriété est en fait ce qui vous permet de définir des callbacks dans
+votre map. Mais vous pouvez stocker n'importe quelle donnée dans votre objet
+map, y compris de nouvelles fonctions spécifiques à votre map en particulier.
+Voici un exemple qui utilise cette fonctionnalité :
+\verbatim
+-- Exemple d'une map avec 3 boutons à activer dans un certain ordre.
+-- On assume que les 3 boutons existent avec les noms "puzzle_switch_1",
+-- "puzzle_switch_2" et "puzzle_switch_3".
+local map = ...
+
+function map:on_started()
+  map.next_switch_index = 1
+  -- Équivalent à : map["next_switch_index"] = 1
+end
+
+-- Appelé lorsque le joueur marche sur le bouton nommé "puzzle_switch_1".
+function puzzle_switch_1:on_activated()
+  -- Vérifie que le bouton "puzzle_switch_1" est le suivant à activer.
+  map:check_switch(self)
+end
+
+function puzzle_switch_2:on_activated()
+  map:check_switch(self)
+end
+
+function puzzle_switch_3:on_activated()
+  map:check_switch(self)
+end
+
+function map:check_switch(switch)
+  if switch:get_name() == "puzzle_switch_" .. map.next_switch_index then
+    -- C'est le bon bouton.
+    map.next_switch_index = map.next_switch_index + 1
+    if map.next_switch_index > 3 then
+      -- Terminé !
+      sol.audio.play_sound("secret")
+      map:get_game():start_dialog("congratulations")
+    end
+  else
+    -- Mauvais bouton: réinitialiser l'énigme.
+    sol.audio.play_sound("wrong")
+    puzzle_switch_1:set_activated(false)
+    puzzle_switch_2:set_activated(false)
+    puzzle_switch_3:set_activated(false)
+    map.next_switch_index = 1
+  end
+end
+\endverbatim
+Dans cet exemple, vous voyez qu'on ajoute trois valeurs à l'objet de la
+map, comme si c'était un tableau :
+\c next_switch_index (un nombre),
+\c on_started (une fonction) et
+\c check_switch (une fonction).
+En fait, on utilise aussi cette fonctionnalité sur les trois boutons :
+en leurs ajoutant une valeur \c on_activated.
+
+\remark Vous pouvez vous demander comment on peut accéder à
+  \c puzzle_switch_1, \c puzzle_switch_2 et \c puzzle_switch_3 sans les avoir
+  déclarés. Il ya un mécanisme qui rend toutes les \ref lua_api_entity
+  "entités" nommées directement accessibles dans l'environnement du script de
+  la map. Consultez \ref lua_api_map_get_entity "map:get_entity()" pour plus
+  de détails.
+
+Mais cet exemple a quelques défauts.
+Les trois \ref lua_api_switch "boutons" sont gérés par duplication de code.
+Ce qui est sujet aux erreurs parce qu'un jour, vous voudrez probablement faire
+une énigme similaire avec 50 entités au lieu de 3.
+Pour rendre votre map plus facile à maintenir, la version suivante est
+équivalente et à favoriser :
+\verbatim
+local map = ...
+
+function map:on_started()
+  map.next_switch_index = 1
+  map.nb_switches = map:get_entities_count("puzzle_switch_")
+end
+
+local function puzzle_switch_activated(switch)
+  map:check_switch(switch)
+end
+
+-- Définit la même méthode on_activated() pour les les entités dont le nom
+-- commence par "puzzle_switch_".
+for switch in map:get_entities("puzzle_switch_") do
+  switch.on_activated = puzzle_switch_activated
+end
+
+function map:check_switch(switch)
+  if switch:get_name() == "puzzle_switch_" .. map.next_switch_index then
+    -- C'est le bon bouton.
+    map.next_switch_index = map.next_switch_index + 1
+    if map.next_switch_index > map.nb_switches then
+      -- Terminé !
+      sol.audio.play_sound("secret")
+      map:start_dialog("congratulations")
+    end
+  else
+    -- Mauvais bouton: réinitialiser l'énigme.
+    sol.audio.play_sound("wrong")
+    for s in map:get_entities("puzzle_switch_") do
+      s:set_activated(false)
+    end
+    map.next_switch_index = 1
+  end
+end
+\endverbatim
+
+Cette version améliorée est plus évolutive : elle n'a pas coder en dur le
+nombre de \ref lua_api_switch "boutons" de l'énigme. Ainsi, si un jour vous
+ajoutez un bouton nommé \c "puzzle_switch_4" dans l'éditeur, le script en
+tiendra directement compte dans l'énigme.
+
+\section lua_api_map_methods Méthodes du type map
+
+\subsection lua_api_map_get_id map:get_id()
+
+Retourne l'identifiant de cette map.
+- Valeur de retour (chaîne de caractère) : Identifiant de la map.
+
+\remark Ce identifiant apparaît dans le nom des \ref
+  lua_api_map_overview_files "fichiers de map".
+
+\subsection lua_api_map_get_game map:get_game()
+
+Retourne la partie courante.
+- Valeur de retour (\ref lua_api_game "partie") : La partie qui est en train
+  d'éxécuter la map.
+
+\subsection lua_api_map_get_world map:get_world()
+
+Retourne le nom du monde qui a été définit pour cette map.
+
+Le nom du monde est une propriété optionnelle définie dans le
+\ref lua_api_map_overview_files "fichier de données de la map".
+Les mondes permettent de grouper les maps ensemble.
+Le monde peut être n'importe quel nom arbitraire. Les maps qui on le même nom
+de monde sont considérées comme faisant partie d'un même environement.
+Par exemple, votre map peut être dans un monde nommé \c "outside_world",
+\c "dungeon_1" ou \c "some_scary_cave".
+Une map qui n'a pas de monde est toujours considéré comme étant seule dans son
+propre environement.
+
+La propriété du monde est utilisé pour déterminer quand définir la position de
+départ du joueur (la position où il démarre lorsqu'il charge sa
+\ref lua_api_game "sauvegarde").
+La position de départ est automatiquement définie par le moteur lorsque le
+monde change (pas lorsque la map change).
+
+Quelques autres fonctionnalités peuvent aussi utiliser la propriété du monde,
+comme l'état des \ref lua_api_crystal_block "plots de cristal". Leur état
+persiste entre toutes les maps d'un même monde et est réinitialisé lorsque le
+monde change.
+- Valeur de retour (chaîne de caractère) : Nom du monde de la map courante.
+  \c nil signifie aucun monde.
+
+\subsection lua_api_map_get_floor map:get_floor()
+
+Retourne l'étage de la map courante si il y en a un.
+
+L'étage est une propriété optionnelle définie dans le
+\ref lua_api_map_overview_files "fichier de données de la map".
+
+Le moteur ne fait rien de particulier avec cette propriété d'étage.
+Mais vous pouvez l'utiliser dans les scripts,
+par exemple pour afficher l'étage courant dans le HUD lorsqu'il change ou pour
+faire un \ref lua_api_menu "menu" de mini-map.
+- Valeur de retour (nombre) : L'étage courant. \c 0 est le rez-de-chaussée,
+  \c 1 le premier étage, \c -1 est le premier sous-sol, etc.
+  \c nil signifie que cette map ne fait pas partie d'un système d'étage.
+
+\subsection lua_api_map_get_size map:get_size()
+
+Retourne la taille de cette map en pixels.
+- Valeur de retour 1 (nombre) : La largeur en pixels (toujours multiple de 8).
+- Valeur de retour 2 (nombre) : La hauteur en pixels (toujours multiple de 8).
+
+\subsection lua_api_map_get_location map:get_location()
+
+Retourne la position x, y de cette map dans son
+\ref lua_api_map_get_world "monde".
+
+Le moteur utilise cette information pour implémenter le défilement entre deux
+maps adjacentes.
+
+Par exemple, vous pouvez aussi utiliser cette propriété dans les scripts si
+vous voulez afficher la position du héros dans le \ref lua_api_menu "menu" de
+mini-map de votre \ref lua_api_map_get_world "monde" extérieur.
+En effet, votre monde extérieur n'est probablement pas en une seule map, mais
+elle est habituellement composée de plusieurs maps adjacentes.
+- Valeur de retour 1 (nombre) : La position en X du coin supérieur gauche
+  de cette map relative à son monde.
+- Valeur de retour 2 (nombre) : La position en Y du coin supérieur gauche
+  de cette map relative à son monde.
+
+\subsection lua_api_map_get_tileset map:get_tileset()
+
+Retourne le nom du \ref lua_api_map_overview_tileset "tileset"
+de la map courante.
+- Valeur de retour (chaîne de caractère) : Identifiant du tileset courant.
+
+\subsection lua_api_map_set_tileset map:set_tileset(tileset_id)
+
+Change le \ref lua_api_map_overview_tileset "tileset"
+de la map courante.
+
+C'est votre responsabilité d'être certain que le nouveau tileset est
+compatible avec le précédent : chaque tile du tileset précédent doit exister
+dans le nouveau et avoir exactement les même propriétés, seule l'image diffère.
+En interne, cette fonction garde actuellement les données du tileset précédent
+et ne charge que l'image du nouveau tileset.
+- \c tileset_id (chaîne de caractère) : Identifiant du nouveau tileset.
+
+\remark Si le nouveau tileset n'est pas compatible avec le précédent,
+  les tiles pourrait être affiché avec une mauvaise image.
+
+\subsection lua_api_map_get_music map:get_music()
+
+Retourne le nom de la musique associée à cette map.
+
+C'est la musique jouée lorsque la map démarre, spécifiée dans le fichier de la map. Elle peut être différente de la musique en cours de lecture.
+Pour obtenir la musique en cours de lecture, consultez
+\ref lua_api_audio_get_music "sol.audio.get_music()".
+- Valeur de retour (chaîne de caractère) : Nom de la musique de cette map,
+  relative au dossier \c musics et sans l'extension. Elle peut aussi avoir la
+  valeur spéciale \c "same" si la map spécifie de ne pas changer la musique,
+  ou \c nil si la map n'a pas spécifié de musique à jouer.
+
+\subsection lua_api_map_get_camera_position map:get_camera_position()
+
+Retourne la zone actuellement visible de la map.
+
+Excepté durant une
+\ref lua_api_map_move_camera "séquence de mouvement de caméra",
+cette zone est centrée sur le héros, et est bloquée par les limites de la map
+et ses \ref lua_api_separator "séparateurs".
+- Valeur de retour 1 (nombre) : Coordonnée en X de la zone visible.
+- Valeur de retour 2 (nombre) : Coordonnée en Y de la zone visible.
+- Valeur de retour 3 (nombre) : Largeur de la zone visible.
+- Valeur de retour 4 (nombre) : Hauteur de la zone visible.
+
+\subsection lua_api_map_move_camera map:move_camera(x, y, speed, callback, [delay_before], [delay_after])
+
+Initie une séquence de mouvement de caméra.
+
+Normalement, la caméra est toujours centré sur le \ref lua_api_hero "héros".
+Vous pouvez utiliser cette fonction pour déplacer temporairement la caméra
+quelque part ailleurs, comme à un endroit où un \ref lua_api_chest "coffre" ou
+un \ref lua_api_enemy "ennemi" pourrait apparaître.
+
+La séquence entière se déroule comme suit. La caméra se déplace vers un point
+cible. Lorsque la cible est atteinte, après un premier délais,
+votre fonction de callback est appelée. Puis, après un deuxième délais, la
+caméra retourne sur le héros.
+
+Durant la séquence, la caméra ignore les \ref lua_api_separator "séparateurs".
+
+La partie est suspendue durant toute la séquence (se qui signifie que
+le héros et les autres \ref lua_api_entity "entités de map" ne peuvent pas
+se déplacer).
+- \c x (nombre) : Coordonée en X de la cible, relative au coin supérieur gauche
+  de la map.
+- \c y (nombre) : Coordonée en Y de la cible, relative au coin supérieur gauche
+  de la map.
+- \c speed (nombre) : Vitesse du mouvement de caméra en pixels par seconde
+  (une valeur recommandée est \c 250).
+- \c callback (fonction) : Une fonction qui sera appelée lorsque la caméra
+  atteindra la cible (après le délais \c delay_before).
+- \c delay_before (nombre, optionnel) : Un délais en milli-secondes avant
+  d'appeler la fonction de callback une fois que la cible est atteinte
+  (par défaut \c 1000).
+- \c delay_after (nombre, optionnel) : Un délais en milli-secondes après
+  l'appel de la fonction de callback, avant que la caméra ne retourne sur le
+  héros (par défaut \c 1000).
+
+Exemple d'utilisation :
+\verbatim
+-- Affiche un coffre lorsque le héros active un bouton.
+function my_switch:on_activated()
+  local x, y = my_chest:get_position()
+  map:move_camera(x, y, 250, function()
+    sol.audio.play_sound("chest_appears")
+    my_chest:set_enabled(true)
+  end)
+end
+\endverbatim
+
+\remark Notez que cette méthode est asynchrone.
+  Comme pour les \ref lua_api_timer "timers", cette fonction retourne
+  immédiatement.
+  Votre callback sera automatiquement appelé plus tard par le moteur.
+
+\subsection lua_api_map_get_ground map:get_ground(x, y, layer)
+
+Retourne le type de sol (terrain) d'un point.
+
+Le sol est définit par les
+\ref lua_api_tile "tiles"
+(et autres entités qui peuvent le changer comme les
+\ref lua_api_dynamic_tile "tiles dynamiques")
+qui chevauche ce point.
+- \c x (nombre) : Coordonnée en X d'un point de la map.
+- \c y (nombre) : Coordonnée en Y d'un point de la map.
+- \c layer (nombre) : La couche
+  (\c 0: couche basse, \c 1: couche intermédiaire, \c 2: couche haute).
+- Valeur de retour (chaîne de caractère) : Le type de sol. Les valeurs possible
+  sont les même que la propriété \c ground des
+  \ref quest_tileset_data_file "fichiers de tileset" :
+  \c "empty" (vide),
+  \c "traversable" (travesable),
+  \c "wall" (mur),
+  \c "low_wall" (muret),
+  \c "wall_top_right" (mur haut droite),
+  \c "wall_top_left" (mur haut gauche),
+  \c "wall_bottom_left" (mur bas gauche),
+  \c "wall_bottom_right" (mur bas droite),
+  \c "wall_top_right_water" (mur haut droite dans l'eau),
+  \c "wall_top_left_water" (mur haut gauche dans l'eau),
+  \c "wall_bottom_left_water" (mur bas gauche dans l'eau),
+  \c "wall_bottom_right_water" (mur bas droite dans l'eau),
+  \c "deep_water" (eau profonde),
+  \c "shallow_water" (eau peu profonde),
+  \c "grass" (herbe),
+  \c "hole" (trou),
+  \c "ice" (glace),
+  \c "ladder" (échelle),
+  \c "prickles" (piquants) ou
+  \c "lava" (lave).
+
+\subsection lua_api_map_draw_sprite map:draw_sprite(sprite, x, y)
+
+Dessine un \ref lua_api_sprite "sprite" aux coordonnées de map spécifiées.
+
+Cette fonction peut être utilisée comme alternative à
+\ref lua_api_drawable_draw "sprite:draw()" afin de dessiner le sprite
+à une position relative à la map (au lieu d'une position relative à l'écran).
+
+Plus précisément, le point d'origine du sprite sera affiché à cette position,
+relative au coin supérieur gauche de la map.
+
+Normalement, les \ref lua_api_entity "entités de map" affichent
+automatiquement leur sprites, de sorte que vous n'ayez pas à appeler cette fonction.
+Cependant, vous aurez peut-être besoin de cette fonction si vous n'avez pas
+associer votre sprite à une entité pour une raison quelconque (voir
+\ref lua_api_enemy_create_sprite "enemy:create_sprite()"),
+ou si vous voulez dessiner quelque chose de relatif aux coordonnées de la map,
+mais sans utiliser une entité de map.
+
+\subsection lua_api_map_get_crystal_state map:get_crystal_state()
+
+Retourne l'état des \ref lua_api_crystal_block "plots de cristal".
+- Valeur de retour (booléen) : \c false état initial
+  (plots orange baissé), \c true état inverse (plots bleu baissé).
+
+\subsection lua_api_map_set_crystal_state map:set_crystal_state(state)
+
+Change l'état des \ref lua_api_crystal_block "plots de cristal".
+
+Cet état persiste à travers les maps d'un même \ref lua_api_map_get_world
+"monde". Il est réinitialisé lorsque le monde change et lorsque la
+\ref lua_api_game "sauvegarde" est rechargée.
+- \c state (booléen) : \c false pour l'état initial (plots orange baissé),
+  \c true pour l'état inverse (plots bleu baissé).
+
+\subsection lua_api_map_change_crystal_state map:change_crystal_state()
+
+Inverse l'état des \ref lua_api_crystal_block "plots de cristal".
+
+\remark Équivalent à
+  <tt>map:set_crystal_state(not map:get_crystal_state())</tt>.
+
+\subsection lua_api_map_open_doors map:open_doors(prefix)
+
+Ouvre les \ref lua_api_door "portes"
+dont le nom commence avec le préfixe spécifié,
+active ou désactive les \ref lua_api_dynamic_tile "tiles dynamiques"
+en conséquence et joue le \ref lua_api_audio_play_sound "son" \c "door_open".
+
+Ouvrir une porte peut être plus complexe que la simple modification d'une
+entité unique de \ref lua_api_door "porte".
+En effet, il y a souvent une porte correspondante dans la salle adjacente
+que vous voulez aussi ouvrir (la porte correspondante est une autre
+\ref lua_api_entity "entité"). Le nom des deux portes peuvent avoir le même
+préfixe, et vous pouvez utiliser cette fonction pour ouvrir les deux en même
+temps.
+
+De plus, vous voulez parfois que les
+\ref lua_api_dynamic_tile "tiles dynamiques"
+soient affichés ou masqués en fonction de l'état d'une porte.
+Quand une porte est ouverte, tous les tiles dynamiques dont le préfixe est
+le nom de la porte suivit par <tt>_open</tt> ou <tt>_closed</tt> sont
+automatiquement activé ou désactivé, respectivement.
+- \c prefix (chaîne de caractère) : Préfixe du nom des portes à ouvrir.
+
+\remark Les portes sont vraiment fermé une fois l'animation d'ouverture de
+  leur sprite terminé. Cependant, elles deviennent immédiatement des obstacles.
+
+\subsection lua_api_map_close_doors map:close_doors(prefix)
+
+Ferme les \ref lua_api_door "portes" dont le nom commence par le préfixe
+spécifié, active ou désactive les \ref lua_api_dynamic_tile "tiles dynamiques"
+en conséquence et joue le \ref lua_api_audio_play_sound "son" \c "door_closed".
+
+Fermer une porte peut être plus complexe que la simple modification d'une
+entité unique de \ref lua_api_door "porte".
+En effet, il y a souvent une porte correspondante dans la salle adjacente
+que vous voulez aussi fermer (la porte correspondante est une autre
+\ref lua_api_entity "entité"). Le nom des deux portes peuvent avoir le même
+préfixe, et vous pouvez utiliser cette fonction pour fermer les deux en même
+temps.
+
+De plus, vous voulez parfois que les
+\ref lua_api_dynamic_tile "tiles dynamiques"
+soient affichés ou masqués en fonction de l'état d'une porte.
+Quand une porte est ouverte, tous les tiles dynamiques dont le préfixe est
+le nom de la porte suivit par <tt>_open</tt> ou <tt>_closed</tt> sont
+automatiquement activé ou désactivé, respectivement.
+- \c prefix (chaîne de caractère) : Préfixe du nom des portes à fermer.
+
+\subsection lua_api_map_set_doors_open map:set_doors_open(prefix, [open])
+
+Comme \ref lua_api_map_open_doors "map:open_doors()" ou
+\ref lua_api_map_close_doors "map:close_doors()",
+mais ne joue pas de son ou d'animation de sprite.
+
+Cette fonction est destinée à être appelé lorsque vous ne voulez pas que le
+joueur remarque le changement, généralement lorsque votre map commence
+(à partir de l'événement \ref lua_api_map_on_started "map:on_started()").
+- \c prefix (chaîne de caractère) : Préfixe du nom des portes à
+  ouvrir ou fermer.
+- \c open (booléen, optionnel) : \c true pour ouvrir les portes, \c false
+  pour les fermer (aucune valeur signifie \c true).
+
+\subsection lua_api_map_get_entity map:get_entity(name)
+
+Retourne l'\ref lua_api_entity "entité de map" avec le nom spécifié si elle
+existe dans cette map. Les noms d'entités sont uniques (deux entités ne
+peuvent exister sur la carte avec le même nom en même temps). Le nom est
+optionnel : certaines entités peuvent ne pas avoir de nom. Dans ce cas, vous
+ne pouvez pas y accéder à partir de cette fonction.
+
+Une fonctionnalité pratique est que les entités de map peuvent également être
+accessibles directement dans l'environnement du
+\ref lua_api_map_overview_files "script de la map". En d'autres
+mots, vous pouvez simplement écrire <tt>bob:get_position()</tt> qui équivaut à
+écrire <tt>map:get_entity("bob"):get_position()</tt>.
+- \c name (chaîne de caractère) : Nom de l'entité de map.
+- Valeur de retour (\ref lua_api_entity "entité") : L'entité correspondante,
+  ou \c nil si il n'existe pas d'entité portant ce nom dans la map.
+
+\remark Note technique pour les experts Lua curieux : le mécanisme qui rend
+  les entités de map directement accessibles dans l'environnement du script de
+  la map est paresseux (il est implémenté comme une metamethod \c __index).
+  Les entités ne sont importés du côté Lua que lorsque votre script en fait
+  la demande. Si vous avez des milliers d'entités nommées dans votre map,
+  vous n'aurez pas des milliers d'objets inutiles vivant dans le context Lua.
+  Seuls ceux auquels votre script tente d'accéder sont importés.
+
+\subsection lua_api_map_has_entity map:has_entity(name)
+
+Retourne si il existe actuellement une
+\ref lua_api_entity "entité de map" avec le nom spécifié dans la map.
+- \c name (chaîne de caractère) : Nom de l'\ref lua_api_entity "entité de map"
+  à vérifier.
+- Valeur de retour (booléen) : \c true si l'entité existe.
+
+\remark C'est équivalent à <tt>map:get_entity(name) ~= nil</tt> (mais en
+  un peu moins lourd car il évite d'exporter l'entité dans le contexte Lua).
+
+\subsection lua_api_map_get_entities map:get_entities(prefix)
+
+Retourne un itérateur de toutes les \ref lua_api_entity "entités de map"
+dont le nom a le préfixe spécifié.
+
+L'utilisation typique de cette fonction est :
+\verbatim
+for entity in map:get_entities("your_prefix") do
+  -- code relatif à l'entité
+end
+\endverbatim
+- \c prefix (chaîne de caractère) : Préfixe des entités à obtenir.
+- Valeur de retour (fonction) : Un itérateur de toutes les entités avec
+  ce préfixe.
+
+\subsection lua_api_map_get_entities_count map:get_entities_count(prefix)
+
+Retourne le nombre d'\ref lua_api_entity "entités de map"
+ayant le préfixe spécifié.
+- \c prefix (chaîne de caractère) : Préfixe des entités à compter.
+- Valeur de retour (nombre) : Le nombre d'entités ayant ce préfixe dans la map.
+
+\subsection lua_api_map_has_entities map:has_entities(prefix)
+
+Retourne si il existe au moins une
+\ref lua_api_entity "entité de map" ayant le préfixe spécifié.
+
+Cette fonction peut être utilisée par exemple pour vérifier si un groupe
+d'\ref lua_api_enemy "ennemis" est mort.
+- \c prefix (chaîne de caractère) : Préfixe des entités à compter.
+- Valeur de retour (booléen) : \c true si il y a au moin une entité avec ce
+  préfixe dans la map.
+
+\remark C'est équivalent à <tt>map:get_entities_count(prefix) > 0</tt>
+  mais en plus rapide lorsqu'il y a beaucoup d'entités
+  (car il arrête la recherche dès qu'il trouve une entité).
+
+\subsection lua_api_map_get_hero map:get_hero()
+
+Retourne le \ref lua_api_hero "héros".
+- Valeur de retour (\ref lua_api_hero "héros") : le héros.
+
+\remark C'est équivalent à <tt>map:get_entity("hero")</tt> mais plus court à
+  écrire. Cette fonction est fournie par commodité car obtenir le héros est
+  souvent nécéssaire.
+
+\subsection lua_api_map_set_entities_enabled map:set_entities_enabled(prefix, [enabled])
+
+Active ou désactive toutes les \ref lua_api_entity "entités de map" ayant
+le préfixe spécifié.
+
+Les entités désactivées ne sont pas affichés et ne sont pas mise à jour.
+Par conséquent, elles ne se déplacent pas et leurs collisions ne sont plus
+détectés. Mais elles existent toujours et peuvent être réactivées plus tard.
+- \c prefix (chaîne de caractère) : Préfixe des entités à activer ou
+  désactiver.
+- \c enable (booléen, optionnel) : \c true pour les activer, \c false pour
+  les désactiver. Aucune valeur signifie \c true.
+
+\remark C'est équivalent à un appel de la méthode
+  \ref lua_api_entity_set_enabled "entity:set_enabled()"
+  mais sur un groupe d'entités.
+
+\subsection lua_api_map_remove_entities map:remove_entities(prefix)
+
+Supprime et détruit toutes les \ref lua_api_entity "entités de map" ayant
+le préfixe spécifié.
+
+Une fois qu'une entité est supprimée, elle est détruite et elle n'existe
+plus dans la map. Une bonne pratique consiste à éviter de garder des
+références à des entités détruites dans vos scripts de sorte qu'elles soient
+gérées par le garbage-collector de Lua.
+- \c prefix (chaîne de caractère) : Préfixe des entités à supprimer de la map.
+
+\remark C'est équivalent à un appel de la méthode
+  \ref lua_api_entity_remove "entity:remove()"
+  mais sur un groupe d'entités.
+
+\subsection lua_api_map_create_destination map:create_destination(properties)
+
+Crée une entité de type
+\ref lua_api_destination "destination"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c direction (nombre) : Direction que le héros devrait prendre lorsqu'il
+    arrive sur la destination, entre \c 0 (Est) et \c 3 (Sud), ou \c -1 pour
+    ne pas changer sa direction.
+  - \c sprite (chaîne de caractère, optionnel) : Identifiant d'un
+    \ref lua_api_sprite "sprite" à créer pour la destination.
+    Aucune valeur signifie aucun sprite (la destination sera donc invisible).
+  - \c default (booléen, optionnel) : Définit cette destination comme celle par
+    défaut lorsqu'un le héros est téléporté dans cette map sans destination
+    précise. Aucune valeur signifie \c false. Seule une destination par map
+    peut être définie comme étant celle par défaut.
+    Si aucune destination par défaut n'est définie, alors la première qui est
+    déclarée deviendra celle par défaut.
+- Valeur de retour (\ref lua_api_destination "destination") :
+  La destination créée.
+
+\subsection lua_api_map_create_teletransporter map:create_teletransporter(properties)
+
+Crée une entité de type
+\ref lua_api_teletransporter "téléporteur"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c width (nombre) : Largeur de l'entité en pixels.
+  - \c height (nombre) : Hauteur de l'entité en pixels.
+  - \c sprite (chaîne de caractère, optionnel) : Identifiant d'un
+    \ref lua_api_sprite "sprite" à créer pour le téléporteur.
+    Aucune valeur signifie aucun sprite (le téléporteur sera donc invisible).
+  - \c sound (chaîne de caractère, optionnel) : Son à
+    \ref lua_api_audio_play_sound "jouer" lorsque le \ref lua_api_hero "héros"
+    utilise le téléporteur. Aucune valeur signifie aucun son.
+  - \c transition (chaîne de caractère, optionnel) : Style de transition
+    à utiliser lorsque le héros est téléporté. Le style de transition doit
+    être l'une des valeurs suivantes :
+    - \c "immediate": Pas d'effet de transition.
+    - \c "fade": Effet de fondu.
+    - \c "scrolling": Effet de défilement entre les maps.
+    La valeur par défaut est \c "fade".
+  - \c destination_map (chaîne de caractère) : Identifiant de la map où
+    téléporter le héros (peut être l'identifiant de la map courante).
+  - \c destination (chaîne de caractère, optionnel) : Position de destination
+    dans la map. Peut être le nom d'une entité de \ref lua_api_destination
+    "destination", la valeur spéciale \c "_same" pour garder les coordonnées
+    du héros, ou la valeur spéciale \c "_side" pour placer le héros du coté
+    correspondant de la map adjacente (normalement utilisé avec l'effet de
+    transition \c "scrolling"). Aucune valeur signifie la destination par
+    défaut de la map.
+- Valeur de retour (\ref lua_api_teletransporter "téléporteur") :
+  Le téléporteur créé.
+
+\subsection lua_api_map_create_pickable map:create_pickable(properties)
+
+Crée une entité de type
+\ref lua_api_pickable "trésor ramassable"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c treasure_name (chaîne de caractère, optionnel) : Type de trésor à créer
+    (le nom d'un \ref lua_api_item "item d'équipment").
+    Si cette valeur n'est pas définie, ou correspond à un item qui n'est pas
+    \ref lua_api_item_is_obtainable "obtenable", alors l'entité n'est pas
+    créé et \c nil est retourné.
+  - \c treasure_variant (nombre, optionnel) : Variante du trésor
+    (car certains \ref lua_api_item "items d'équipement" peuvent avoir
+    plusieurs variantes). La valeur par défaut est \c 1 (la première variante).
+  - \c treasure_savegame_variable (chaîne de caractère, optionnel) : Nom de la
+    valeur booléenne qui est stockée dans la \ref lua_api_game "sauvegarde"
+    lorsque ce trésor ramassable est trouvé.
+    Aucune valeur signifie que le trésor n'est pas sauvegardé.
+    Si le trésor est sauvegardé et que le joueur l'a déjà, alors l'entité
+    n'est pas créé et \c nil est retourné.
+- Valeur de retour (\ref lua_api_pickable "trésor ramassable") : le trésor
+  ramassable créé, ou \c nil si l'item n'est pas définit, n'est pas
+  \ref lua_api_item_is_obtainable "obtenable", ou si le trésor ramassable a
+  déjà été trouvé (pour un trésor sauvegardé).
+
+\subsection lua_api_map_create_destructible map:create_destructible(properties)
+
+Crée une entité de type
+\ref lua_api_destructible "objet destructible"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c treasure_name (chaîne de caractère, optionnel) : Type de
+    \ref lua_api_pickable "trésor ramassable" à cacher dans l'objet
+    destructible (le nom d'un \ref lua_api_item "item d'équipment").
+    Si cette valeur n'est pas définie, alors aucun trésor n'est placé dans
+    l'objet destructible. Si ce trésor n'est pas obtenable lorsque l'objet
+    est détruit, aucun trésor ramassable n'est créé.
+  - \c treasure_variant (nombre, optionnel) : Variante du trésor
+    (car certains \ref lua_api_item "items d'équipement" peuvent avoir
+    plusieurs variantes). La valeur par défaut est \c 1 (la première variante).
+  - \c treasure_savegame_variable (chaîne de caractère, optionnel) : Nom de la
+    valeur booléenne qui est stockée dans la \ref lua_api_game "sauvegarde"
+    lorsque le \ref lua_api_pickable "trésor ramassable" caché dans l'objet
+    destructible est trouvé.
+    Aucune valeur signifie que le trésor (si il y en a) n'est pas sauvegardé.
+    Si le trésor est sauvegardé et que le joueur l'a déjà, alors aucun trésor
+    n'est placé dans l'objet destructible.
+  - \c sprite (chaîne de caractère, optionnel) : Identifiant d'un
+    \ref lua_api_sprite "sprite" à créer pour l'objet destructible.
+  - \c destruction_sound (chaîne de caractère, optionnel) : Son à
+    \ref lua_api_audio_play_sound "jouer" lorsque l'objet destructible est
+    coupé ou cassé après avoir été lancé. Aucune valeur signifie aucun son.
+  - \c weight (nombre, optionnel) : Niveau de l'\ref lua_api_game_get_ability
+    "abilité" \c "lift" requise pour soulever l'objet.
+    \c 0 permet au joueur de soulever l'objet sans condition.
+    La valeur spéciale \c -1 signifie que l'objet ne peut jamais être soulevé.
+    La valeur par défaut est \c 0.
+  - \c can_be_cut (booléen, optionnel) : Si le héros peut coupé l'objet
+    avec l'épée. Aucune valeur signifie \c false.
+  - \c can_explode (booléen, optionnel) : Si l'objet doit explosé lorsque il
+    est coupé, touché par une arme et après un délais lorsque le héro le
+    soulève. La valeur par défaut est \c false.
+  - \c can_regenerate (booléen, optionnel) : Si l'objet doit automatiquement
+    être régénéré après un délais lorsqu'il est détruit.
+    La valeur par défaut est \c false.
+  - \c damage_on_enemies (nombre, optionnel) : Nombre de points de vie à
+    retiré à un ennemi qui est touché par cet objet après que le
+    \ref lua_api_hero "héros" l'ait lancé.
+    Si la valeur est \c 0, les ennemis ignoreront l'objet.
+    La valeur par défaut est \c 1.
+  - \c ground (chaîne de caractère, optionnel) : Sol définit par cette entité.
+    Le sol est habituellement \c "wall", mais vous pouvez définir
+    \c "traversable" pour rendre l'objet traversable, ou par exemple \c "grass"
+    pour le rendre également traversable mais avec un sprite additionnel
+    d'herbe sous le héros.
+    La valeur par défaut est \c "wall".
+- Valeur de retour (\ref lua_api_destructible "objet destructible"):
+  L'objet destructible créé.
+
+\remark L'état du \ref lua_api_pickable "trésor ramassable" placé dans l'objet
+  destructible (obtenu ou non) et la variante possédée de l'\ref lua_api_item
+  "objet" (un nombre) sont deux valeurs indépendantes qui ont des
+  significations différentes et qui sont sauvegardés séparément.
+
+\subsection lua_api_map_create_chest map:create_chest(properties)
+
+Crée une entité de type
+\ref lua_api_chest "coffre"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c treasure_name (chaîne de caractère, optionnel) : Type de trésor à
+    placer dans le coffre (le nom d'un \ref lua_api_item "item d'équipment").
+    Si cette valeur n'est pas définie, alors ce coffre sera vide.
+    Si ce trésor n'est pas obtenable lorsque le héros ouvre le coffre,
+    il devient vide.
+  - \c treasure_variant (nombre, optionnel) : Variante du trésor
+    (car certains \ref lua_api_item "items d'équipement" peuvent avoir
+    plusieurs variantes). La valeur par défaut est \c 1 (la première variante).
+  - \c treasure_savegame_variable (chaîne de caractère, optionnel) : Nom de la
+    valeur booléenne qui est stockée dans la \ref lua_api_game "sauvegarde"
+    lorsque ce coffre est ouvert.
+    Aucune valeur signifie que l'état du trésor n'est pas sauvegardé.
+    Si le trésor est sauvegardé et que le joueur l'a déjà, alors aucun trésor
+    n'est placé dans le coffre (le coffre apparaîtra ouvert).
+  - \c sprite (chaîne de caractère, optionnel) : Identifiant d'un
+    \ref lua_api_sprite "sprite" à créer pour le coffre.
+    Le sprite doit avoir les animations \c "open" et \c "closed".
+  - \c opening_method (chaîne de caractère, optionnel) : Spécifie les
+    permissions pour que le héros ouvre le coffre. La méthode d'ouverture
+    doit être l'une des valeurs suivante :
+    - \c "interaction" (par défaut) : Peut être ouvert en pressant la
+      \ref lua_api_game_intro_commands "commande d'action" en face de lui.
+    - \c "interaction_if_savegame_variable" : Peut être ouvert en pressant la
+      \ref lua_api_game_intro_commands "commande d'action" en face de lui,
+      à condition que la variable de sauvegarde spécifiée soit définie.
+    - \c "interaction_if_item": Peut être ouvert en pressant la
+      \ref lua_api_game_intro_commands "commande d'action" en face de lui,
+      à condition que le joueur ait l'\ref lua_api_item "item d'équipement"
+      spécifié.
+  - \c opening_condition (chaîne de caractère, optionnel) : La condition
+    requise pour ouvrir le coffre.
+    Seulement pour les méthodes d'ouverture
+    \c "interaction_if_savegame_variable" et \c "interaction_if_item".
+    - Pour la méthode d'ouverture \c "interaction_if_savegame_variable",
+      ce doit être le nom d'une variable de sauvegarde.
+      Le \ref lua_api_hero "héros"
+      sera autorisé à ouvrir le coffre si cette valeur sauvegardée est
+      \c true, un entier supérieur à zéro ou une chaîne de caractère non
+      vide.
+    - Pour la méthode d'ouverture \c "interaction_if_item",
+      ce doit être le nom d'un \ref lua_api_item "item d'équipment".
+      Le héros sera autorisé à ouvrir le coffre si il possède l'item et,
+      pour les items avec une quantité, si la quantité est supérieure à zéro.
+    - Pour la méthode d'ouverture par défaut (\c "interaction"),
+      cette option n'a aucun effet.
+  - \c opening_condition_consumed (booléen, optionnel) : Si l'ouverture
+    du coffre doit consomer la variable de sauvegarde ou l'\ref lua_api_item
+    "item d'équipment" qui est requis.
+    La valeur par défaut est \c false.
+    Si vous définissez ça à \c true, les règles suivantes seront appliquées
+    lorsque le \ref lua_api_hero "héros" ouvrira le coffre avec succès :
+    - Pour la méthode d'ouverture \c "interaction_if_savegame_variable",
+      la variable de sauvegarde qui est requise sera réinitialisée à \c false,
+      \c 0 ou \c "" (dépendant de son type).
+    - Pour la méthode d'ouverture \c "interaction_if_item", l'item d'équipement
+      qui est requis est supprimé. Ce qui signifie définir sa
+      \ref lua_api_item_set_variant "variante possédée" à \c 0, excepté si il
+      a une quantité associée : dans ce cas, la quantité est décrémenté.
+  - \c cannot_open_dialog (chaîne de caractère, optionnel) : Identifiant du
+    dialogue à afficher si le héros ne peut pas ouvrir le coffre.
+    Si vous ne définissez pas cette valeur, aucun dialogue n'est affiché.
+- Valeur de retour (\ref lua_api_chest "coffre"): Le coffre créé.
+
+\remark L'état du \ref lua_api_chest "coffre" (obtenu ou non)
+  et la variante possédé de son \ref lua_api_item "item" sont deux valeurs
+  indépendantes qui ont des significations différentes et qui sont
+  sauvegardés séparément.
+
+\subsection lua_api_map_create_jumper map:create_jumper(properties)
+
+Crée une entité de type
+\ref lua_api_jumper "sauteur"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c width (nombre) : Largeur de l'entité en pixels.
+  - \c height (nombre) : Hauteur de l'entité en pixels.
+  - \c direction (nombre) : Direction du saut, entre \c 0 (Est)
+    et \c 7 (Sud-Est).
+    Si la direction est horizontale, la largeur doit être de \c 8 pixels.
+    Si la direction est verticale, la hauteur doit être de \c 8 pixels.
+    Si la direction est en diagonale, la taille doit correspondre
+    à celle d'un carré.
+  - \c jump_length (nombre) : Longueur de base du saut en pixels
+    (consultez la page des \ref lua_api_jump_movement "mouvements de saut"
+    pour plus de détails).
+- Valeur de retour (\ref lua_api_jumper "sauteur") : Le sauteur créé.
+
+\subsection lua_api_map_create_enemy map:create_enemy(properties)
+
+Crée une entité de type
+\ref lua_api_enemy "ennemi"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c direction (nombre) : Direction initiale de l'ennemi, entre
+    \c 0 (Est) et \c 3 (Sud).
+  - \c breed (chaîne de caractère) : Modèle de l'ennemi à créer.
+  - \c rank (nombre, optionnel) : \c 0 pour un ennemi normal (défaut),
+    \c 1 pour un mini-boss, \c 2 pour un boss.
+  - \c savegame_variable (chaîne de caractère, optionnel) : Nom de la valeur
+    booléenne qui est stockée dans la \ref lua_api_game "sauvegarde"
+    lorsque l'ennemi est mort. Aucune valeur signifie que l'ennemi n'est pas
+    sauvegardé. Si l'ennemi est sauvegardé et à déjà été tué, alors aucun
+    ennemi n'est créé. Au lieu de cela, son \ref lua_api_pickable
+    "trésor ramassable" est créé si il est sauvegardé.
+  - \c treasure_name (chaîne de caractère, optionnel) : Type de
+    \ref lua_api_pickable "trésor ramassable" à laisser tomber lorsque
+    l'ennemi est tué. (le nom d'un \ref lua_api_item "item d'équipment").
+    Si cette valeur n'est pas définie, alors l'ennemi ne laissera rien tomber.
+    Si le trésor n'est pas obtenable lorsque l'ennemi est tué, alors rien n'est
+    laissé tomber.
+  - \c treasure_variant (nombre, optionnel) : Variante du trésor
+    (car certains \ref lua_api_item "items d'équipment" peuvent avoir
+    plusieurs variantes).
+    La valeur par défaut est \c 1 (la première variante).
+  - \c treasure_savegame_variable (chaîne de caractère, optionnel) : Nom de
+    la valeur booléene qui est stockée dans la \ref lua_api_game "sauvegarde"
+    lorsque le \ref lua_api_pickable "trésor ramassable" de l'ennemi
+    est obtenu. Aucune valeur signifie que l'état du trésor n'est pas
+    sauvegardé. Si le trésor est sauvegardé et que le joueur l'a déjà, alors
+    l'ennemi ne laissera rien tomber.
+- Valeur de retour (\ref lua_api_enemy "ennemi" ou \ref lua_api_pickable
+  "trésor ramassable") : L'ennemi créé, excepté lorsque c'est un ennemi
+  sauvegardé qu'il est déjà mort. Dans ce cas, si l'ennemi laisse tomber un
+  trésor sauvegardé qui n'a pas encore été obtenu, ce
+  \ref lua_api_pickable "trésor ramassable" est créé et retourné.
+  Autrement, \c nil est retourné.
+
+\remark L'état de l'\ref lua_api_enemy "ennemi" (vivant ou mort),
+  l'état de son \ref lua_api_pickable "trésor ramassable"
+  (obtenu ou non) et la variante possédée de l'\ref lua_api_item "item"
+  laissé tombé (un nombre) sont trois valeurs indépendantes qui ont des
+  significations différentes et qui sont sauvegardés séparément.
+
+\subsection lua_api_map_create_npc map:create_npc(properties)
+
+Crée une entité de type
+\ref lua_api_npc "personnage non-joueur" (PNJ)
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c direction (nombre) : Direction initiale du sprite du PNJ, entre
+    \c 0 (Est) et \c 3 (Sud).
+  - \c subtype (nombre) : Type de PNJ à créer : \c 1 pour un PNJ classique
+    à qui le joueur peut parler, \c 0 pour un PNJ généralisé (qui n'est pas
+    nécéssairement une personne). Consultez la \ref lua_api_npc
+    "documentation des PNJs" pour plus de détails.
+  - \c sprite (chaîne de caractère, optionnel) : Nom du
+    \ref lua_api_sprite "sprite" à créer pour le PNJ.
+    Aucune valeur signifie aucun sprite (le PNJ sera donc invisible).
+  - \c behavior (chaîne de caractère, optionnel) : Que faire lors d'une
+    interaction avec le PNJ.
+    - \c "dialog#XXXX" : Démarre le dialogue avec l'identifiant \c XXXX
+      lorsque le joueur parle à ce PNJ.
+    - \c "map" (défaut) : Propage l'événement au script de la map
+      (par exemple, appel l'événement \ref lua_api_npc_on_interaction
+      "on_interaction()" du PNJ).
+    - \c "item#XXXX": Propage l'événement à un script d'\ref lua_api_item
+      "item d'équipement"
+      (par exemple, appel l'événement \ref lua_api_item_on_npc_interaction
+      "on_interaction()" de l'item d'équipement avec l'identifiant \c XXXX).
+- Valeur de retour (\ref lua_api_npc "PNJ") : le PNJ créé.
+
+\subsection lua_api_map_create_block map:create_block(properties)
+
+Crée une entité de type
+\ref lua_api_block "bloc"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c direction (nombre, optionnel) : La seule direction vers laquelle
+    le bloc peut être déplacé, entre \c 0 (Est) et \c 3 (Sud).
+    Aucune valeur signifie aucune restriction et permet au bloc d'être déplacé
+    dans n'importe laquelle des quatre directions principales.
+  - \c sprite (chaîne de caractère) : Nom du
+    \ref lua_api_sprite "sprite" à créer pour le bloc.
+  - \c pushable (booléen) : \c true pour permettre au bloc d'être poussé.
+  - \c pullable (booléen) : \c true pour permettre au bloc d'être tiré.
+  - \c maximum_moves (nombre) : \c Indique combien de fois le bloc peut être
+    déplacé (\c 0: jamais, \c 1: une seule fois, \c 2: infini).
+- Valeur de retour (\ref lua_api_block "bloc") : le bloc créé.
+
+\subsection lua_api_map_create_dynamic_tile map:create_dynamic_tile(properties)
+
+Crée une entité de type
+\ref lua_api_dynamic_tile "tile dynamique"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X du coin supérieur gauche du tile
+    dynamique dans la map.
+  - \c y (nombre) : Coordonnée en Y du coin supérieur gauche du tile
+    dynamique dans la map.
+  - \c width (nombre) : Largeur du tile dynamique en pixels. Le motif du tile
+    est répété horizontalement pour s'adapter à la largeur.
+  - \c height (nombre) : Hauteur du tile dynamique en pixels. Le motif du tile
+    est répété verticalement pour s'adapter à la hauteur.
+  - \c tile_pattern_id (chaîne de caractère) : Identifiant du motif de tile à
+    utiliser depuis le tileset.
+  - \c enabled_at_start (booléen) : \c true pour rendre le tile dynamique
+    initialement activé, \c false pour le rendre initialiement désactivé.
+- Valeur de retour (\ref lua_api_dynamic_tile "tile dynamique") :
+  le tile dynamique créé.
+
+\subsection lua_api_map_create_switch map:create_switch(properties)
+
+Crée une entité de type
+\ref lua_api_switch "bouton"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c subtype (chaîne de caractère) : Type de bouton à créer :
+    - \c "walkable" : Une plaque de pression traversable qui est activée
+      lorsque le héros marche dessus.
+    - \c "solid": Un interrupteur solide non-traversable, qui peut être activé
+      sous diverses conditions : par l'épée, par une explosion
+      ou par un projectile (un objet lancé, une flèche, le boomerang ou le
+      grappin).
+    - \c "arrow_target" Un interrupteur qui ne peut être activé qu'en tirant
+      une flèche dessus.
+  - \c sprite (chaîne de caractère) : Nom du
+    \ref quest_sprite_data_file "sprite" à créer pour le bouton.
+    Le sprite doit contenir les animations \c "activated" et \c "inactivated".
+    Aucune valeur signifie aucun sprite.
+  - \c sound (chaîne de caractère, optionnel) : Son à jouer lorsque le bouton
+    est activé. Aucune valeur signifie aucun son.
+  - \c inactivate_when_leaving (booléen) : Si c'est \c true, le bouton devient
+    inactivé lorsque le \ref lua_api_hero "héros" ou un
+    \ref lua_api_block "bloc" le quitte (seulement pour un bouton
+    de type \c "walkable").
+- Valeur de retour (\ref lua_api_switch "bouton") : le bouton créé.
+
+\subsection lua_api_map_create_wall map:create_wall(properties)
+
+Crée une entité de type
+\ref lua_api_wall "mur"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c width (nombre) : Largeur de l'entité en pixels.
+  - \c height (nombre) : Hauteur de l'entité en pixels.
+  - \c stops_hero (booléen, optionnel) : \c true pour que le mur bloque le
+    \ref lua_api_hero "héros".
+    Aucune valeur signifie \c false.
+  - \c stops_npcs (booléen, optionnel) : \c true pour que le mur bloque les
+    \ref lua_api_npc "personnages non-joueur".
+    Aucune valeur signifie \c false.
+  - \c stops_enemies (booléen, optionnel) : \c true pour que le mur bloque les
+    \ref lua_api_enemy "ennemis".
+    Aucune valeur signifie \c false.
+  - \c stops_blocks (booléen, optionnel) : \c true pour que le mur bloque les
+    \ref lua_api_block "blocs".
+    Aucune valeur signifie \c false.
+  - \c stops_projectiles (booléen, optionnel) : \c true pour que le mur
+    bloque les projectiles :
+    \ref lua_api_carried_object "objets lancés", \ref lua_api_arrow "flèches",
+    le \ref lua_api_hookshot "grappin" et le
+    \ref lua_api_boomerang "boomerang". Aucune valeur signifie \c false.
+- Valeur de retour (\ref lua_api_wall "mur"): le mur créé.
+
+\subsection lua_api_map_create_sensor map:create_sensor(properties)
+
+Crée une entité de type
+\ref lua_api_sensor "capteur"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c width (nombre) : Largeur de l'entité en pixels.
+  - \c height (nombre) : Hauteur de l'entité en pixels.
+- Valeur de retour (\ref lua_api_sensor "capteur") : le capteur créé.
+
+\subsection lua_api_map_create_crystal map:create_crystal(properties)
+
+Crée une entité de type
+\ref lua_api_crystal "cristal"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+- Valeur de retour (\ref lua_api_crystal "cristal"): le cristal créé.
+
+\subsection lua_api_map_create_crystal_block map:create_crystal_block(properties)
+
+Crée une entité de type
+\ref lua_api_crystal_block "plot de cristal"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c width (nombre) : Largeur de l'entité en pixels.
+  - \c height (nombre) : Hauteur de l'entité en pixels.
+  - \c subtype (nombre): Type de plot de cristal à créer :
+    \c 0 pour un plot initialement baissé (orange),
+    \c 1 pour un plot initialement levé (bleu).
+- Valeur de retour (\ref lua_api_crystal_block "plot de cristal") :
+  le plot de cristal créé.
+
+\subsection lua_api_map_create_shop_treasure map:create_shop_treasure(properties)
+
+Crée une entité de type
+\ref lua_api_shop_treasure "article de magasin"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c price (nombre) : La quantité de monnaie requise pour acheter
+    cet article.
+  - \c dialog (chaîne de caractère) : Identifiant du dialogue à afficher
+    lorsque le \ref lua_api_hero "héros" demande des informations à
+    propos de l'article.
+  - \c treasure_name (chaîne de caractère) : Type d'article à vendre
+    (le nom d'un \ref lua_api_item "item d'équipement").
+    Si cette valeur correspond à un item qui n'est pas
+    \ref lua_api_item_is_obtainable "obtenable", alors
+    l'article de magasin n'est pas créé et \c nil est retourné.
+  - \c treasure_variant (nombre, optionnel) : Variante de l'article
+    (car certains \ref lua_api_item "items d'équipment" peuvent avoir
+    plusieurs variantes).
+    La valeur par défaut est \c 1 (la première variante).
+  - \c treasure_savegame_variable (chaîne de caractère, optionnel) : Nom de
+    la valeur booléenne qui est stockée dans la \ref lua_api_game "sauvegarde"
+    lorsque le joueur achète cet article. Aucune valeur signifie que l'état
+    de l'article n'est pas sauvegardé. Si l'article est sauvegardé et que le
+    joueur l'a déjà, alors l'article de magasin n'est pas créé et \c nil
+    est retourné.
+- Valeur de retour (\ref lua_api_shop_treasure "article de magasin") :
+  L'article de magasin créé, ou \c nil si l'item n'est pas
+  \ref lua_api_item_is_obtainable "obtenable", ou si l'article de magasin à
+  déjà été acheté (pour un article sauvegardé).
+
+\remark L'état de l'\ref lua_api_shop_treasure "article de magasin"
+  (acheté ou non) et la variante possédée de l'\ref lua_api_item "item"
+  (un nombre) sont deux valeurs indépendantes qui ont des
+  significations différentes et qui sont sauvegardés séparément.
+
+\subsection lua_api_map_create_stream map:create_stream(properties)
+
+Crée une entité de type
+\ref lua_api_stream "flux"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c direction (nombre) : Direction vers laquelle le flux déplace le
+    \ref lua_api_hero "héros", entre \c 0 (Est) et \c 7 (Sud-Est).
+  - \c sprite (chaîne de caracère, optionnel): Identifiant du
+    \ref quest_sprite_data_file "sprite" à créer pour le flux.
+    Aucune valeur signifie aucun sprite (le flux sera donc invisible).
+  - \c speed (nombre, optionnel) : Vitesse du mouvement appliqué au héros par
+    le flux, en pixels par seconde. La valeur par défaut est \c 64.
+  - \c allow_movement (booléen, optionnel) : Si le joueur peut toujours
+    déplacer le héros lorsqu'il est dans le flux.
+    La valeur par défaut est \c true.
+  - \c allow_attack (booléen, optionnel) : Si le joueur peut utiliser l'épée
+    lorsqu'il est dans le flux.
+    La valeur par défaut est \c true.
+  - \c allow_item (booléen, optionnel) : Si le joueur peut utiliser les items
+    d'équipement lorsqu'il est dans le flux.
+    La valeur par défaut est \c true.
+- Valeur de retour (\ref lua_api_stream "flux"): le flux créé.
+
+\subsection lua_api_map_create_door map:create_door(properties)
+
+Crée une entité de type
+\ref lua_api_door "porte"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c direction (nombre) : Direction de la porte, entre
+    \c 0 (à l'Est de la salle) et \c 3 (au Sud de la salle).
+  - \c sprite (chaîne de caractère) : Nom du
+    \ref lua_api_sprite "sprite" à créer pour la porte.
+    Le sprite doit avoir une animation \c "closed", qui sera affiché tant que
+    la porte est fermée.
+    Lorsque la porte est ouverte, aucun sprite n'est affiché.
+    Optionnelement, le sprite peut aussi avoir une animation \c "opening"
+    et \c "closing", qui seront affichées (si elles existent) durant
+    l'ouverture ou la fermeture de la porte, respectivement.
+    Si elles n'existent pas, la porte s'ouvre et se ferme instantanément.
+  - \c savegame_variable (chaîne de caractère, optionnel) : Nom de la
+    valeur booléenne qui est stockée dans la \ref lua_api_game "sauvegarde"
+    lorsque la porte est ouverte.
+    Aucune valeur signifie que l'état de la porte n'est pas sauvegardé.
+    Si l'état de la porte est sauvegardé, alors elle apparaît ouverte.
+  - \c opening_method (chaîne de caractère, optionnel) : Comment la porte
+    est supposé être ouverte par le joueur. La méthode d'ouvertue doit être
+    l'une des valeurs suivantes :
+    - \c "none" (défaut) : Ne peut pas être ouverte par le joueur.
+      Vous ne pouvez l'ouvrir que depuis Lua.
+    - \c "interaction": Peut être ouverte en pressant la
+      \ref lua_api_game_intro_commands "commande d'action" devant elle.
+    - \c "interaction_if_savegame_variable": Peut être ouverte en pressant la
+      \ref lua_api_game_intro_commands "commande d'action" devant elle,
+      à condition qu'une variable de sauvegarde spécifique soit définie.
+    - \c "interaction_if_item": Peut être ouverte en pressant la
+      \ref lua_api_game_intro_commands "commande d'action" devant elle,
+      à condition que le joueur ait un \ref lua_api_item
+      "item d'équipement" spécifique.
+    - \c "explosion": Peut être ouverte par une explosion.
+  - \c opening_condition (chaîne de caractère, optionnel) : La condition
+    requise pour ouvrir la porte. Seulement pour les méthodes d'ouverture
+    \c "interaction_if_savegame_variable" et \c "interaction_if_item".
+    - Pour la méthode d'ouvertue \c "interaction_if_savegame_variable",
+      ce doit être le nom d'une variable de sauvegarde.
+      Le \ref lua_api_hero "héros" est autorisé à ouvrir la porte si la
+      valeur de la variable est \c true, un entier supérieur à zéro ou
+      une chaîne de caractère non vide.
+    - Pour la méthode d'ouverture \c "interaction_if_item",
+      ce doit être le nom d'un \ref lua_api_item "item d'équipment".
+      Le héros est autorisé à ouvrir la porte si il possède l'item et,
+      pour les items avec une quantité, si la quantité est supérieure à zéro.
+    - Pour les autres méthodes d'ouverture, ce paramètre n'a aucun effet.
+  - \c opening_condition_consumed (booléen, optionnel) : Si l'ouverture de
+    la porte doit consomer la variable de sauvegarde ou l'\ref lua_api_item
+    "item d'équipment" qui est requis. La valeur par défaut est \c false. Si
+    vous définissez ça à \c true, les règles suivantes seront appliquées
+    lorsque le \ref lua_api_hero "héros" ouvrira la porte avec succès :
+    - Pour la méthode d'ouverture \c "interaction_if_savegame_variable",
+      la variable de sauvegarde qui est requise sera réinitialisée à \c false,
+      \c 0 ou \c "" (dépendant de son type).
+    - Pour la méthode d'ouverture \c "interaction_if_item",
+      l'item d'équipement qui est requis est supprimé. Ce qui signifie définir
+      sa \ref lua_api_item_set_variant "variante possédée" à \c 0, excepté si
+      il a une quantité associée : dans ce cas, la quantité est décrémenté.
+    - Pour les autres méthodes d'ouverture, ce paramètre n'a aucun effet.
+  - \c cannot_open_dialog (chaîne de caractère, optionnel) : Identifiant du
+    dialogue à afficher si le héros ne peut pas ouvrir la porte.
+    Si vous ne définissez pas cette valeur, aucun dialogue n'est affiché.
+- Valeur de retour (\ref lua_api_door "porte") : la \ref lua_api_door
+  "porte" créée.
+
+\subsection lua_api_map_create_stairs map:create_stairs(properties)
+
+Crée une entité de type
+\ref lua_api_stairs "escaliers"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c direction (nombre) : Direction vers laquelle les escaliers doivent être
+    tourné, entre \c 0 (à l'Est de la salle) et \c 3 (au Sud de la salle).
+    Pour les escaliers à l'intérieur d'un même étage, c'est la direction
+    vers laquelle aller dans l'étage.
+  - \c subtype (nombre) : Type d'escaliers à créer :
+    - \c 0: Escalier en colimaçon pour monter d'un étage.
+    - \c 1: Escalier en colimaçon pour descendre d'un étage
+    - \c 2: Escalier droit pour monter d'un étage.
+    - \c 3: Escalier droit pour descendre d'un étage
+    - \c 4: Petits esaliers à l'intérieur d'un même étage
+      (change la couche du \ref lua_api_hero "héros").
+- Valeur de retour (\ref lua_api_stairs "escaliers") :
+  les escaliers créé.
+
+\subsection lua_api_map_create_bomb map:create_bomb(properties)
+
+Crée une entité de type
+\ref lua_api_bomb "bombe"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+- Valeur de retour (\ref lua_api_bomb "bombe"): la bombe créée.
+
+\subsection lua_api_map_create_explosion map:create_explosion(properties)
+
+Crée une entité de type
+\ref lua_api_explosion "explosion"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+- Valeur de retour (\ref lua_api_explosion "explosion") : l'explosion créée.
+
+\subsection lua_api_map_create_fire map:create_fire(properties)
+
+Crée une entité de type
+\ref lua_api_fire "feu"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+- Valeur de retour (\ref lua_api_fire "feu") : le feu créé.
+
+\subsection lua_api_map_create_separator map:create_separator(properties)
+
+Crée une entité de type
+\ref lua_api_separator "séparateur"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c width (nombre) : Largeur de l'entité en pixels.
+  - \c height (nombre) : Hauteur de l'entité en pixels.
+    L'un des deux (\c width ou \c height) doit valoir 16 pixels.
+- Valeur de retour (\ref lua_api_separator "séparateur") : le séparateur créé.
+
+\subsection lua_api_map_create_custom_entity map:create_custom_entity(properties)
+
+Crée une entité de type
+\ref lua_api_custom_entity "entité custom"
+dans la map.
+- \c properties (tableau) : Un tableau qui décrit toutes les propriétés de
+  l'entité à créer. Ses paires clé-valeur doivent être :
+  - \c name (chaîne de caractère, optionnel) : Nom qui identifie
+    l'entité ou \c nil. Si le nom est déjà utilisé par une autre entité, un
+    suffixe (de la forme \c "_2", \c "_3", etc.) sera automatiquement ajouté
+    pour garder les noms d'entité unique.
+  - \c layer (nombre) : Couche dans la map (\c 0: basse, \c 1: intérmédiaire,
+    \c 2: haute).
+  - \c x (nombre) : Coordonnée en X dans la map.
+  - \c y (nombre) : Coordonnée en Y dans la map.
+  - \c width (nombre, optionnel) : Largeur de l'entité en pixels
+    (\c 16 par défaut).
+  - \c height (nombre, optionnel) : Hauteur de l'entité en pixels
+    (\c 16 par défaut).
+
+  - \c model (chaîne de caractère, optionnel) : Modèle de l'entité custom
+    ou \c nil. Le modèle est le nom d'un script Lua dans le dossier
+    \c "entities" de votre quête. Il définit le comportement de votre entité.
+    Le script est appelé avec les paramètres de l'entité.
+    Les modèles sont utile lorsque vous avez besoin de créer beaucoup d'entités
+    similaires, en particulier dans différentes maps.
+    \c nil signifie aucun modèle : dans ce cas, aucun script particulier n'est
+    appelé mais vous pouvez toujours définir le comportement de votre entité
+    dans le script de la map.
+- Valeur de retour (\ref lua_api_custom_entity "entité custom") :
+  l'entité custom créée.
+
+\section lua_api_map_events Événements d'une map
+
+Les événements sont des méthodes de callback automatiquement appelées par
+le moteur lorsque qu'elles sont définies.
+Dans le cas des maps, ils ne sont appelés que dans la map courante.
+
+\subsection lua_api_map_on_started map:on_started(destination)
+
+Appelé lorsque cette map démarre (lorsque le joueur y entre).
+- \c destination (\ref lua_api_destination "destination") : L'entité de
+  destination depuis laquelle le \ref lua_api_hero "héros" arrive dans la map,
+  ou \c nil si il utilise une autre voie que par une entité de destination.
+  (comme le coté de la map ou des coordonnées directes).
+
+\subsection lua_api_map_on_finished map:on_finished()
+
+Appelé lorsque cette map s'arrête (lorsque le joueur la quitte).
+
+\subsection lua_api_map_on_update map:on_update()
+
+Appelé à chaque cycle de la boucle principale tant que cette map est la
+map courante.
+
+\remark Cette fonction est appelée à chaque cycle, il est recommandé d'utiliser
+  les autres solutions quand c'est possible, comme les \ref lua_api_timer
+  "timers" et autres événements.
+
+\subsection lua_api_map_on_draw map:on_draw(dst_surface)
+
+Appelé lorsque la map vient juste d'être redessinée par le moteur.
+
+Le moteur a déjà dessiné la map, mais pas les
+\ref lua_api_menu "menus" de cette map si elle en a.
+Utilisez cet événement si vous voulez dessiner du contenu additionnel dans
+cette map avant les menus, par exemple pour l'overlay d'un système jour/nuit.
+- \c dst_surface (\ref lua_api_surface "surface") : La surface sur laquelle la
+  map est dessinée. Cette surface représente la partie visible de l'écran,
+  pas la map entière.
+
+\subsection lua_api_map_on_suspended map:on_suspended(suspended)
+
+Appelé lorsque la map vient juste d'être suspendue ou qu'elle vient juste
+de reprendre.
+
+La map est suspendue par le moteur dans certains cas, comme lorsque la
+\ref lua_api_game "partie" est en pause ou lorsque la caméra est déplacé par
+un script. Lorsque cela arrive, toutes les \ref lua_api_entity "entités de map"
+arrête de se déplacer et la plupart des \ref lua_api_sprite "sprites" arrête
+leur animation.
+- \c suspended (booléen) : \c true si la map vient juste d'être suspendue,
+  \c false si elle vient juste de reprendre.
+
+\subsection lua_api_map_on_opening_transition_finished map:on_opening_transition_finished(destination)
+
+Lorsque la map démarre, appelé après l'effet de transition d'ouverture.
+Après ce moment, le joueur a le contrôle du \ref lua_api_hero "héros".
+- \c destination (\ref lua_api_destination "destination") : L'entité de
+  destination depuis laquelle le \ref lua_api_hero "héros" arrive dans la map,
+  ou \c nil si il utilise une autre voie que par une entité de destination.
+  (comme le coté de la map ou des coordonnées directes).
+
+\subsection lua_api_map_on_camera_back map:on_camera_back()
+
+Après une séquence de caméra (voir \ref lua_api_map_move_camera
+"map:move_camera()"), cet événement est déclenché lorsque la caméra retourne
+sur le \ref lua_api_hero "héros".
+
+\subsection lua_api_map_on_obtaining_treasure map:on_obtaining_treasure(treasure_item, treasure_variant, treasure_savegame_variable)
+
+Appelé lorsque le \ref lua_api_hero "héros" obtient un trésor dans cette map,
+avant le dialogue du trésor (si il y en a).
+- \c treasure_item (\ref lua_api_item "item") : Item d'équipment obtenu.
+- \c treasure_variant (nombre) : Variante du trésor
+  (car certains \ref lua_api_item "items d'équipment" peuvent avoir
+  plusieurs variantes).
+- \c treasure_savegame_variable (chaîne de caractère) : Nom de la valeur
+  booléenne qui est stockée dans la \ref lua_api_game "sauvegarde" lorsque
+  ce trésor est trouvé, ou \c nil si la trésor n'est pas sauvegardé.
+
+\subsection lua_api_map_on_obtained_treasure map:on_obtained_treasure(treasure_item, treasure_variant, treasure_savegame_variable)
+
+Appelé après que le \ref lua_api_hero "héros" obtienne un trésor dans
+cette map.
+
+Dans le cas d'un trésor brandit, cet événement est appelé après que
+le dialogue du trésor se soit terminé.
+Autrement, il est appelé immédiatement après la méthode
+\ref lua_api_map_on_obtaining_treasure "map:on_obtaining_treasure()".
+- \c treasure_item (\ref lua_api_item "item") : Item d'équipment obtenu.
+- \c treasure_variant (nombre) : Variante du trésor
+  (car certains \ref lua_api_item "items d'équipment" peuvent avoir
+  plusieurs variantes).
+- \c treasure_savegame_variable (chaîne de caractère) : Nom de la valeur
+  booléenne qui est stockée dans la \ref lua_api_game "sauvegarde" lorsque
+  ce trésor est trouvé, ou \c nil si la trésor n'est pas sauvegardé.
+
+\subsection lua_api_map_on_key_pressed map:on_key_pressed(key, modifiers)
+
+Appelé lorsque l'utilisateur presse une touche du clavier pendant que
+votre map est active.
+- \c key (chaine de caractère) : Nom de la touche qui a été pressée.
+- \c modifiers (tableau) : Un tableau dont les clés indiquent quels
+  modificateurs étaient pressés durant l'événement. Les clés possible
+  du tableau sont \c "shift", \c "control" et \c "alt".
+  Les valeurs du tableau n'ont pas d'importance.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+  Si vous retournez \c false ou rien, l'événement continuera sa propagation
+  par les \ref lua_api_game_intro_commands "commandes".
+
+\remark Cet événement indique la touche pressée. Si vous voulez connaître le
+  caractère correspondant à la place (si il y en a un), consultez
+  \ref lua_api_map_on_character_pressed "map:on_character_pressed()".
+  Si vous voulez la commande de haut-niveau correspondante (si il y en a une),
+  consultez \ref lua_api_map_on_command_pressed "map:on_command_pressed()".
+
+\subsection lua_api_map_on_key_released map:on_key_released(key, modifiers)
+
+Appelé lorsque l'utilisateur relache une touche du clavier pendant que
+votre map est active.
+- \c key (chaine de caractère) : Nom de la touche qui a été relachée.
+- \c modifiers (tableau) : Un tableau dont les clés indiquent quels
+  modificateurs étaient pressés durant l'événement. Les clés possible
+  du tableau sont \c "shift", \c "control" et \c "alt".
+  Les valeurs du tableau n'ont pas d'importance.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+  Si vous retournez \c false ou rien, l'événement continuera sa propagation
+  par les \ref lua_api_game_intro_commands "commandes".
+
+\remark Cet événement indique la touche relachée, si vous voulez la commande
+  de haut-niveau correspondante (si il y en a une), consultez
+  \ref lua_api_map_on_command_released "map:on_command_released()".
+
+\subsection lua_api_map_on_character_pressed map:on_character_pressed(character)
+
+Appelé lorsque l'utilisateur entre du texte pendant que votre map est active.
+
+- \c character (chaine de caractère) : une chaine de caractère en utf-8 qui
+  représente le caractére qui a été entré.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+  Si vous retournez \c false ou rien, l'événement continuera sa propagation
+  par les \ref lua_api_game_intro_commands "commandes".
+
+\remark Lorsqu'un caractère est pressé, deux événements sont appelés :
+  \ref lua_api_map_on_key_pressed "map:on_key_pressed()"
+  (indique la touche pressée)
+  et \ref lua_api_map_on_character_pressed "map:on_character_pressed()"
+  (indique le caractère utf-8).
+  Si vous avez besoin d'un texte entré par l'utilisateur,
+  \ref lua_api_map_on_character_pressed "map:on_character_pressed()"
+  est ce qu'il vous faut car elle prend en consideration la disposition
+  du clavier et donne une chaine de caractère en utf-8 internationnal.
+
+\subsection lua_api_map_on_joypad_button_pressed map:on_joypad_button_pressed(button)
+
+Appelé lorsque l'utilisateur presse un bouton du joypad pendant que votre map est active.
+- \c button (nombre) : Index du buton qui a été pressé.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+
+\subsection lua_api_map_on_joypad_button_released map:on_joypad_button_released(button)
+
+Appelé lorsque l'utilisateur relache un bouton du joypad pendant que votre map est active.
+- \c button (nombre): Index du buton qui a été relaché.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+
+\subsection lua_api_map_on_joypad_axis_moved map:on_joypad_axis_moved(axis, state)
+
+Appelé lorsque l'utilisateur bouge un axe du joypad pendant que votre map est active.
+- \c axis (nombre) : Index de l'axe qui a bougé. Habituelement, \c 0 est un
+  axe horizontal et \c 1 est un axe vertical.
+- \c state (nombre) : Le nouvel état de l'axe qui a été bougé. \c -1 signifie
+  gauche ou haut, \c 0 signifie le centre et \c 1 signifie droite ou bas.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+
+\subsection lua_api_map_on_joypad_hat_moved map:on_joypad_hat_moved(hat, direction8)
+
+Appelé lorsque l'utilisateur bouge un bouton de type coolie hat (en forme de
+chapeau chinois) du joypad pendant que votre map est active.
+- \c hat (nombre): Index du bouton de type coolie hat (en forme de chapeau
+  chinois) qui a été bougé.
+- \c direction8 (nombre) : La nouvelle direction du bouton de type coolie hat
+  (en forme de chapeau chinois). \c -1 signifie que le bouton est centré.
+  de \c 0 à \c 7 indique que le bouton est dans l'une des huit directions
+  principales.
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+
+\subsection lua_api_map_on_command_pressed map:on_command_pressed(command)
+
+Appelé lorsque le joueur presse une \ref lua_api_game_intro_commands
+"commande de jeu" (une touche du clavier ou une action du joypad associée à
+un comportement de jeu intégré) pendant que votre map est active.
+Vous pouvez utiliser cet événement pour redéfinir le comportement intégré des commandes de jeu.
+- \c command (chaîne de caractère) : Nom de la commande de jeu intégrée qui
+  a été pressée. Les commandes possible sont
+  \c "action", \c "attack", \c "pause", \c "item_1", \c "item_2",
+  \c "right", \c "up", \c "left" et \c "down".
+- Valeur de retour (booléen) :  Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (vous avez redéfinit le comportement intégré de la commande de jeu pressée).
+
+\remark Cet événement n'est pas déclenché si vous avez déjà géré son événement
+  de clavier ou de joypad sous-jacent.
+
+\subsection lua_api_map_on_command_released map:on_command_released(command)
+
+Appelé lorsque le joueur relache une \ref lua_api_game_intro_commands
+"commande de jeu" (une touche du clavier ou une action du joypad associée à
+un comportement de jeu intégré) pendant que votre map est active.
+Vous pouvez utiliser cet événement pour redéfinir le comportement intégré des commandes de jeu.
+- \c command (chaîne de caractère) : Nom de la commande de jeu intégrée qui
+  a été relachée. Les commandes possible sont
+  \c "action", \c "attack", \c "pause", \c "item_1", \c "item_2",
+  \c "right", \c "up", \c "left" et \c "down".
+- Valeur de retour (booléen) :  Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets
+  (vous avez redéfinit le comportement intégré de la commande de jeu pressée).
+
+\remark Cet événement n'est pas déclenché si vous avez déjà géré son événement
+  de clavier ou de joypad sous-jacent.
+
+\subsection lua_api_map_on_mouse_pressed map:on_mouse_pressed(button, x, y)
+
+Appelé lorsque l'utilisateur presse un bouton de la souris pendant que votre map est active.
+- \c button (chaine de caractère) : Nom du bouton de la souris qui a été
+  pressé. Les valeurs possible sont \c "left", \c "middle", \c "right",
+  \c "x1" et \c "x2".
+- \c x (nombre) : La position en X de la souris dans les coordonnées du
+  \ref lua_api_video_get_quest_size "cadre de la quête".
+- \c y (nombre) : La position en Y de la souris dans les coordonnées du
+  \ref lua_api_video_get_quest_size "cadre de la quête".
+- Valeur de retour (booléen) : Indique si l'événement à été géré. Si vous
+  retournez \c true, l'événement ne se propagera pas aux autres objets.
+
+*/
