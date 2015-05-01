@@ -1291,6 +1291,8 @@ on the map.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c price (number): Money amount required to buy the treasure.
+  - \c font (string, optional): Id of the font to use to display to price.
+    The default value is the first one in alphabetical order.
   - \c dialog (string): Id of the dialog to show when the
     \ref lua_api_hero "hero" asks for information about the treasure.
   - \c treasure_name (string): Kind of treasure to sell

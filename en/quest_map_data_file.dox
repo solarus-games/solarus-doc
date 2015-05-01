@@ -570,6 +570,8 @@ A shop treasure can be declared in the map data file with
 
 Additional properties:
 - \c price (number): Money amount required to buy the treasure.
+- \c font (string, optional): Id of the font to use to display to price.
+  The default value is the first one in alphabetical order.
 - \c dialog (string): Id of the dialog to show when the
   player asks for information about the treasure.
 - \c treasure_name (string): Kind of treasure to sell
