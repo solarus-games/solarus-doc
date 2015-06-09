@@ -409,7 +409,7 @@ Called when your item script is being created, that is, when the
 In this event, you should initialize your item.
 
 \remark All items scripts are not loaded yet at this time.
-  Your item is being loaded, but you don't know the status of ther ones.
+  Your item is being loaded, but you don't know the status of the other ones.
   Unless your item is the last one to be
   initialized, other items are not ready. If your item needs to get
   some properties from other items in its initialization, use \ref
