@@ -249,7 +249,7 @@ The \ref lua_api_map_get_ground "ground" is the terrain property of the
 \ref lua_api_map "map".
 It is defined by \ref lua_api_tile "tiles" and by other entities that may
 change it dynamically.
-- \c ground (string, optional): A kind of ground.
+- \c ground (string): A kind of ground.
   See \ref lua_api_map_get_ground "map:get_ground()" for the possible values.
 - Return value (boolean): \c true if your custom entity can traverse this
   kind of ground.
@@ -269,7 +269,7 @@ change it dynamically.
 By default, this depends on the the ground: for example,
 the \c "grass" ground can be traversed by default
 while the \c "low wall" ground cannot.
-- \c ground (string, optional): A kind of ground.
+- \c ground (string): A kind of ground.
   See \ref lua_api_map_get_ground "map:get_ground()" for the possible values.
 - \c traversable (boolean): Whether your custom entity can
   traverse this kind of ground.
