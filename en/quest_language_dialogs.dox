@@ -15,6 +15,10 @@ file as well as the
 Have a look at the \ref translation page if you are interested in translating
 a Solarus game.
 
+Solarus Quest Editor fully supports the edition of dialog files.
+You can either use it to edit a dialog file graphically, or you can edit
+\c dialogs.dat by hand in a text editor if you prefer.
+
 \c dialogs.dat is a text file encoded in UTF-8.
 We specify here its full syntax,
 with instructions for quest makers and translators.

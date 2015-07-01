@@ -11,6 +11,10 @@ that there is no quest in the directory.
 
 \section quest_properties_file_syntax Syntax of the quest properties file
 
+Solarus Quest Editor fully supports the edition of the quest properties file.
+You should not have to edit \c quest.dat by hand unless you know what you
+are doing.
+
 \c quest.dat is a text file encoded in UTF-8.
 
 The sequence of characters \c \-\- (two dashes) marks
@@ -89,10 +93,6 @@ quest{
   max_quest_size = "400x240",     -- Suited for Android and other mobile devices.
 }
 \endverbatim
-
-The current version of the quest editor has poor support of this
-file \c quest.dat for now. A default (and incomplete) one is generated
-when you create a quest, but then you have to edit it by hand.
 
 \remark The syntax of the quest properties file is actually valid Lua.
   The engine internally uses Lua to parse it.

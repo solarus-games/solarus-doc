@@ -15,6 +15,10 @@ file as well as the
 Have a look at the \ref translation page if you are interested in translating
 the game (and you should also contact us).
 
+Solarus Quest Editor fully supports the edition of string files.
+You can either use it to edit a string file graphically, or you can edit
+\c strings.dat by hand in a text editor if you prefer.
+
 \c string.dat is a text file encoded in UTF-8.
 We specify here its full syntax,
 with instructions for quest makers and translators.
