@@ -109,7 +109,7 @@ Each tile pattern must have the following properties:
   - \c "lava": Lava (the hero drowns and gets hurt).
 - \c default_layer (number): The initial layer (\c 0 to \c 2)
   to be used when creating a
-  tile with this pattern on a map with the map editor. This information is
+  tile with this pattern on a map with a map editor. This information is
   only useful for map editors (the engine does not use it).
 - \c x (number or table): X coordinate(s) of the upper-left corner of the
   pattern's rectangle(s) in the tileset image file.
@@ -171,6 +171,17 @@ Each tile pattern must have the following properties:
     themselves. 
     Self-scrolling tile patterns cannot be multi-frame.
     Example of use: holes in dungeons.
+- \c repeat_mode (string, optional): How the pattern is supposed to be
+  repeatable.
+  This property is only useful for map editors (the engine does not use it).
+  Map editors can take advantage of it to resize
+  patterns only in the way they are intended.
+  It can be one of:
+  - \c "all" (default): The pattern can be repeated both horizontally and
+    vertically.
+  - \c "horizontal": The pattern can only be repeated horizontally.
+  - \c "vertical": The pattern can only be repeated vertically.
+  - \c "none": The pattern cannot be repeated.
 
 \remark While the syntax of multi-frame patterns is redundant, it is
   flexible and will remain valid if one day we decide to remove the rules about
