@@ -45,15 +45,15 @@ Each dialog must have at least the following two properties:
   they want to display it.
   If you are translating dialogs, you must never translate the id.
 
-- \c text (multi-line string): Contents of this dialog.
+- \c text (multi-line string, optional): Contents of this dialog.
   If you are translating dialogs, \c text is the property to translate.
   The text has usually several lines, but can be empty.
   The text should be enclosed between \c [[ and \c ]], which is
   the notation for multiline strings.
 
-Only \c id and \c text are mandatory
+Only \c id and \c text are recognized by the engine
 (because the default minimal built-in dialog box use them),
-but you can add any other property depending on your dialog box implementation.
+but you can add other properties depending on your dialog box implementation.
 Properties of a dialog are always of type string.
 Numbers and booleans are also accepted, but they will be converted to
 strings.
