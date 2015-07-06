@@ -368,6 +368,7 @@ Sets the maximum amount associated to this item
 This maximum value is used in \ref lua_api_item_set_amount
 "item:set_amount()" and \ref lua_api_item_add_amount
 "item:add_amount()" to make a limit.
+The default value is \c 1000.
 - \c max_amount (number): The maximum amount to set.
 
 \remark The maximum amount of an item is not saved automatically.
