@@ -896,7 +896,7 @@ decoration and you have nothing else to do.
 If this event is defined, the engine does nothing and your script is
 responsible to show the dialog in any way you want,
 and to close it later by calling
-\ref lua_api_game_stop_dialog "game:stop_dialog()").
+\ref lua_api_game_stop_dialog "game:stop_dialog()".
 It is recommended to implement your dialog system as a
 \ref lua_api_menu "menu": if you do so,
 you will automatically get called by the engine
