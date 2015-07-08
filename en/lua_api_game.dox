@@ -887,7 +887,7 @@ Called when a dialog starts.
 
 The dialog may be triggered by a Lua script
 (by calling \ref lua_api_game_start_dialog "game:start_dialog()")
-or by the engine because in various situations (for example
+or by the engine in various situations (for example
 when finding a treasure).
 
 If this event is not defined, the engine shows a minimal dialog box without
