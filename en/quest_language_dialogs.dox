@@ -50,6 +50,7 @@ Each dialog must have at least the following two properties:
   The text has usually several lines, but can be empty.
   The text should be enclosed between \c [[ and \c ]], which is
   the notation for multiline strings.
+  The closing marker \c ]] should be on a new line.
 
 Only \c id and \c text are recognized by the engine
 (because the default minimal built-in dialog box use them),
@@ -96,7 +97,7 @@ Do you think you can
 protect the Princess?
 Definitely!
 No way
-  ]],
+]],
 }
 
 dialog{
@@ -111,7 +112,7 @@ one able to protect
 our kingdom...
 Sure
 No way
-  ]],
+]],
 }
 
 dialog{
@@ -119,7 +120,7 @@ dialog{
   text = [[
 I knew I could count on
 your immense bravery.
-  ]],
+]],
 }
 \endverbatim
 
