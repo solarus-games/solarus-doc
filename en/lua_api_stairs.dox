@@ -41,7 +41,7 @@ Indeed, the stairs are additional, they don't replace teletransporters and
 destinations.
 You just have put all three entities
 (the stairs, a teletransporter and a destination) at the same coordinates
-at it works.
+and it works.
 
 Stairs that move from a layer to another layer
 inside the same map work differently.
