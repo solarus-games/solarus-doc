@@ -128,7 +128,8 @@ It may have been created at the creation of the custom entity,
 or when you called
 \ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
 - Return value (\ref lua_api_sprite "sprite"): The first sprite created for
- this custom_entity.
+  this custom_entity.
+  Returns \c nil if the custom entity has no sprite.
 
 \remark If the custom entity has several sprites, the first one created is returned.
   For the other sprites, you cannot use this function.

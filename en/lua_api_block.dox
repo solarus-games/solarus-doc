@@ -48,7 +48,7 @@ See \ref lua_api_entity_methods to know these methods.
 
 The following methods are specific to blocks.
 
-\subsection lua_api_block_get_sprite bloc:get_sprite()
+\subsection lua_api_block_get_sprite block:get_sprite()
 
 Returns the sprite of this block.
 - Return value (\ref lua_api_sprite "sprite"): The sprite of this block.
