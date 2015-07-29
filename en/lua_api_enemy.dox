@@ -272,7 +272,7 @@ unless you override some of them with
     be increased by the level of the sword
     (see \ref lua_api_enemy_on_hurt_by_sword "enemy:on_hurt_by_sword()").
   - \c "ignored": Nothing happens. The weapon (if any) traverses the enemy.
-  - \c "protected": The enemy stops the attack. A attack failure sound is
+  - \c "protected": The enemy stops the attack. An attack failure sound is
     played.
   - \c "immobilized": The enemy is immobilized for a few seconds.
   - \c "custom": Event \ref lua_api_enemy_on_custom_attack_received
