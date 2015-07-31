@@ -1,7 +1,5 @@
 /**
 \page lua_api Solarus 1.5 - Lua API reference
-/**
-\page quest Solarus 1.5 - Quest data files specification
 
 We explain here how a quest is built.
 
