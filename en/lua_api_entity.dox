@@ -331,11 +331,14 @@ other entities.
 
 \remark The sprites of this entity (if any) may exceed the bounding box.
 
-\subsection lua_api_entity_overlaps entity:overlaps(x, y, [width, height])
+\subsection lua_api_entity_overlaps entity:overlaps(x, y, [width, height]), entity:overlaps(other_entity)
 
 Returns whether the
 \ref lua_api_entity_get_bounding_box "bounding box"
-of this entity overlaps the specified rectangle or point.
+of this entity overlaps the specified rectangle, point or entity.
+
+To test if this entity overlaps a rectangle or a point (a point is a rectangle
+of size 1x1):
 - \c x (number): X coordinate of the upper left corner of the rectangle
   to check.
 - \c y (number): Y coordinate of the upper left corner of the rectangle
@@ -345,11 +348,7 @@ of this entity overlaps the specified rectangle or point.
 - Return value (boolean): \c true if the bounding box of this entity overlaps
   the rectangle.
 
-\subsection lua_api_entity_overlaps entity:overlaps(other_entity)
-
-Returns whether the
-\ref lua_api_entity_get_bounding_box "bounding box"
-of this entity overlaps the bounding box of another one.
+To test if this entity overlaps another entity:
 - \c other_entity (entity): An entity to check.
 - Return value (boolean): \c true if both bounding boxes overlap.
 
