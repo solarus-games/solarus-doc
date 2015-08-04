@@ -4,7 +4,7 @@
 \tableofcontents
 
 Separators allow to visually separate different regions of a map like
-if they were several maps.
+if there was several maps.
 
 This type of \ref lua_api_entity "map entity" can be declared in the
 \ref lua_api_map_overview_files "map data file".
