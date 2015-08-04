@@ -1561,6 +1561,8 @@ on the map.
     (default \c 16).
   - \c height (number, optional): Height of the entity in pixels
     (default \c 16).
+  - \c sprite (string, optional): Name of the animation set of a
+    \ref lua_api_sprite "sprite" to create for the custom entity.
   - \c model (string, optional): Model of custom entity or \c nil.
     The model is the name of a Lua script in the \c "entities" directory of
     your quest. It will define the behavior of your entity.
