@@ -385,7 +385,7 @@ Returns the currently visible area of the map.
 
 Except during a
 \ref lua_api_map_move_camera "camera moving sequence",
-this area is centered on the hero, stopping on the limits of the maps
+this area is centered on the hero, stopping on the limits of the map
 and on
 \ref lua_api_separator "separators".
 - Return value 1 (number): X coordinate of the visible area.
@@ -408,8 +408,8 @@ When the target is reached, after a first delay,
 your callback function is called.
 Then, after a second delay, the camera moves back towards the hero.
 
-During the sequence, the camera ignores
-\ref lua_api_separator "separators".
+During the sequence, the camera continues to stop on limits of the map
+and \ref lua_api_separator "separators".
 
 The game is suspended during the whole sequence (meaning that
 the hero and other \ref lua_api_entity "map entities" cannot move).
