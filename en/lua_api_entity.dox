@@ -463,36 +463,28 @@ you can use this function to change their Z-index.
   The Z-index of these entities is already managed by the engine to show
   entities more to the north behind the ones more to the south.
   Therefore, this function has no effect for them.
+
 \subsection lua_api_entity_get_optimization_distance entity:get_optimization_distance()
 
-Returns the optimization threshold of this map entity.
+Returns the optimization threshold hint of this map entity.
 
-Above this distance from the visible area
-of the map, the entity will be suspended.
+Above this distance from the camera, the engine may decide to skip updates or
+drawings.
+This is only a hint: the engine is responsible of the final decision.
 A value of \c 0 means an infinite distance (the entity is never optimized away).
-- Return value (number): The optimization distance in pixels.
+- Return value (number): The optimization distance hint in pixels.
 
 \subsection lua_api_entity_set_optimization_distance entity:set_optimization_distance(optimization_distance)
 
-Sets the optimization threshold of this map entity.
+Sets the optimization threshold hint of this map entity.
 
-Above this distance from the visible area
-of the map, the entity will be suspended.
-When an entity is suspended, its
-\ref lua_api_movement "movements",
-\ref lua_api_sprite "sprites"
-and
-\ref lua_api_timer "timers"
-are suspended.
+Above this distance from the camera, the engine may decide to skip updates or
+drawings.
+This is only a hint: the engine is responsible of the final decision.
 
 A value of \c 0 means an infinite distance (the entity is never optimized away).
-The default value depends on the type of entity and is usually fine,
-but you may need to increase it in some cases, or even disable it for example
-for an
-\ref lua_api_enemy "enemy"
-in a huge room.
-- \c optimization_distance (number): The optimization distance to set in pixels.
-  \c 0 disables this automatic suspending.
+The default value is \c 0.
+- \c optimization_distance (number): The optimization distance hint to set in pixels.
 
 \subsection lua_api_entity_is_in_same_region entity:is_in_same_region(other_entity)
 
