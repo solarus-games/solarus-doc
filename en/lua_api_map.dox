@@ -664,6 +664,26 @@ This function can be used for example to checker whether a group of
   when there are a lot of entities
   (because it stops searching as soon as there is a match).
 
+\subsection lua_api_map_get_entities_in_rectangle map:get_entities_in_rectangle(x, y, width, height)
+
+Returns an iterator to all \ref lua_api_entity "map entities"
+whose maximum bounding box intersects the given rectangle.
+The maximum bounding box is the union of the entity's own
+\ref lua_api_entity_get_bounding_box "bounding box"
+and of the bounding boxes from its sprites.
+
+The typical usage of this function is:
+\verbatim
+for entity in map:get_entities_in_rectangle(x, y, width, height) do
+  -- some code related to the entity
+end
+\endverbatim
+- \c x (number): X coordinate of the rectangle's upper-left corner.
+- \c y (number): Y coordinate of the rectangle's upper-left corner.
+- \c width (number): Width of the rectangle.
+- \c height (number): Height of the rectangle.
+- Return value (function): An iterator to all entities intersecting the rectangle.
+
 \subsection lua_api_map_get_hero map:get_hero()
 
 Returns the \ref lua_api_hero "hero".
