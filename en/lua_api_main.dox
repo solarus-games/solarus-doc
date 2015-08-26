@@ -177,6 +177,66 @@ specified vector.
 - Return value (number): The angle in radians between the x axis and this
   vector.
 
+\subsection lua_api_main_get_type sol.main.get_type(value)
+
+Returns the type name of a value.
+
+This function is similar to the standard Lua function type(), except that
+for userdata known by Solarus, it returns the exact Solarus type name.
+
+- \c value (any type): Any value or \c nil.
+- Return value (string): The name of the type.
+  Can of one of standard Lua type names: \c "nil" (a string, not the value nil),
+  \c "number", \c "string", \c "boolean", \c "table", \c "function", \c "thread".
+  If it is a userdata unknown to Solarus, returns \c "userdata".
+  If it is a Solarus userdata, returns one of:
+  \c "game",
+  \c "map",
+  \c "item",
+  \c "surface",
+  \c "text_surface",
+  \c "sprite",
+  \c "timer",
+  \c "movement",
+  \c "straight_movement",
+  \c "target_movement",
+  \c "random_movement",
+  \c "path_movement",
+  \c "random_path_movement",
+  \c "path_finding_movement",
+  \c "circle_movement",
+  \c "jump_movement",
+  \c "pixel_movement",
+  \c "hero",
+  \c "dynamic_tile",
+  \c "teletransporter",
+  \c "destination",
+  \c "pickable",
+  \c "destructible",
+  \c "carried_object",
+  \c "chest",
+  \c "shop_treasure",
+  \c "enemy",
+  \c "npc",
+  \c "block",
+  \c "jumper",
+  \c "switch",
+  \c "sensor",
+  \c "separator",
+  \c "wall",
+  \c "crystal",
+  \c "crystal_block",
+  \c "stream",
+  \c "door",
+  \c "stairs",
+  \c "bomb",
+  \c "explosion",
+  \c "fire",
+  \c "arrow",
+  \c "hookshot",
+  \c "boomerang",
+  \c "custom_entity".
+
 \subsection lua_api_main_get_metatable sol.main.get_metatable(type_name)
 
 Returns the metatable of a Solarus userdata type.
