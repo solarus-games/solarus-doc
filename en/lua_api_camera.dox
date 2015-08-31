@@ -8,21 +8,10 @@ The camera is a rectangular shape that determines the visible part of the
 There is always exactly one camera on the current map.
 The camera is automatically created by the engine when loading a map.
 You cannot create or remove it.
-
-\section lua_api_camera_overview Overview
-
-The name of the camera entity
-(as returned by \ref lua_api_entity_get_name
-"entity:get_name()") is always \c "camera".
-Therefore, from a script, you can access the camera with
-<tt>map:get_entity("camera")</tt> or,
-if you are in a map script, directly with the
-\c camera variable
-(see \ref lua_api_map_get_entity "map:get_entity()" for more details).
-There is also a quick accessor
+To access the camera of the map from one of your scripts, you can use
 \ref lua_api_map_get_camera "map:get_camera()".
 
-\subsection lua_api_camera_overview_mode Camera modes
+\section lua_api_camera_overview Overview
 
 The camera can work in two modes.
 It can be either centered on an
