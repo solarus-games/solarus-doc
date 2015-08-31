@@ -235,6 +235,7 @@ for userdata known by Solarus, it returns the exact Solarus type name.
   \c "arrow",
   \c "hookshot",
   \c "boomerang",
+  \c "camera",
   \c "custom_entity".
 
 \subsection lua_api_main_get_metatable sol.main.get_metatable(type_name)
@@ -342,6 +343,7 @@ official API would be surprising for people who contribute to your game.
   \c "arrow",
   \c "hookshot",
   \c "boomerang",
+  \c "camera",
   \c "custom_entity".
 - Return value (table): The metatable of this type, or \c nil if there is no
   such Solarus type.

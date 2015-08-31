@@ -19,7 +19,7 @@ Depending on their type,
 they can be visible or not. When they are visible,
 they are usually represented by one or several
 \ref lua_api_sprite "sprites".
-Some entities are fixed, other move according to a
+Some entities are fixed, others move according to a
 \ref lua_api_movement "movement" object.
 
 Entities can also have a name that uniquely identifies them on the map.
@@ -89,6 +89,8 @@ Here are the existing types of entities.
   \ref lua_api_hero "hero".
 - \subpage lua_api_boomerang "Boomerang": A boomerang shot by the
   \ref lua_api_hero "hero".
+- \subpage lua_api_camera "Camera": A rectangle that determines the visible
+  area of the map.
 - \subpage lua_api_custom_entity "Custom entity": An entity fully controlled
   by your Lua scripts.
 

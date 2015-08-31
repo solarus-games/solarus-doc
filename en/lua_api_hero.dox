@@ -13,10 +13,16 @@ you cannot create or remove him.
 The name of the hero
 (as returned by \ref lua_api_entity_get_name
 "entity:get_name()") is always \c "hero".
-Therefore, from a map script, you can access the hero with
-<tt>map:get_entity("hero")</tt> or directly with the
-\c hero variable (see \ref lua_api_map_get_entity "map:get_entity()"
-for more details).
+Therefore, from a script, you can access the hero with
+<tt>map:get_entity("hero")</tt> or,
+if you are in a map script, directly with the
+\c hero variable
+(see \ref lua_api_map_get_entity "map:get_entity()" for more details).
+There are also quick accessors
+\ref lua_api_map_get_hero "map:get_hero()"
+and
+\ref lua_api_game_get_hero "game:get_hero()"
+to retrieve the hero more easily.
 
 His size is always 16x16 pixels and his sprites
 (tunic, sword, shield, shadow, etc.)

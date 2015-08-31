@@ -18,9 +18,11 @@ or a vertical bar with a width of 16 pixels.
 The separation is made in the middle of this bar: in other words, 8 pixels
 belong to each side.
 
-When the camera touches the separation, it stops like if there was a limit of
-a map.
-If the hero touches the separation, he automatically scrolls to the other side.
+When the \ref lua_api_camera "camera"
+touches the separation, it stops like if there was a limit of a map.
+If the
+\ref lua_api_hero "hero"
+touches the separation, he automatically scrolls to the other side.
 
 It is your responsibility to make sure that your separators don't
 conflict.
