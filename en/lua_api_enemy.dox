@@ -506,11 +506,17 @@ This function has no effect if the enemy is dying.
 
 \subsection lua_api_enemy_hurt enemy:hurt(life_points)
 
-Hurts this enemy if possible.
+Hurts this enemy if he is currently vulnerable.
 
-The enemy is not hurt if he is currently invulnerable
-(for example because he is already in the process of being hurt).
+If the enemy is vulnerable, the hurting animation and sound start
+and the given number of life points are removed.
+
+Nothing happens if the enemy is currently invulnerable
+(for example because he is already being hurt).
 - \c life_points (number): Number of life points to remove from the enemy.
+
+\remark If you just want to silently remove some life, call
+\ref lua_api_enemy_remove_life "enemy:remove_life()" instead.
 
 \subsection lua_api_enemy_immobilize enemy:immobilize()
 
@@ -714,13 +720,16 @@ special reaction, etc.
 
 Called when this enemy is successfully hurt by the sword of the hero.
 
-This only happens if the
+You should define this event to customize the damage inflicted by the sword.
+
+This event can only be called if the
 \ref lua_api_enemy_get_attack_consequence "reaction" to the \c "sword" attack is
 hurting the enemy.
-The enemy has just started a hurt animation and should now lose some life
-points.
-You can define this event if you want to customize the number of life points
-to lose or do something more.
+
+At this point, the enemy is in the state of being hurt.
+His hurting animation and sound have just started.
+This is a good time to remove some life points with
+\ref lua_api_enemy_remove_life "enemy:remove_life()".
 
 By default, if you don't define this event, the enemy loses a number of
 life points computed as
@@ -734,21 +743,16 @@ and doubled during a spin attack.
   You may use this information if your enemy has several sprites with
   different behaviors.
 
-\remark This event is likely to be needed and identical for all enemies of
-  your quest.
-  Recall that you can easily apply an event to all enemies at once
-  by defining it on their \ref lua_api_main_get_metatable "metatable".
-
 \subsection lua_api_enemy_on_hurt enemy:on_hurt(attack)
 
-Called when this enemy is hurt by any attack.
+Called when this enemy is successfully hurt by any attack.
 
-This only happens if the
+This event can only be called if the
 \ref lua_api_enemy_get_attack_consequence "reaction" to the attack is
 hurting the enemy.
 
-At this point,
-the hurt animation of the enemy has started
+At this point, the enemy is in the state of being hurt.
+His hurting animation and sound have just started
 and he has just lost some life.
 - \c attack (string): The attack that was received:
   \c "sword", \c "thrown_item", \c "explosion",
