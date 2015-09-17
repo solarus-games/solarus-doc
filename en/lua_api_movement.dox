@@ -62,10 +62,10 @@ then available to get and set its properties.
   - \c "target": Like "straight" but goes into the direction of a
     fixed point or a moving entity.
   - \c "path": Follows a specified succession of basic moves on an
-    8*8 pixels grid.
+    8x8 pixels grid.
   - \c "random_path": Like "path" but computes the path randomly.
   - \c "path_finding": Like "path" but computes the shortest path to
-   the hero, avoiding obstacles of the map (only possible in game).
+   an entity, avoiding obstacles of the map (only possible in game).
   - \c "circle": Follows a circular trajectory around a center.
   - \c "jump": Makes a jump above a rectilinear trajectory.
   - \c "pixel": Follows a trajectory specified pixel by pixel.
