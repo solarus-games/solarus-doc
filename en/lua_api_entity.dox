@@ -277,8 +277,9 @@ Returns the position of this entity on the \ref lua_api_map "map"
 - Return value 2 (number): Y coordinate of the \ref lua_api_entity_get_origin
   "origin point" of the entity,
   relative to the upper left corner of the map.
-- Return value 3 (number): Layer where the entity is on the map
-  (\c 0: low layer, \c 1: intermediate layer, \c 2: high layer).
+- Return value 3 (number): Layer where the entity is on the map,
+  between \c 0 (the lowest one) and
+  \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
 
 \subsection lua_api_entity_set_position entity:set_position(x, y, [layer]):
 
@@ -291,8 +292,9 @@ Any previous movement or other action performed by the entity
 continues normally.
 - \c x (number): X coordinate to set.
 - \c y (number): Y coordinate to set.
-- \c layer (number, optional): Layer to set
-  (\c 0: low layer, \c 1: intermediate layer, \c 2: high layer).
+- \c layer (number, optional): Layer to set,
+  between \c 0 (the lowest one) and
+  \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
   By default, the layer is unchanged.
 
 \remark Be careful: this function does not check collisions with obstacles.
@@ -451,7 +453,7 @@ you can use this function to change their Z-index.
   displayed in Y order.
   The Z-index of these entities is already managed by the engine to show
   entities more to the north behind the ones more to the south.
-  Therefore, this function has no effect for them.
+  Therefore, this function has no effect on their drawing order.
 
 \subsection lua_api_entity_bring_to_back entity:bring_to_back()
 
@@ -464,7 +466,7 @@ you can use this function to change their Z-index.
   displayed in Y order.
   The Z-index of these entities is already managed by the engine to show
   entities more to the north behind the ones more to the south.
-  Therefore, this function has no effect for them.
+  Therefore, this function has no effect on their drawing.
 
 \subsection lua_api_entity_get_optimization_distance entity:get_optimization_distance()
 

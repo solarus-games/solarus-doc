@@ -27,7 +27,8 @@ A map is composed of the following information:
 - The world it belongs to (optional). Allows to groups maps together.
 - Its location relative to its world.
 - The floor it belongs to (if any),
-- All entities of the map (tiles, enemies, chests, pots, switches, etc.).
+- All entities of the map (tiles, enemies, chests, pots, switches, etc.),
+  separated in different layers.
 
 All of this is stored in the map data file \c xx.dat.
 We now specify its syntax below.
@@ -55,6 +56,7 @@ double quotes.
 The following properties must be defined:
 - \c width (number): Width of the map in pixels. Must be a multiple of 8.
 - \c height (number): Height of the map in pixels. Must be a multiple of 8.
+- \c num_layers (number): Number of layers of the map.
 - \c world (string, optional): A name that identifies a group of maps this map
   belongs to. Worlds allow to group maps together.
   The world can be any arbitrary name.
@@ -175,7 +177,8 @@ separated with commas. It is allowed to have an extra comma after
 the last property. String values should be enclosed within
 double quotes.
 
-Entities are ordered like they are declared in the map data file:
+In each layer,
+entities are ordered like they are declared in the map data file:
 the first entity in the map data file is the most to the back,
 the last one is the most to the front.
 But \ref quest_map_data_file_syntax_tile "tiles" are always below all other
@@ -197,8 +200,8 @@ The following properties exist for all types of entities:
   All entities can have a name except
   \ref quest_map_data_file_syntax_tile "tiles": this is because tiles
   don't exist individually at runtime for performance reasons.
-- \c layer (number): Layer where the entity is at runtime:
-  \c 0 (low layer), \c 1 (intermediate layer) or \c 2 (high layer).
+- \c layer (number): Layer where the entity is on the map.
+  The lowest layer is \c 0.
 - \c x (number): X coordinate of the entity relative to the upper-left corner
   of the map.
   The \ref lua_api_entity_get_origin "origin point" of the entity will be
