@@ -9,6 +9,35 @@ of the program, no matter if a game or some menus are running.
 
 \section lua_api_main_functions Functions of sol.main
 
+\subsection lua_api_main_get_solarus_version sol.main.get_solarus_version()
+
+Returns the current Solarus version.
+
+The Solarus version includes three numbers: x.y.z,
+where x is the major version,
+y is the minor version
+and z is the patch version.
+
+Changes of major and minor versions may introduce some incompatibilities
+in the Lua API.
+Patch versions are only for bug fixing and never introduce incompatibilities.
+See the
+<a href="http://wiki.solarus-games.org/doku.php?id=migration_guide">migration
+guide</a> for instructions about how to upgrade your quest to the latest
+version.
+
+- Return value (string): The Solarus version.
+
+\subsection lua_api_main_get_quest_format sol.main.get_quest_format()
+
+Returns the format of this quest.
+
+This corresponds to a version of Solarus
+with major and minor version numbers (no patch number),
+for example \c "1.5".
+
+- Return value (string): The format of this quest.
+
 \subsection lua_api_main_load_file sol.main.load_file(script_name)
 
 Loads a Lua file (but does not run it).
