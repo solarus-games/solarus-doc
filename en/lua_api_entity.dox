@@ -279,7 +279,7 @@ Returns the position of this entity on the \ref lua_api_map "map"
   relative to the upper left corner of the map.
 - Return value 3 (number): Layer where the entity is on the map,
   between \c 0 (the lowest one) and
-  \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+  \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
 
 \subsection lua_api_entity_set_position entity:set_position(x, y, [layer]):
 
@@ -294,7 +294,7 @@ continues normally.
 - \c y (number): Y coordinate to set.
 - \c layer (number, optional): Layer to set,
   between \c 0 (the lowest one) and
-  \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+  \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   By default, the layer is unchanged.
 
 \remark Be careful: this function does not check collisions with obstacles.

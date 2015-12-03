@@ -458,7 +458,7 @@ that overlap this point.
 - \c x (number): X coordinate of a point of the map.
 - \c y (number): Y coordinate of a point of the map.
 - \c layer (number): The layer, between \c 0 (the lowest one) and
-  \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+  \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
 - Return value (string): The kind of ground. The possible values are the
   same as the \c ground property of the
   \ref quest_tileset_data_file "tileset file":
@@ -737,7 +737,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Direction that the hero should take when arriving on
@@ -767,7 +767,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -807,7 +807,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c treasure_name (string, optional): Kind of treasure to create
@@ -842,7 +842,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c treasure_name (string, optional): Kind of
@@ -916,7 +916,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c treasure_name (string, optional): Kind of treasure to place in the chest
@@ -999,7 +999,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1025,7 +1025,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Initial direction of the enemy, between
@@ -1084,7 +1084,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Initial direction of the NPC's sprite, between
@@ -1121,7 +1121,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number, optional): The only direction where the block can be
@@ -1148,7 +1148,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate of the top-left corner of the dynamic tile on
     the map.
   - \c y (number): Y coordinate of the top-left corner of the dynamic tile on
@@ -1176,7 +1176,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c subtype (string): Kind of switch to create:
@@ -1214,7 +1214,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1253,7 +1253,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1272,7 +1272,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
 - Return value (\ref lua_api_crystal "crystal"): the crystal created.
@@ -1289,7 +1289,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1311,7 +1311,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c price (number): Money amount required to buy the treasure.
@@ -1358,7 +1358,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Direction where the stream moves the
@@ -1394,7 +1394,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Direction of the door, between
@@ -1472,7 +1472,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Direction where the stairs should be turned
@@ -1500,7 +1500,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
 - Return value (\ref lua_api_bomb "bomb"): the
@@ -1518,7 +1518,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
 - Return value (\ref lua_api_explosion "explosion"): the
@@ -1536,7 +1536,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
 - Return value (\ref lua_api_fire "fire"): the
@@ -1554,7 +1554,7 @@ on the map.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1578,7 +1578,7 @@ on the map.
     and \c 3 (South).
     This direction will be applied to the entity's sprites if possible.
   - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number, optional): Width of the entity in pixels
