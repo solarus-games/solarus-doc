@@ -632,7 +632,7 @@ Returns whether there currently exists a
 \remark Equivalent to <tt>map:get_entity(name) ~= nil</tt> (but a bit
   lighter because it avoids to export the entity to Lua).
 
-\subsection lua_api_map_get_entities map:get_entities(prefix)
+\subsection lua_api_map_get_entities map:get_entities([prefix])
 
 Returns an iterator to all \ref lua_api_entity "map entities"
 whose name has the specified prefix.
@@ -643,8 +643,10 @@ for entity in map:get_entities("your_prefix") do
   -- some code related to the entity
 end
 \endverbatim
-- \c prefix (string): Prefix of the entities to get.
+- \c prefix (string, optional): Prefix of the entities to get.
+  No value means all entities (equivalent to an empty prefix).
 - Return value (function): An iterator to all entities with this prefix.
+  Entities are returned in Z order (insertion order).
 
 \subsection lua_api_map_get_entities_count map:get_entities_count(prefix)
 
@@ -687,6 +689,7 @@ end
 - \c width (number): Width of the rectangle.
 - \c height (number): Height of the rectangle.
 - Return value (function): An iterator to all entities intersecting the rectangle.
+  Entities are returned in Z order (insertion order).
 
 \subsection lua_api_map_get_hero map:get_hero()
 
