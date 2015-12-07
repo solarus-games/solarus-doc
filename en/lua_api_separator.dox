@@ -49,6 +49,9 @@ Use
 \ref lua_api_entity_is_in_same_region "entity:is_in_same_region()" to determine whether
 the enemy is in the same region than the hero.
 
+To get all entities in a given region, see
+\ref lua_api_map_get_entities_in_region "map:get_entities_in_region()".
+
 \section lua_api_separator_inherited_methods Methods inherited from map entity
 
 Separators are particular \ref lua_api_entity "map entities".

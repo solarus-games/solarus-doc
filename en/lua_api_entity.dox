@@ -137,7 +137,7 @@ Returns the type of entity.
   \c "arrow",
   \c "hookshot",
   \c "boomerang" or
-  \c "custom_entity",
+  \c "custom_entity".
 
 \remark The type \c "tile" is not is this list because
   \ref lua_api_tile "tiles" don't exist at
@@ -492,10 +492,16 @@ The default value is \c 0.
 
 \subsection lua_api_entity_is_in_same_region entity:is_in_same_region(other_entity)
 
-Returns whether another entity is in the same region than this one.
+Returns whether this entity is in the same region as another one.
 
 Regions of the map are defined by the position of
-\ref lua_api_separator "separators".
+\ref lua_api_separator "separators" and map limits.
+The region of an entity is the one of its center point.
+
+Regions should be rectangular.
+Non-convex regions, for example with an "L" shape, are not supported by this
+function.
+
 You can use this function to make sure that an
 \ref lua_api_enemy "enemy" close to the
 \ref lua_api_hero "hero" but in the other side of a separator won't attack him.

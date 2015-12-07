@@ -670,6 +670,21 @@ This function can be used for example to checker whether a group of
   when there are a lot of entities
   (because it stops searching as soon as there is a match).
 
+\subsection lua_api_map_get_entities_by_type map:get_entities_by_type(type)
+
+Returns an iterator to all \ref lua_api_entity "map entities"
+of the given type on the map.
+
+The typical usage of this function is:
+\verbatim
+for entity in map:get_entities_by_type(type) do
+  -- some code related to the entity
+end
+\endverbatim
+- \c type (string): Name of an entity type.
+  See \ref lua_api_entity_get_type "entity:get_type()"
+  for the possible values.
+
 \subsection lua_api_map_get_entities_in_rectangle map:get_entities_in_rectangle(x, y, width, height)
 
 Returns an iterator to all \ref lua_api_entity "map entities"
@@ -690,6 +705,35 @@ end
 - \c height (number): Height of the rectangle.
 - Return value (function): An iterator to all entities intersecting the rectangle.
   Entities are returned in Z order (insertion order).
+
+\subsection lua_api_map_get_entities_in_region map:get_entities_in_region(x, y), map:get_entities_in_region(entity)
+
+Returns an iterator to all \ref lua_api_entity "map entities"
+that are in a region.
+Regions of the map are defined by the position of
+\ref lua_api_separator "separators" and map limits.
+The region of an entity is the one of its center point.
+
+Regions should be rectangular.
+Non-convex regions, for example with an "L" shape, are not supported by this
+function.
+
+The typical usage of this function is:
+\verbatim
+for entity in map:get_entities_in_region(my_entity) do
+  -- some code related to the entity
+end
+\endverbatim
+
+To get entities in the same region as a point:
+- \c x (number): X coordinate of the region to get.
+- \c y (number): Y coordinate of the region to get.
+- Return value (function): An iterator to all entities in the same region as
+  the point.
+
+To get entities in the same region as another entity:
+- \c entity (entity): An entity.
+- Return value (function): An iterator to all other entities in the same region.
 
 \subsection lua_api_map_get_hero map:get_hero()
 
