@@ -298,9 +298,21 @@ when the world changes (not when the map changes).
 
 Some other features may also rely on the world property, like the state of
 \ref lua_api_crystal_block "crystal blocks". Their state persists
-between all maps of the current world and is reset when the world changes.
+between all maps of the current world and is reset when entering a
+map whose world is different.
 - Return value (string): Name of the world of the current map.
   \c nil means no world.
+
+\subsection lua_api_map_set_world map:set_world(world)
+
+Changes the world of this map.
+
+The world property remains until the map is destroyed:
+If you reload the same map again later,
+the world is reset to the one defined in the
+\ref lua_api_map_overview_files "map data file".
+- \c world (string): The new world name to set,
+  or \c nil to set no world.
 
 \subsection lua_api_map_get_floor map:get_floor()
 
@@ -316,6 +328,17 @@ when it changes or to make a minimap \ref lua_api_menu "menu".
 - Return value (number): The current floor. \c 0 is the first floor, \c 1
   is the second floor, \c -1 is the first basement floor, etc.
   \c nil means that this map is not part of a floor system.
+
+\subsection lua_api_map_set_floor map:set_floor(floor)
+
+Changes the floor of this map.
+
+The floor property remains until the map is destroyed:
+If you reload the same map again later,
+the floor is reset to the one defined in the
+\ref lua_api_map_overview_files "map data file".
+- \c floor (number): The new floor number to set,
+  or \c nil to set no floor.
 
 \subsection lua_api_map_get_num_layers map:get_num_layers()
 
