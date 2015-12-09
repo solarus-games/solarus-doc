@@ -72,11 +72,16 @@ See \ref lua_api_entity_events to know these events.
 
 The following events are specific to chests.
 
-\subsection lua_api_chest_on_empty chest:on_empty()
+\subsection lua_api_chest_on_opened chest:on_opened(treasure_item, treasure_variant, treasure_savegame_variable)
 
-Called when the hero opens this chest if the chest has no treasure.
+Called when the hero opens this chest.
 
-Your script has to define what happens.
+If you don't define this event, then by default,
+the engine gives the treasure to the player.
+(if there is no treasure, then nothing happens and
+the hero is automatically unfreezed).
+
+Your script can define this even to customize what happens.
 You may either give a treasure decided dynamically
 (by calling \ref lua_api_hero_start_treasure "hero:start_treasure()")
 or do something else: show a dialog, play a sound, close the chest
@@ -84,12 +89,19 @@ again, etc.
 
 The hero is automatically freezed during the whole process of opening a chest.
 If you don't give him a treasure,
-then you have to unblock him explicitely by calling
+then you have to unblock him explicitly by calling
 \ref lua_api_hero_unfreeze "hero:unfreeze()" when you want to restore control
 to the player.
-
-If you don't define this event, by default, the engine does nothing special
-and just restores control to the player.
+- \c treasure_item (\ref lua_api_item "item"): Equipment item in the chest,
+  or \c nil if the chest is empty.
+- \c treasure_variant (number): Variant of the treasure
+  (because some \ref lua_api_item "equipment items"
+  may have several variants),
+  or \c nil if the chest is empty.
+- \c treasure_savegame_variable (string): Name of the boolean
+  value that stores in the \ref lua_api_game "savegame"
+  whether this chest is open,
+  or \c nil if this chest is not saved.
 
 */
 
