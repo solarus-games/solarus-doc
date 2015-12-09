@@ -296,7 +296,7 @@ unless you override some of them with
   \ref lua_api_enemy_get_attack_consequence
   "enemy:get_attack_consequence()".
 
-\subsection lua_api_enemy_get_attack_consequence_sprite enemy:get_attack_consequence_sprite(sprite, attack):
+\subsection lua_api_enemy_get_attack_consequence_sprite enemy:get_attack_consequence_sprite(sprite, attack)
 
 Returns how this enemy reacts when one of his \ref lua_api_sprite "sprites"
 receives an attack.
@@ -318,7 +318,7 @@ the reaction of the enemy for a particular sprite with
   \ref lua_api_enemy_get_attack_consequence
   "enemy:get_attack_consequence()".
 
-\subsection lua_api_enemy_set_attack_consequence_sprite enemy:set_attack_consequence_sprite(sprite, attack, consequence):
+\subsection lua_api_enemy_set_attack_consequence_sprite enemy:set_attack_consequence_sprite(sprite, attack, consequence)
 
 Sets how this enemy reacts when one of his \ref lua_api_sprite "sprites"
 receives an attack.
