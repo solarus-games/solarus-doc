@@ -13,15 +13,17 @@ It can also be created dynamically with
 \section lua_api_chest_overview Overview
 
 A chest may contain a treasure or be empty.
-- If the chest contains a treasure, the engine will give it automatically
-  to the player when the \ref lua_api_hero "hero" opens its.
-  If the treasure is not
-  \ref lua_api_item_is_obtainable "obtainable",
-  it is replaced by an empty treasure.
-- If the chest is empty, it may either mean that there is really
-  no treasure, or that what happens when the player opens it
-  is defined dynamically by your script
-  (see the \ref lua_api_chest_on_empty "chest:on_empty()" event).
+
+When opening the chest, the following happens by default:
+- If the chest contains a treasure, the engine automatically gives it
+  to the player, unless the treasure is not
+  \ref lua_api_item_is_obtainable "obtainable".
+- If the chest is empty or contains a non-obtainable treasure,
+  then nothing happens.
+
+This is the default behavior of opening a chest,
+and it can be redefined by your script in
+the \ref lua_api_chest_on_opened "chest:on_opened()" event.
 
 The state of a chest is either open or closed.
 When a chest is closed, its treasure (if any) is still inside
@@ -53,10 +55,54 @@ Returns the state of this chest (open or closed).
 \subsection lua_api_chest_set_open chest:set_open([open])
 
 Sets the state of this chest (open or closed).
-If you close the chest, its content (if any) is restored and can be obtained
-again.
+If you close the chest, its treasure
+(as returned by \ref lua_api_chest_get_treasure "chest:get_treasure()")
+is restored and can be obtained again later.
 - \c open (boolean, optional): \c true to make the chest open, \c false
   to make it closed. No value means \c true.
+
+\subsection lua_api_chest_get_treasure chest:get_treasure()
+
+Returns the treasure the player will obtain when opening this chest.
+
+If the chest is already open, this function still works: it returns the
+treasure that was inside the chest before it was open.
+- Return value 1 (string): Name of an \ref lua_api_item
+  "equipment item".
+  \c nil means that the chest is empty.
+- Return value 2 (number): Variant of this equipment item
+  (\c 1 means the first variant).
+  \c nil means that the chest is empty.
+- Return value 3 (string): Name of the boolean
+  value that stores in the \ref lua_api_game "savegame"
+  whether the chest is open.
+  \c nil means that the chest is not saved.
+
+\remark If the treasure is a
+  \ref lua_api_item_is_obtainable "non-obtainable item",
+  the hero will actually get no treasure when opening the chest.
+
+\subsection lua_api_chest_set_treasure chest:set_treasure([item_name, [variant, [savegame_variable]]])
+
+Sets the treasure the player will obtain when opening this chest.
+
+If the chest is already open, this function still works, it sets the treasure
+that will be put back in case you
+\ref lua_api_chest_set_open "close" the chest later.
+- \c item_name (string, optional): Name of an \ref lua_api_item
+  "equipment item".
+  \c nil makes the chest empty.
+- \c variant (number, optional): Variant of this equipment item
+  (\c 1 means the first variant). The default value is \c 1.
+  Must be \c nil when \c item_name is \c nil.
+- \c savegame_variable (string, optional): Name of the boolean
+  value that stores in the \ref lua_api_game "savegame"
+  whether the chest is open.
+  \c nil means that the chest is not saved.
+
+\remark If the treasure is a
+  \ref lua_api_item_is_obtainable "non-obtainable item",
+  the hero will actually get no treasure when opening the chest.
 
 \section lua_api_chest_inherited_events Events inherited from map entity
 
@@ -77,11 +123,11 @@ The following events are specific to chests.
 Called when the hero opens this chest.
 
 If you don't define this event, then by default,
-the engine gives the treasure to the player.
+the engine gives the treasure to the player
 (if there is no treasure, then nothing happens and
 the hero is automatically unfreezed).
 
-Your script can define this even to customize what happens.
+Your script can define this event to customize what happens.
 You may either give a treasure decided dynamically
 (by calling \ref lua_api_hero_start_treasure "hero:start_treasure()")
 or do something else: show a dialog, play a sound, close the chest
@@ -93,11 +139,11 @@ then you have to unblock him explicitly by calling
 \ref lua_api_hero_unfreeze "hero:unfreeze()" when you want to restore control
 to the player.
 - \c treasure_item (\ref lua_api_item "item"): Equipment item in the chest,
-  or \c nil if the chest is empty.
+  or \c nil if the chest is empty or contains a
+  \ref lua_api_item_is_obtainable "non-obtainable item".
 - \c treasure_variant (number): Variant of the treasure
-  (because some \ref lua_api_item "equipment items"
-  may have several variants),
-  or \c nil if the chest is empty.
+  or \c nil if the chest is empty or contains a
+  \ref lua_api_item_is_obtainable "non-obtainable item".
 - \c treasure_savegame_variable (string): Name of the boolean
   value that stores in the \ref lua_api_game "savegame"
   whether this chest is open,
