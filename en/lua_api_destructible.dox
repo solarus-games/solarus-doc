@@ -145,8 +145,9 @@ loses when the \ref lua_api_hero "hero" throws this object at it.
 
 Returns the ground defined by this destructible object on the map.
 
+The presence of a destructible object can modify the ground of the map.
 The ground is usually \c "wall", but it may sometimes be \c "traversable",
-or for example \c "grass" to make it
+or for example \c "grass" to make the destructible object
 traversable too but with an additional grass sprite below the hero.
 - Return value (string): The ground defined by this destructible object.
   See \ref lua_api_map_get_ground "map:get_ground()" for the list of grounds.
