@@ -103,19 +103,17 @@ If the delay is set to zero, the function is called immediately.
     paused.
     An entity may be suspended when the
     \ref lua_api_game_is_suspended "game is suspended",
-    when the entity is
-    \ref lua_api_entity_set_enabled "disabled"
     or when the entity is
-    \ref lua_api_entity_set_optimization_distance "far for the screen".
+    \ref lua_api_entity_set_enabled "disabled".<br>
     Example: a boss who shoots fireballs every 10 seconds.
     Most enemy scripts usually create timers.
   - If you set the context to a \ref lua_api_menu "menu", the timer is
-    canceled when the menu is closed.
-    Example: in the title screen, show some game sequences after a few seconds
+    canceled when the menu is closed.<br>
+    Example: in the title screen, show some animations after a few seconds
     without action from the user.
   - If you set the context to the \ref lua_api_main "sol.main" table, the
     timer is canceled when Lua is closed. Thus, it will be a global timer.
-    This kind of timer is not often needed.
+    This kind of timer is not often needed.<br>
     Example: dumping some global information periodically while the program is
     running.
   - If you don't specify a context, then a default context is set for you:
@@ -126,7 +124,7 @@ If the delay is set to zero, the function is called immediately.
   If this callback function returns \c true, then the timer automatically
   repeats itself with the same delay.
   In this case, if the delay is shorter than the time of a cycle of the main
-  loop, then the callback may be executed several times in
+  loop, the callback may be executed several times in
   the same cycle in order to catch up.
 - Return value (timer): The timer created.
   Most of the time, you don't need to store the returned timer.
@@ -161,13 +159,10 @@ This function is equivalent to calling \ref lua_api_timer_stop on each timer
 of the context.
 It may allow you to avoid to store explicitly all your timers.
 
-Keep in mind that timers are already automatically stopped when their context
-finishes: when the player goes to another \ref lua_api_map "map",
-map timers are canceled,
-when an \ref lua_api_enemy "enemy" is killed, its timers are canceled, etc.
-In all these cases, you don't need this function.
-But there are situations where you need to cancel explictly the timers of a
-context.
+\remark Canceling timers by hand may be tedious and error-prone.
+  In lots of cases, you can simply pass a context parameter to
+  \ref lua_api_timer_start "sol.timer.start()" in order to restrict the
+  lifetime of your timer to some other object.
 
 \section lua_api_timer_methods Methods of the type timer
 
@@ -209,7 +204,8 @@ Returns whether this timer is currently suspended.
 Returns whether this timer gets automatically suspended when the
 \ref lua_api_map "map" is
 suspended.
-- Return value (boolean): \c true if this timer is currently suspended.
+- Return value (boolean): \c true if this timer gets suspended when the map
+  is suspended.
 
 \subsection lua_api_timer_set_suspended_with_map timer:set_suspended_with_map([suspended_with_map])
 
