@@ -56,7 +56,8 @@ double quotes.
 The following properties must be defined:
 - \c width (number): Width of the map in pixels. Must be a multiple of 8.
 - \c height (number): Height of the map in pixels. Must be a multiple of 8.
-- \c num_layers (number): Number of layers of the map.
+- \c min_layer (number): Index of the lowest layer (0 or less).
+- \c max_layer (number): Index of the highest layer (0 or less).
 - \c world (string, optional): A name that identifies a group of maps this map
   belongs to. Worlds allow to group maps together.
   The world can be any arbitrary name.
@@ -201,7 +202,6 @@ The following properties exist for all types of entities:
   \ref quest_map_data_file_syntax_tile "tiles": this is because tiles
   don't exist individually at runtime for performance reasons.
 - \c layer (number): Layer where the entity is on the map.
-  The lowest layer is \c 0.
 - \c x (number): X coordinate of the entity relative to the upper-left corner
   of the map.
   The \ref lua_api_entity_get_origin "origin point" of the entity will be

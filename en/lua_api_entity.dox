@@ -277,9 +277,9 @@ Returns the position of this entity on the \ref lua_api_map "map"
 - Return value 2 (number): Y coordinate of the \ref lua_api_entity_get_origin
   "origin point" of the entity,
   relative to the upper left corner of the map.
-- Return value 3 (number): Layer where the entity is on the map,
-  between \c 0 (the lowest one) and
-  \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+- Return value 3 (number): Layer where the entity is on the map, between
+  \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+  \ref lua_api_map_get_max_layer "map:get_max_layer()".
 
 \subsection lua_api_entity_set_position entity:set_position(x, y, [layer]):
 
@@ -292,9 +292,9 @@ Any previous movement or other action performed by the entity
 continues normally.
 - \c x (number): X coordinate to set.
 - \c y (number): Y coordinate to set.
-- \c layer (number, optional): Layer to set,
-  between \c 0 (the lowest one) and
-  \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+- \c layer (number, optional): Layer to set, between
+  \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+  \ref lua_api_map_get_max_layer "map:get_max_layer()".
   By default, the layer is unchanged.
 
 \remark Be careful: this function does not check collisions with obstacles.

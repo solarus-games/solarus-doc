@@ -572,8 +572,9 @@ and the layer is the one of the current enemy by default.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
     No value means no name.
-  - \c layer (number, optional): The layer, between \c 0 (he lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number, optional): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
     No value means the same layer as the current enemy.
   - \c x (number, optional): X coordinate on the map, relative to the current
     enemy. The default value is \c 0.

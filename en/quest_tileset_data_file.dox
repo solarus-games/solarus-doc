@@ -111,7 +111,6 @@ Each tile pattern must have the following properties:
   to be used when creating a
   tile with this pattern on a map with a map editor. This information is
   only useful for map editors (the engine does not use it).
-  \c 0 is the lowest layer.
 - \c x (number or table): X coordinate(s) of the upper-left corner of the
   pattern's rectangle(s) in the tileset image file.
   The rectangle of a tile pattern must not overlap other tile patterns in the

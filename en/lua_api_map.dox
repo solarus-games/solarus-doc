@@ -27,6 +27,10 @@ Thus, each \ref lua_api_entity "entity" has some coordinates <tt>X,Y</tt>
 on the map. But its position is also defined by a third value: its layer.
 The map has a number of distinct layers that are stacked.
 Each layer has its own set of entities.
+Layers are identified by a number.
+There is always a layer \c 0, and maps can add additional
+layers above or below \c 0.
+
 Layers allow to implement maps with multi-level content, like a bridge
 between two higher platforms. The \ref lua_api_hero "hero"
 (as well as \ref lua_api_enemy "enemies" and any other
@@ -340,10 +344,15 @@ the floor is reset to the one defined in the
 - \c floor (number): The new floor number to set,
   or \c nil to set no floor.
 
-\subsection lua_api_map_get_num_layers map:get_num_layers()
+\subsection lua_api_map_get_min_layer map:get_min_layer()
 
-Returns the number of layers of this map.
-- Return value (number): The number of layers.
+Returns the index of the lowest layer of this map.
+- Return value (number): The lowest layer (0 or less).
+
+\subsection lua_api_map_get_max_layer map:get_max_layer()
+
+Returns the index of the highest layer of this map.
+- Return value (number): The highest layer (0 or more).
 
 \subsection lua_api_map_get_size map:get_size()
 
@@ -480,8 +489,9 @@ The ground is defined by
 that overlap this point.
 - \c x (number): X coordinate of a point of the map.
 - \c y (number): Y coordinate of a point of the map.
-- \c layer (number): The layer, between \c 0 (the lowest one) and
-  \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+- \c layer (number): The layer, between
+  \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+  \ref lua_api_map_get_max_layer "map:get_max_layer()".
 - Return value (string): The kind of ground. The possible values are the
   same as the \c ground property of the
   \ref quest_tileset_data_file "tileset file":
@@ -806,8 +816,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Direction that the hero should take when arriving on
@@ -836,8 +847,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -876,8 +888,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c treasure_name (string, optional): Kind of treasure to create
@@ -911,8 +924,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c treasure_name (string, optional): Kind of
@@ -985,8 +999,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c treasure_name (string, optional): Kind of treasure to place in the chest
@@ -1068,8 +1083,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1094,8 +1110,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Initial direction of the enemy, between
@@ -1153,8 +1170,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Initial direction of the NPC's sprite, between
@@ -1190,8 +1208,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number, optional): The only direction where the block can be
@@ -1217,8 +1236,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate of the top-left corner of the dynamic tile on
     the map.
   - \c y (number): Y coordinate of the top-left corner of the dynamic tile on
@@ -1245,8 +1265,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c subtype (string): Kind of switch to create:
@@ -1283,8 +1304,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1322,8 +1344,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1341,8 +1364,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
 - Return value (\ref lua_api_crystal "crystal"): the crystal created.
@@ -1358,8 +1382,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1380,8 +1405,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c price (number): Money amount required to buy the treasure.
@@ -1427,8 +1453,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Direction where the stream moves the
@@ -1463,8 +1490,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Direction of the door, between
@@ -1541,8 +1569,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c direction (number): Direction where the stairs should be turned
@@ -1569,8 +1598,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
 - Return value (\ref lua_api_bomb "bomb"): the
@@ -1587,8 +1617,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
 - Return value (\ref lua_api_explosion "explosion"): the
@@ -1605,8 +1636,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
 - Return value (\ref lua_api_fire "fire"): the
@@ -1623,8 +1655,9 @@ on the map.
     If the name is already used by another entity, a suffix (of the form
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
@@ -1647,8 +1680,9 @@ on the map.
   - \c direction (number): Direction of the custom entity, between \c 0 (East)
     and \c 3 (South).
     This direction will be applied to the entity's sprites if possible.
-  - \c layer (number): The layer, between \c 0 (the lowest one) and
-    \ref lua_api_map_get_num_layers "map:get_num_layers()" - 1.
+  - \c layer (number): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number, optional): Width of the entity in pixels
