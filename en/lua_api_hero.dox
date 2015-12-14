@@ -63,7 +63,7 @@ Teletransports the hero to a different place.
   or the special keyword \c "_same" to keep the same coordinates.
   Can also be the special keyword \c "_side0", \c "_side1", \c "_side2" or
   \c "_side3" to arrive near the East, North, West or South frontier of the map
-  respectively. But the hero should be near the corresponding side or the
+  respectively. But the hero should be near the corresponding side of the
   original map for this to look okay. This is usually used in combination with
   scrolling transitions.
   No value means the default destination entity of the map.
