@@ -6,14 +6,15 @@
 An equipment item represents something that the player can obtain 
 (one or more times, in various forms and with several variants) and possibly
 keep.
-The Lua item type described in this page provides various functions to get and
-the possession state of a equipment item, set its properties (like whether the
-item is saved and has an amount) and control its dynamic behavior
-(like what happens when the player uses this item).
+The Lua item type described in this page provides various functions to
+- get and the possession state of a equipment item,
+- set its properties, like whether the item is saved and has an amount,
+- control its dynamic behavior, like what happens when the player
+  uses this item (for items that can be used).
 
-A Lua item object represents a kind of treasure
-(and not particular instances of treasures).
-Individual treasures may be represented as
+A Lua item object represents a kind of treasure,
+and not a particular instance of treasures.
+Individual treasures may then be represented as
 \ref lua_api_pickable "pickable treasures",
 \ref lua_api_chest "chests",
 \ref lua_api_shop_treasure "shop treasures", and may be brandished by the
@@ -53,7 +54,7 @@ you can retrieve that savegame with
 the sprite <tt>entities/items</tt>: it is used by the engine whenever it needs
 to draw your item on the \ref lua_api_map "map"
 (for example, when a \ref lua_api_pickable "pickable treasure"
-of this kind is created).
+of this kind is created on the map).
 
 \section lua_api_item_methods Methods of the type item
 
