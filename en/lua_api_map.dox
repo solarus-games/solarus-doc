@@ -415,6 +415,11 @@ To get the music currently being played, see
   music unchanged,
   or \c nil if the map specifies to play no music.
 
+\subsection lua_api_map_get_camera map:get_camera()
+
+Returns the camera entity of the map.
+- Return value (\ref lua_api_camera "camera"): The camera.
+
 \subsection lua_api_map_get_camera_position map:get_camera_position()
 
 Returns the currently visible area of the map.
@@ -428,6 +433,8 @@ and on
 - Return value 2 (number): Y coordinate of the visible area.
 - Return value 3 (number): Width of the visible area.
 - Return value 4 (number): Height of the visible area.
+
+\remark This is equivalent to <tt>map:get_camera():get_position()</tt>.
 
 \subsection lua_api_map_move_camera map:move_camera(x, y, speed, callback, [delay_before], [delay_after])
 
