@@ -13,42 +13,48 @@ To access the camera of the map from one of your scripts, you can use
 
 \section lua_api_camera_overview Overview
 
-The camera can work in two modes.
+The camera can work in two states.
 It can be either centered on an
 \ref lua_api_entity "entity" and track it automatically,
 or it can be controlled manually by your scripts or by the engine.
 
 When a map starts, its camera tracks the \ref lua_api_hero "hero".
 
-Use \ref lua_api_camera_stop_tracking "camera:stop_tracking"
-to switch to manual mode, and
+Use \ref lua_api_camera_start_manual "camera:start_manual"
+to switch to manual state, and
 \ref lua_api_camera_start_tracking "camera:start_tracking"
-to switch to tracking mode.
+to switch to tracking state.
 Starting a
 \ref lua_api_movement "movement" on the camera 
-also switches it to manual mode.
+also switches it to manual state.
 
 \subsection lua_api_camera_constraints Movements and constraints
 
 \ref lua_api_separator "Separators" and map limits are obstacles for the
 camera.
-It means that when the \ref lua_api_hero "hero"
-(or more generally the tracked entity)
-is close to a separator or to a limit of the
-\ref lua_api_map "map",
-the camera stops as you would expect.
 
-When you start a \ref lua_api_movement "movement" on the camera, the
-map is automatically suspended.
-Regarding separators and map limits, the rules of the movement are applied
-just like for any entity:
-the movement will stop on separators and map limits unless you called
+It means that if the camera is close to a separator or to a limit of the map,
+its movement stops as you would expect, independently of its state.
+
+Remember however that obstacles can be explicitly ignored with
 \ref lua_api_movement_set_ignore_obstacles
 "movement:set_ignore_obstacles(true)".
+For a camera, it means that you can ignore separators and even map limits
+if you want.
 
-Finally, when the \ref lua_api_hero "hero" crosses a separator,
-the engine starts a scrolling movement on the camera.
-After the scrolling, the camera tracks the hero again.
+\subsection lua_api_camera_tracking_state Tracking state specifics
+
+In tracking state, when the tracked entity crosses a separator,
+the engine automatically starts a scrolling movement on the camera.
+After the scrolling, the camera is centered on the tracked entity again.
+
+\subsection lua_api_camera_manual_state Manual state specifics
+
+In manual state, the map is by default automatically suspended.
+This is useful to make cutscenes.
+See
+\ref lua_api_camera_set_map_auto_suspended "camera:set_map_auto_suspended()"
+if you want to change this behavior.
 
 \subsection lua_api_camera_overview_size Camera size
 
@@ -58,7 +64,12 @@ meaning that the camera occupies the whole screen.
 
 It is possible to set a smaller size to the camera, in order to show the
 map only on a subpart of the screen.
-You can then use the rest of the screen to display a HUD for example.
+You can then use the rest of the screen to display some information like a HUD.
+Use
+\ref lua_api_camera_set_size "camera:set_size()"
+and \ref lua_api_camera_set_origin "camera:set_origin()"
+to indicate the exact subpart of the screen where you want
+the camera to be displayed.
 
 \section lua_api_camera_inherited_methods Methods inherited from map entity
 
@@ -71,9 +82,17 @@ See \ref lua_api_entity_methods to know these methods.
 
 TODO
 
+camera:set_size(width, height)
+
+camera:set_origin(x, y)
+
 camera:start_tracking(entity)
 
-camera:stop_tracking()
+camera:start_manual()
+
+camera:is_map_auto_suspended()
+
+camera:set_map_auto_suspended([suspend])
 
 \section lua_api_camera_inherited_events Events inherited from map entity
 
