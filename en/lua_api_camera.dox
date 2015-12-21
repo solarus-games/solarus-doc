@@ -90,6 +90,8 @@ camera:set_origin(x, y)
 
 camera:start_tracking(entity)
 
+camera:get_tracked_entity()
+
 camera:start_manual()
 
 camera:get_auto_suspend_map()
