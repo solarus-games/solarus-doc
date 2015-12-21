@@ -41,6 +41,8 @@ Remember however that obstacles can be explicitly ignored with
 "movement:set_ignore_obstacles(true)".
 For a camera, it means that you can ignore separators and even map limits
 if you want.
+Parts of the camera that are outside the map are displayed with the background
+color of the tileset.
 
 \subsection lua_api_camera_tracking_state Tracking state specifics
 
