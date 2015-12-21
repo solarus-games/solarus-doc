@@ -53,7 +53,7 @@ After the scrolling, the camera is centered on the tracked entity again.
 In manual state, the map is by default automatically suspended.
 This is useful to make cutscenes.
 See
-\ref lua_api_camera_set_map_auto_suspended "camera:set_map_auto_suspended()"
+\ref lua_api_camera_set_auto_suspend_map "camera:set_auto_suspend_map()"
 if you want to change this behavior.
 
 \subsection lua_api_camera_overview_size Camera size
@@ -90,9 +90,9 @@ camera:start_tracking(entity)
 
 camera:start_manual()
 
-camera:is_map_auto_suspended()
+camera:get_auto_suspend_map()
 
-camera:set_map_auto_suspended([suspend])
+camera:set_auto_suspend_map([suspend])
 
 \section lua_api_camera_inherited_events Events inherited from map entity
 
