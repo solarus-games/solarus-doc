@@ -908,8 +908,9 @@ when you need to draw the dialog box on the screen, etc.
   It is a table with at least the following two entries:
   - \c dialog_id (string): Id of the dialog.
   - \c text (string): Text of the dialog in the current language.
-  It may have several lines.
-  When it is not empty, it always ends with a newline character.
+    It may have several lines.
+    When it is not empty, it always ends with a newline character.
+
   The table also contains all custom entries defined in
   \ref quest_language_dialogs "text/dialogs.dat"
   for this dialog.
