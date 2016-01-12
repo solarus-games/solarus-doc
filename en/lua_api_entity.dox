@@ -226,6 +226,10 @@ other entities.
 
 \remark Note that the \ref lua_api_sprite "sprites" of an entity may have a
   different size than the entity itself.
+  See
+  \ref lua_api_entity_get_sprites_bounding_box
+  "entity:get_sprites_bounding_box()"
+  to know it.
 
 \subsection lua_api_entity_get_origin entity:get_origin()
 
@@ -334,6 +338,25 @@ other entities.
 - Return value 4 (number): Height of the bounding box.
 
 \remark The sprites of this entity (if any) may exceed the bounding box.
+  See
+  \ref lua_api_entity_get_sprites_bounding_box
+  "entity:get_sprites_bounding_box()".
+
+\subsection lua_api_entity_get_sprites_bounding_box entity:get_sprites_bounding_box()
+
+Returns the rectangle containing this entity and its sprites
+in all their possible animations and directions.
+
+This is usually larger than
+\ref lua_api_entity_get_bounding_box
+"entity:get_bounding_box()", because the sprite of an entity often
+exceeds its bounding box.
+- Return value 1 (number): X coordinate of the upper left corner of the
+  sprites bounding box.
+- Return value 2 (number): Y coordinate of the upper left corner of the
+  sprites bounding box.
+- Return value 3 (number): Width of the sprites bounding box.
+- Return value 4 (number): Height of the sprites bounding box.
 
 \subsection lua_api_entity_overlaps entity:overlaps(x, y, [width, height]), entity:overlaps(other_entity)
 
