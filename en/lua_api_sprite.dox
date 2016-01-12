@@ -101,6 +101,12 @@ Sets the current frame of this sprite.
 - \c frame (number): The frame to set (the first one is \c 0).
   This frame must exist in the current direction.
 
+\subsection lua_api_sprite_get_num_frames sprite:get_num_frames()
+
+Returns the number of frames of this sprites in the current animation and
+direction.
+- Return value (number): The number of frames.
+
 \subsection lua_api_sprite_get_frame_delay sprite:get_frame_delay()
 
 Returns the delay between two frames of this sprite in the current animation.
