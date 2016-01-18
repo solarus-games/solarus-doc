@@ -358,11 +358,11 @@ exceeds its bounding box.
 - Return value 3 (number): Width of the sprites bounding box.
 - Return value 4 (number): Height of the sprites bounding box.
 
-\subsection lua_api_entity_overlaps entity:overlaps(x, y, [width, height]), entity:overlaps(other_entity)
+\subsection lua_api_entity_overlaps_rectangle entity:overlaps(x, y, [width, height])
 
 Returns whether the
 \ref lua_api_entity_get_bounding_box "bounding box"
-of this entity overlaps the specified rectangle, point or entity.
+of this entity overlaps the specified rectangle or point.
 
 To test if this entity overlaps a rectangle or a point (a point is a rectangle
 of size 1x1):
@@ -375,9 +375,49 @@ of size 1x1):
 - Return value (boolean): \c true if the bounding box of this entity overlaps
   the rectangle.
 
-To test if this entity overlaps another entity:
-- \c other_entity (entity): An entity to check.
-- Return value (boolean): \c true if both bounding boxes overlap.
+\subsection lua_api_entity_overlaps_entity entity:overlaps(other_entity, [collision_mode])
+
+Returns whether another entity collides with this entity according to
+the specified collision test.
+- \c entity (entity): Another entity.
+- \c collision_mode (string, optional): Specifies what kind of collision you
+  want to test. This may be one of:
+  - \c "overlapping": Collision if the
+    \ref lua_api_entity_get_bounding_box "bounding box"
+    of both entities overlap.
+    This is the default value.
+  - \c "containing": Collision if the bounding box of the other entity is
+    fully inside the bounding box of this entity.
+  - \c "origin": Collision if the \ref lua_api_entity_get_origin "origin point"
+    or the other entity is inside the bounding box of this entity.
+  - \c "center": Collision if the \ref lua_api_entity_get_center_position
+    "center point" of the other entity is inside the bounding box of this
+    entity.
+  - \c "facing": Collision if the facing point of the other
+    entity's bounding box is touching this entity's bounding box.
+    Bounding boxes don't necessarily overlap, but they are in
+    contact: there is no space between them.
+    When you consider the bounding box of an entity,
+    which is a rectangle with four sides,
+    the facing point is the middle point of the side the entity is oriented to.
+    This \c "facing" collision test is useful when the other entity cannot
+    traverse your custom entity.
+    For instance, if the other entity has direction "east", there is a
+    collision if the middle of the east side of its bounding box touches
+    (but does not necessarily overlap) this entity's bounding box.
+    This is typically what you need to let the hero interact with
+    this entity when he is looking at it.
+  - \c "touching": Like \c "facing", but accepts all four sides of the other
+    entity's bounding box, no matter its direction.
+  - \c "sprite": Collision if a sprite of the other entity overlaps a sprite of
+    this entity.
+    The collision test is pixel precise.
+- Return value (boolean): \c true if a collision is detected with this collision test.
+
+\remark For custom entities, see also
+  \ref lua_api_custom_entity_add_collision_test
+  "custom_entity:add_collision_test()"
+  to be automatically notified when a collision is detected.
 
 \subsection lua_api_entity_get_distance entity:get_distance(x, y), entity:get_distance(other_entity)
 
@@ -545,45 +585,6 @@ if this map entity was translated.
   No value means the current layer.
 - Return value (boolean): \c true if there would be a collision in this
 position.
-
-\subsection lua_api_entity_test_collision entity:test_collision(other_entity, collision_mode)
-
-Tests if another entity is colliding this entity.
-- \c entity (entity): Another entity.
-- \c collision_mode (string): Specifies what kind of collision you
-  want to test. This may be one of:
-  - \c "overlapping": Collision if the
-    \ref lua_api_entity_get_bounding_box "bounding box"
-    of both entities overlap.
-    This is equivalent to
-    \ref lua_api_entity_overlaps "entity:overlaps()"
-  - \c "containing": Collision if the bounding box of the other entity is
-    fully inside the bounding box of this entity.
-  - \c "origin": Collision if the \ref lua_api_entity_get_origin "origin point"
-    or the other entity is inside the bounding box of this entity.
-  - \c "center": Collision if the \ref lua_api_entity_get_center_position
-    "center point" of the other entity is inside the bounding box of this
-    entity.
-  - \c "facing": Collision if the facing point of the other
-    entity's bounding box is touching this entity's bounding box.
-    Bounding boxes don't necessarily overlap, but they are in
-    contact: there is no space between them.
-    When you consider the bounding box of an entity,
-    which is a rectangle with four sides,
-    the facing point is the middle point of the side the entity is oriented to.
-    This \c "facing" collision test is useful when the other entity cannot
-    traverse your custom entity.
-    For instance, if the other entity has direction "east", there is a
-    collision if the middle of the east side of its bounding box touches
-    (but does not necessarily overlap) this entity's bounding box.
-    This is typically what you need to let the hero interact with
-    this entity when he is looking at it.
-  - \c "touching": Like \c "facing", but accepts all four sides of the other
-    entity's bounding box, no matter its direction.
-  - \c "sprite": Collision if a sprite of the other entity overlaps a sprite of
-    this entity.
-    The collision test is pixel precise.
-- Return value (boolean): \c true if a collision is detected.
 
 \subsection lua_api_entity_is_visible entity:is_visible()
 

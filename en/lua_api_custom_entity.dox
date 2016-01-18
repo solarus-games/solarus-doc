@@ -328,7 +328,7 @@ when another entity.
   just ignore these additional sprite parameters.
 
 \remark See also
-  \ref lua_api_entity_test_collision "entity:test_collision()"
+  \ref lua_api_entity_overlaps_entity "entity:overlaps()"
   to directly test a collision rather than registering a callback.
 
 \subsection lua_api_custom_entity_clear_collision_tests custom_entity:clear_collision_tests()
