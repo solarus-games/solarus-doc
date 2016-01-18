@@ -275,11 +275,53 @@ while the \c "low wall" ground cannot.
 - \c traversable (boolean): Whether your custom entity can
   traverse this kind of ground.
 
-\subsection lua_api_custom_entity_add_collision_test custom_entity:add_collision_test(collision_test, callback)
+\subsection lua_api_custom_entity_test_collision custom_entity:test_collision(entity, collision_mode)
+
+Tests if another entity is colliding your custom entity.
+- \c entity (\ref lua_api_entity "entity"): Another entity.
+- \c collision_mode (string): Specifies what kind of collision you
+  want to test. This may be one of:
+  - \c "overlapping": Collision if the
+    \ref lua_api_entity_get_bounding_box "bounding box"
+    of both entities overlap.
+    This is often used when the other entity can traverse your custom entity.
+  - \c "containing": Collision if the bounding box of the other entity is
+    fully inside the bounding box of your custom entity.
+  - \c "origin": Collision if the \ref lua_api_entity_get_origin "origin point"
+    or the other entity is inside the bounding box of your custom entity.
+  - \c "center": Collision if the \ref lua_api_entity_get_center_position
+    "center point" of the other entity is inside the bounding box of your
+    custom entity.
+  - \c "facing": Collision if the facing point of the other
+    entity's bounding box is touching your custom entity's bounding box.
+    Bounding boxes don't necessarily overlap, but they are in
+    contact: there is no space between them.
+    When you consider the bounding box of an entity,
+    which is a rectangle with four sides,
+    the facing point is the middle point of the side the entity is oriented to.
+    This \c "facing" collision test is useful when the other entity cannot
+    traverse your custom entity.
+    For instance, if the other entity has direction "east", there is a
+    collision if the middle of the east side of its bounding box touches
+    (but does not necessarily overlap) your custom entity's bounding box.
+    This is very often what you need, typically to let the hero interact with
+    your entity when he is looking at it.
+  - \c "touching": Like \c "facing", but accepts all four sides of the other
+    entity's bounding box, no matter its direction.
+  - \c "sprite": Collision if a sprite of the other entity overlaps a sprite of
+    your custom entity.
+    The collision test is pixel precise.
+- Return value (boolean): \c true if a collision is detected.
+
+\remark See also
+  \ref lua_api_custom_entity_add_collision_test "custom_entity:add_collision_test()"
+  to register a callback to be executed whenever a collision occurs.
+
+\subsection lua_api_custom_entity_add_collision_test custom_entity:add_collision_test(collision_mode, callback)
 
 Registers a function to be called when your custom entity detects a collision
 when another entity.
-- \c collision_test (string or function): Specifies what kind of collision you
+- \c collision_mode (string or function): Specifies what kind of collision you
   want to test. This may be one of:
   - \c "overlapping": Collision if the
     \ref lua_api_entity_get_bounding_box "bounding box"
