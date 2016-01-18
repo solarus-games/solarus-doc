@@ -126,6 +126,30 @@ Use this function if you want to override the normal delay
 - \c delay (number): The new delay in milliseconds. \c nil means infinite
   and is only allowed for single-frame animations.
 
+\subsection lua_api_sprite_get_size sprite:get_size()
+
+Returns the frame size of this sprite in the current animation and direction.
+
+The frame size is the same for all frames of a given animation and direction.
+- Return value 1 (number): The width of a frame.
+- Return value 2 (number): The height of a frame.
+
+\subsection lua_api_sprite_get_origin sprite:get_origin()
+
+Returns the coordinates of the origin point of this sprite in the current
+animation and direction, relative to the upper left corner of a frame.
+
+The origin is the point of synchronization for sprites that have several
+animations or directions of different sizes,
+and for entity sprites that are larger than the entity itself.
+
+See \ref lua_api_entity_get_origin "entity:get_origin()" for more details.
+
+In a given animation and direction of a sprite,
+the origin point is the same for all frames.
+- Return value 1 (number): X coordinate of the origin point.
+- Return value 2 (number): Y coordinate of the origin point.
+
 \subsection lua_api_sprite_is_paused sprite:is_paused()
 
 Returns whether this sprite is paused.
