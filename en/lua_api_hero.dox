@@ -366,7 +366,7 @@ Returns the name of the current built-in state of the hero.
   \c "falling",
   \c "forced walking",
   \c "free",
-  \c "freezed",
+  \c "frozen",
   \c "grabbing",
   \c "hookshot",
   \c "hurt",

@@ -125,7 +125,7 @@ Called when the hero opens this chest.
 If you don't define this event, then by default,
 the engine gives the treasure to the player
 (if there is no treasure, then nothing happens and
-the hero is automatically unfreezed).
+the hero is automatically unfrozen).
 
 Your script can define this event to customize what happens.
 You may either give a treasure decided dynamically
@@ -133,7 +133,7 @@ You may either give a treasure decided dynamically
 or do something else: show a dialog, play a sound, close the chest
 again, etc.
 
-The hero is automatically freezed during the whole process of opening a chest.
+The hero is automatically frozen during the whole process of opening a chest.
 If you don't give him a treasure,
 then you have to unblock him explicitly by calling
 \ref lua_api_hero_unfreeze "hero:unfreeze()" when you want to restore control
