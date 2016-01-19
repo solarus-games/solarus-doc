@@ -227,8 +227,7 @@ other entities.
 \remark Note that the \ref lua_api_sprite "sprites" of an entity may have a
   different size than the entity itself.
   See
-  \ref lua_api_entity_get_sprites_bounding_box
-  "entity:get_sprites_bounding_box()"
+  \ref lua_api_sprite_get_size "sprite:get_size()"
   to know it.
 
 \subsection lua_api_entity_get_origin entity:get_origin()
@@ -339,12 +338,13 @@ other entities.
 
 \remark The sprites of this entity (if any) may exceed the bounding box.
   See
-  \ref lua_api_entity_get_sprites_bounding_box
-  "entity:get_sprites_bounding_box()".
+  \ref lua_api_entity_get_max_bounding_box
+  "entity:get_max_bounding_box()".
 
-\subsection lua_api_entity_get_sprites_bounding_box entity:get_sprites_bounding_box()
+\subsection lua_api_entity_get_max_bounding_box entity:get_max_bounding_box()
 
-Returns the rectangle containing this entity and its sprites
+Returns the rectangle surrounding the bounding box of this entity
+plus the bounding boxes of its sprites
 in all their possible animations and directions.
 
 This is usually larger than
