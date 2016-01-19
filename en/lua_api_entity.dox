@@ -607,7 +607,7 @@ Returns a sprite representing this entity.
   several sprites are automatically created by the engine
   for the tunic, the shadow and others.
   See the \ref lua_api_hero_overview_sprites "hero sprites" section for
-  the full specification of such sprites their name.
+  their full specification and their name.
 
 \subsection lua_api_entity_is_visible entity:is_visible()
 
