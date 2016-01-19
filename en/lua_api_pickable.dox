@@ -35,12 +35,6 @@ See \ref lua_api_entity_methods to know these methods.
 
 \section lua_api_pickable_methods Methods of the type pickable
 
-\subsection lua_api_pickable_get_sprite pickable:get_sprite()
-
-Returns the sprite of this pickable treasure.
-- Return value (\ref lua_api_sprite "sprite"): The sprite of this pickable
-  treasure.
-
 \subsection lua_api_pickable_has_layer_independent_collisions pickable:has_layer_independent_collisions()
 
 Returns whether this pickable treasure can detect collisions with entities

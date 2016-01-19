@@ -121,26 +121,13 @@ Sets the direction of this custom entity.
 Sprites of your custom entity that have such a direction automatically take it.
 - Return value 1 (number): The direction.
 
-\subsection lua_api_custom_entity_get_sprite custom_entity:get_sprite()
-
-Returns the \ref lua_api_sprite "sprite" of this custom entity.
-It may have been created at the creation of the custom entity,
-or when you called
-\ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
-- Return value (\ref lua_api_sprite "sprite"): The first sprite created for
-  this custom_entity.
-  Returns \c nil if the custom entity has no sprite.
-
-\remark If the custom entity has several sprites, the first one created is returned.
-  For the other sprites, you cannot use this function.
-  However, it is easy to store the return values of your calls to
-  \ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
-
-\subsection lua_api_custom_entity_create_sprite custom_entity:create_sprite(sprite_name)
+\subsection lua_api_custom_entity_create_sprite custom_entity:create_sprite(animation_set_id, [sprite_name])
 
 Creates a \ref lua_api_sprite "sprite" for this custom entity.
-- \c sprite_name (string): Name of the animation set of the
-  sprite to create.
+- \c animation_set_id (string): Animation set to use for the sprite.
+- \c sprite_name (string, optional): An optional name to identify the created
+  sprite. Only useful for entities with multiple sprites (see
+  \ref lua_api_entity_get_sprite "entity:get_sprite()").
 - Return value (\ref lua_api_sprite "sprite"): The sprite created.
 
 \subsection lua_api_custom_entity_remove_sprite custom_entity:remove_sprite([sprite])

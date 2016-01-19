@@ -40,12 +40,6 @@ See \ref lua_api_entity_methods to know these methods.
 
 The following methods are specific to teletransporters.
 
-\subsection lua_api_teletransporter_get_sprite teletransporter:get_sprite()
-
-Returns the sprite representing this teletransporter.
-- Return value (string): The sprite of this teletransporter.
-  \c nil means that the teletransporter is invisible.
-
 \subsection lua_api_teletransporter_get_sound teletransporter:get_sound()
 
 Returns the sound to be played when the hero uses this teletransporter.

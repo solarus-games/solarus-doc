@@ -24,9 +24,7 @@ and
 \ref lua_api_game_get_hero "game:get_hero()"
 to retrieve the hero more easily.
 
-His size is always 16x16 pixels and his sprites
-(tunic, sword, shield, shadow, etc.)
-are managed by the engine.
+His size is always 16x16 pixels.
 
 The hero entity persists accross map changes.
 In other words, the effect of functions like
@@ -37,6 +35,27 @@ Similarly, events that you define on the hero
 continue to get called on any map while the game is active.
 
 We describe here the Lua API that you can use to change the hero's state.
+
+\subsection lua_api_hero_overview_sprites Hero sprites
+
+Multiple sprites for the hero are automatically created by the engine.
+You can access them like for any other entity, specifying their name in
+\ref lua_api_entity_get_sprite "hero:get_sprite([name])".
+
+Here is the list of hero sprites created by the engine and their names:
+- \c "tunic": Main sprite of the hero.
+- \c "shield": Shield if any.
+- \c "sword": Sword if any.
+- \c "sword_stars": Small stars sparkling near the sword in some states.
+- \c "shadow": Shadow displayed under the hero in some states.
+- \c "trail": Trail of dust displayed under the hero when running.
+- \c "ground": Ground displayed under the hero when walking on special terrain
+  like shallow water or grass.
+
+Keep in mind that depending on the hero's equipment, his state
+and the ground below him,
+all of these built-in sprites don't always exist,
+and some of them may exist at some point but without being currently displayed.
 
 \section lua_api_hero_inherited_methods Methods inherited from map entity
 

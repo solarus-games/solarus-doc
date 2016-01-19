@@ -52,12 +52,6 @@ See \ref lua_api_entity_methods to know these methods.
 
 The following methods are specific to switches.
 
-\subsection lua_api_switch_get_sprite switch:get_sprite()
-
-Returns the sprite of this switch.
-- Return value (\ref lua_api_sprite "sprite"): The sprite of this switch,
-  or \c nil if the switch has no sprite.
-
 \subsection lua_api_switch_is_activated switch:is_activated()
 
 Returns whether this switch is activated.

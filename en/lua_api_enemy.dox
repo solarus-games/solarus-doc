@@ -524,24 +524,13 @@ Immobilizes this enemy for a while if possible.
 
 After a few seconds, the enemy shakes and then restarts.
 
-\subsection lua_api_enemy_get_sprite enemy:get_sprite()
-
-Returns the \ref lua_api_sprite "sprite" of this enemy,
-as created by
-\ref lua_api_enemy_create_sprite "enemy:create_sprite()".
-- Return value (\ref lua_api_sprite "sprite"): The first sprite created for
- this enemy.
-
-\remark If the enemy has several sprites, the first one created is returned.
-  For the other sprites, you cannot use this function.
-  However, you can just store the return values of your calls to
-  \ref lua_api_enemy_create_sprite "enemy:create_sprite()".
-
-\subsection lua_api_enemy_create_sprite enemy:create_sprite(sprite_name)
+\subsection lua_api_enemy_create_sprite enemy:create_sprite(animation_set_id, [sprite_name])
 
 Creates a \ref lua_api_sprite "sprite" for this enemy.
-- \c sprite_name (string): Name of the animation set of the
-  sprite to create.
+- \c animation_set_id (string): Animation set to use for the sprite.
+- \c sprite_name (string, optional): An optional name to identify the created
+  sprite. Only useful for entities with multiple sprites (see
+  \ref lua_api_entity_get_sprite "entity:get_sprite()").
 - Return value (\ref lua_api_sprite "sprite"): The sprite created.
 
 \remark If you don't create a sprite, your enemy will be invisible.

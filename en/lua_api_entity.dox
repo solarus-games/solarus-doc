@@ -586,6 +586,29 @@ if this map entity was translated.
 - Return value (boolean): \c true if there would be a collision in this
 position.
 
+\subsection lua_api_entity_get_sprite entity:get_sprite([name])
+
+Returns a sprite representing this entity.
+- \c name (string, optional): Name of the sprite to get
+  (only useful for entities that have multiple sprites).
+  By default, the first sprite of the entity (in creation order) is returned.
+- Return value (string): The entity sprite with this name,
+  or its first sprite if no name is specified.
+  Returns \c nil if the entity has no such sprite.
+
+\remark To manage entities with multiple sprites, you can set names
+  with sprite creation methods like
+  \ref lua_api_enemy_create_sprite "enemy:create_sprite()"
+  and
+  \ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
+  Or you can leave the names blank and simply store the result of these sprite
+  creation methods.
+  In the case of the \ref lua_api_hero "hero",
+  several sprites are automatically created by the engine
+  for the tunic, the shadow and others.
+  See the \ref lua_api_hero_overview_sprites "hero sprites" section for
+  the full specification of such sprites their name.
+
 \subsection lua_api_entity_is_visible entity:is_visible()
 
 Returns whether this entity is visible.
