@@ -203,8 +203,7 @@ Returns the style of sounds and animations to play when this enemy is hurt.
 \subsection lua_api_enemy_set_hurt_style enemy:set_hurt_style(hurt_style)
 
 Sets the style of sounds and animations to play when this enemy is hurt.
-The default values are \c "normal" for usual enemies
-and \c "boss" for bosses and minibosses.
+The default values is \c "normal".
 - \c hurt_style (string): \c "normal", \c "monster" or \c "boss".
 
 \subsection lua_api_enemy_get_can_attack enemy:get_can_attack()
@@ -572,10 +571,6 @@ and the layer is the one of the current enemy by default.
   - \c direction (number, optional): Initial direction of the enemy, between
     \c 0 (East) and \c 3 (South). The default value is \c 3.
   - \c breed (string): Model of enemy to create.
-  - \c rank (number, optional): \c 0 for a normal enemy (default),
-    \c 1 for a miniboss, \c 2 for a boss.
-    This property will be removed in a future version.
-    Its only effect is to change the initial hurt style.
   - \c savegame_variable (string, optional): Name of the boolean value that
     stores in the \ref lua_api_game "savegame" whether this enemy is dead.
     No value means that the enemy is not saved.
@@ -762,7 +757,7 @@ is played.
 The details of the dying animation and the sound played depend on the
 \ref lua_api_enemy_set_hurt_style "hurt style" property.
 If the hurt style is \c "enemy" or \c "monster", any sprite you created
-on the enemy is automatically removed and replaced by sprite
+on the enemy is automatically removed and replaced by the sprite
 \c "enemies/enemy_killed".
 If the hurt style is \c "boss", your sprites continue to exist and to play
 animation "hurt", while explosions appear on the enemy.
