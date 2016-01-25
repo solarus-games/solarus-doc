@@ -382,7 +382,7 @@ Your custom entity can move: the ground will still be correctly applied.
 
 \remark If you only need to modify the ground of the map dynamically,
 for example to make a moving platform over holes, a
-\ref lua_api_dynamic_tile "dynamic_tile"
+\ref lua_api_dynamic_tile "dynamic tile"
 with a
 \ref lua_api_movement "movement"
 may be enough.
