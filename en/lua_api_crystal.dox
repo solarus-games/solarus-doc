@@ -19,6 +19,18 @@ A crystal is essentially a solid switch that
 configuration" of \ref lua_api_crystal_block "crystal blocks"
 when activated.
 
+\subsection lua_api_crystal_overview_sprites Crystal sprites
+
+Two sprites for a crystal are automatically created by the engine.
+You can access them like for any other entity, specifying their name in
+\ref lua_api_entity_get_sprite "entity:get_sprite([name])".
+- \c "main": Main sprite representing the crystal.
+  Its animation set is \c "entities/crystal".
+  This is the default one in
+  \ref lua_api_entity_get_sprite "entity:get_sprite([name])".
+- \c "star": Star twinkling over the crystal.
+  Its animation set is \c "entities/star".
+
 \section lua_api_crystal_inherited_methods Methods inherited from map entity
 
 Crystals are particular \ref lua_api_entity "map entities".

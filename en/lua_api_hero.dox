@@ -40,10 +40,12 @@ We describe here the Lua API that you can use to change the hero's state.
 
 Multiple sprites for the hero are automatically created by the engine.
 You can access them like for any other entity, specifying their name in
-\ref lua_api_entity_get_sprite "hero:get_sprite([name])".
+\ref lua_api_entity_get_sprite "entity:get_sprite([name])".
 
 Here is the list of hero sprites created by the engine and their names:
-- \c "tunic": Main sprite of the hero.
+- \c "tunic": Main sprite of the hero. It always exists.
+  This is the default one in
+  \ref lua_api_entity_get_sprite "entity:get_sprite([name])".
 - \c "shield": Shield if any.
 - \c "sword": Sword if any.
 - \c "sword_stars": Small stars sparkling near the sword in some states.

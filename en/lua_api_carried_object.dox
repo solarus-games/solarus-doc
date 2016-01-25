@@ -21,6 +21,22 @@ it is created from.
 The hero can then walk with his carried object and throw it.
 He can even go to another map: the carried object is preserved.
 
+\subsection lua_api_carried_object_overview_sprites Carried object sprites
+
+Two sprites for a carried object are automatically created by the engine.
+You can access them like for any other entity, specifying their name in
+\ref lua_api_entity_get_sprite "entity:get_sprite([name])".
+- \c "main": Main sprite representing the carried object.
+  Its animation set is the one of the original entity he was created from
+  (like a \ref lua_api_destructible "destructible object"),
+  with the animation \c "stopped" or \c "walking" depending on the hero state,
+  and the same direction as the hero.
+  This is the default sprite in
+  \ref lua_api_entity_get_sprite "entity:get_sprite([name])".
+- \c "shadow": Shadow displayed under the carried object when thrown.
+  Its animation set is \c "entities/shadow",
+  with the animation name \c "big".
+
 \section lua_api_carried_object_inherited_methods Methods inherited from map entity
 
 Carried objects are particular \ref lua_api_entity "map entities".
