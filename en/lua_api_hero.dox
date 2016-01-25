@@ -425,6 +425,40 @@ Makes the hero jump towards the specified direction.
   traverse obstacles during this movement (default \c false).
   Make sure the movement does not end inside an obstacle.
 
+\subsection lua_api_hero_start_attack hero:start_attack()
+
+Makes the hero perform his main attack (swinging his sword).
+
+This function does the same as what happens when the player presses
+the \c "attack" game \ref lua_api_game_overview_commands "command".
+You can use it to trigger the attack from your script instead of from a
+game command.
+
+If the player is not allowed to perform the attack now
+(because he does not have the sword
+\ref lua_api_game_get_ability "ability"
+or because the hero is currently busy in another state), then nothing happens.
+
+\subsection lua_api_hero_start_item hero:start_item(item)
+
+Makes the hero use an \ref lua_api_item "equipment item".
+
+The \ref lua_api_item_on_using "item:on_using()" event will be called and
+the player won't be able to control the hero until you call
+\ref lua_api_item_set_finished "item:set_finished()". See the documentation
+of \ref lua_api_item "equipment items" for more information.
+
+This function does the same as what happens when the player presses
+a game \ref lua_api_game_overview_commands "command" corresponding to this
+equipment item.
+You can use it to trigger the item from your script instead of from a
+game command.
+
+If the player is not allowed to use the item now
+(because he does not have it, because the item cannot be used explicitly,
+or because the hero is currently busy in another state), then nothing happens.
+- \c item (\ref lua_api_item "item"): The equipment item to start using.
+
 \subsection lua_api_hero_start_treasure hero:start_treasure(treasure_item, [treasure_variant, [treasure_savegame_variable, [callback]]])
 
 Gives a treasure to the player. The hero will brandish the treasure.
@@ -453,20 +487,6 @@ Makes the hero brandish his sword for a victory.
   If you define it, you can do other things, like teletransporting the hero
   somewhere else. To restore the control to the player, call
   \ref lua_api_hero_unfreeze "hero:unfreeze()".
-
-\subsection lua_api_hero_start_item hero:start_item(item)
-
-Makes the hero use an \ref lua_api_item "equipment item".
-
-The \ref lua_api_item_on_using "item:on_using()" event will be called and
-the player won't be able to control the hero until you call
-\ref lua_api_item_set_finished "item:set_finished()". See the documentation
-of \ref lua_api_item "equipment items" for more information.
-
-If the player is not allowed to use the item now
-(because he does not have it, because the item cannot be used explicitly,
-or because the hero is currently busy in another state), then nothing happens.
-- \c item (\ref lua_api_item "item"): The equipment item to start using.
 
 \subsection lua_api_hero_start_boomerang hero:start_boomerang(max_distance, speed, tunic_preparing_animation, sprite_name)
 

@@ -50,12 +50,12 @@ A door may be opened by one of the following methods:
 - \c "none": Cannot be opened by the player. You can only open it
   explicitly by calling \ref lua_api_map_open_doors "map:open_doors()".
 - \c "interaction": Can be opened by pressing the
-  \ref lua_api_game_intro_commands "action command" in front of it.
+  \ref lua_api_game_overview_commands "action command" in front of it.
 - \c "interaction_if_savegame_variable": Can be opened by pressing the
-  \ref lua_api_game_intro_commands "action command" in front of it,
+  \ref lua_api_game_overview_commands "action command" in front of it,
    provided that a specific savegame variable is set.
 - \c "interaction_if_item": Can be opened by pressing the
-  \ref lua_api_game_intro_commands "action command" in front of it,
+  \ref lua_api_game_overview_commands "action command" in front of it,
   provided that the player has a specific \ref lua_api_item
   "equipment item".
 - \c "explosion": Can be opened by an explosion.

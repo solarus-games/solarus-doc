@@ -5,9 +5,9 @@
 
 This module provides a datatype "game" that represents a savegame.
 
-\section lua_api_game_intro Overview
+\section lua_api_game_overview Overview
 
-\subsection lua_api_game_intro_save Saved data
+\subsection lua_api_game_overview_save Saved data
 
 On a game object, you can access and modify everything that is saved.
 The data saved and restored by the engine are the following:
@@ -27,7 +27,7 @@ When a game is running, more features are available
 (like pausing the game, handling game commands, etc.).
 Only one game can be running at a time.
 
-\subsection lua_api_game_intro_commands Game commands
+\subsection lua_api_game_overview_commands Game commands
 
 An important concept that comes with the game is the notion of
 game commands.
@@ -65,7 +65,7 @@ joypad input (but if you want to, you can, and the callbacks are exactly the
 sames as in \ref
 lua_api_main "sol.main" and in \ref lua_api_menu "menus").
 
-\subsection lua_api_game_intro_table Accessing the game like tables
+\subsection lua_api_game_overview_table Accessing the game like tables
 
 Objects of the game type are userdata, but like most Solarus
 Lua types, they can also be accessed like tables.
@@ -185,7 +185,7 @@ Sets whether the player can pause or unpause the \ref lua_api_game "game".
   game. No value means \c true.
 
 \remark This function applies to the built-in \ref
-  lua_api_game_intro_commands "pause command".
+  lua_api_game_overview_commands "pause command".
   Your script can still pause the game explicitly by calling
   \ref lua_api_game_set_paused "game:set_paused()".
 

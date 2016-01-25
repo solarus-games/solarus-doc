@@ -463,7 +463,7 @@ or when because another entity changes it.
 
 Called when the \ref lua_api_hero "hero" interacts
 with this custom entity, that is,
-when the player presses the \ref lua_api_game_intro_commands "action command"
+when the player presses the \ref lua_api_game_overview_commands "action command"
 while facing this custom entity.
 
 \remark This event is also available with
@@ -473,7 +473,7 @@ while facing this custom entity.
 
 Called when the \ref lua_api_hero "hero" uses any
 \ref lua_api_item "equipment item"
-(the player pressed an \ref lua_api_game_intro_commands "item command") while
+(the player pressed an \ref lua_api_game_overview_commands "item command") while
 facing this custom entity.
 - \c item_used (\ref lua_api_item "item"): The item currently used by
   the player.

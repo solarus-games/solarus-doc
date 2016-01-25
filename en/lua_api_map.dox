@@ -1039,12 +1039,12 @@ on the map.
   - \c opening_method (string, optional): Specifies the permissions for the
     hero to open the chest. Must be one of:
     - \c "interaction" (default): Can be opened by pressing the
-      \ref lua_api_game_intro_commands "action command" in front of it.
+      \ref lua_api_game_overview_commands "action command" in front of it.
     - \c "interaction_if_savegame_variable": Can be opened by pressing the
-      \ref lua_api_game_intro_commands "action command" in front of it,
+      \ref lua_api_game_overview_commands "action command" in front of it,
       provided that a specific savegame variable is set.
     - \c "interaction_if_item": Can be opened by pressing the
-      \ref lua_api_game_intro_commands "action command" in front of it,
+      \ref lua_api_game_overview_commands "action command" in front of it,
       provided that the player has a specific \ref lua_api_item
       "equipment item".
   - \c opening_condition (string, optional): The condition required to open the
@@ -1527,12 +1527,12 @@ on the map.
     - \c "none" (default): Cannot be opened by the player. You can only open it
       from Lua.
     - \c "interaction": Can be opened by pressing the
-      \ref lua_api_game_intro_commands "action command" in front of it.
+      \ref lua_api_game_overview_commands "action command" in front of it.
     - \c "interaction_if_savegame_variable": Can be opened by pressing the
-      \ref lua_api_game_intro_commands "action command" in front of it,
+      \ref lua_api_game_overview_commands "action command" in front of it,
       provided that a specific savegame variable is set.
     - \c "interaction_if_item": Can be opened by pressing the
-      \ref lua_api_game_intro_commands "action command" in front of it,
+      \ref lua_api_game_overview_commands "action command" in front of it,
       provided that the player has a specific \ref lua_api_item
       "equipment item".
     - \c "explosion": Can be opened by an explosion.
@@ -1819,7 +1819,7 @@ Called when the user presses a keyboard key while your map is active.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects.
   If you return \c false or nothing, the event will continue its propagation
-  to the \ref lua_api_game_intro_commands "commands".
+  to the \ref lua_api_game_overview_commands "commands".
 
 \remark This event indicates the raw keyboard key pressed. If you want the
 corresponding character instead (if any), see
@@ -1837,7 +1837,7 @@ Called when the user releases a keyboard key while your map is active.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects.
   If you return \c false or nothing, the event will continue its propagation
-  to the \ref lua_api_game_intro_commands "commands".
+  to the \ref lua_api_game_overview_commands "commands".
 
 \remark This event indicates the raw keyboard key pressed. If you want the
 corresponding character instead (if any), see
@@ -1854,7 +1854,7 @@ while your map is active.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects.
   If you return \c false or nothing, the event will continue its propagation
-  to the \ref lua_api_game_intro_commands "commands".
+  to the \ref lua_api_game_overview_commands "commands".
 
 \remark When a character key is pressed, two events are called:
 \ref lua_api_map_on_key_pressed "map:on_key_pressed()"
@@ -1903,7 +1903,7 @@ Called when the user moves a joypad hat while your map is active.
 
 \subsection lua_api_map_on_command_pressed map:on_command_pressed(command)
 
-Called when the player presses a \ref lua_api_game_intro_commands
+Called when the player presses a \ref lua_api_game_overview_commands
 "game command"
 (a keyboard key or a joypad action mapped to a built-in game behavior)
 while this map is active.
@@ -1922,7 +1922,7 @@ command.
 
 \subsection lua_api_map_on_command_released map:on_command_released(command)
 
-Called when the player released a \ref lua_api_game_intro_commands
+Called when the player released a \ref lua_api_game_overview_commands
 "game command"
 (a keyboard key or a joypad action mapped to a built-in game behavior).
 while this map is active.

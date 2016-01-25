@@ -168,7 +168,7 @@ Called when the user presses a keyboard key while your menu is active.
   \c "alt". Table values don't matter.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects
-  (like other menus or the built-in \ref lua_api_game_intro_commands
+  (like other menus or the built-in \ref lua_api_game_overview_commands
   "game commands").
 
 For all keyboard and joypad events, most recent menus are notified
@@ -195,7 +195,7 @@ Menus on top are notified first.
   \c "alt". Table values don't matter.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects
-  (like other menus or the built-in \ref lua_api_game_intro_commands
+  (like other menus or the built-in \ref lua_api_game_overview_commands
   "game commands").
 
 \subsection lua_api_menu_on_character_pressed menu:on_character_pressed(character)
@@ -227,7 +227,7 @@ Menus on top are notified first.
 - \c button (number): Index of the button that was pressed.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects
-  (like other menus or the built-in \ref lua_api_game_intro_commands
+  (like other menus or the built-in \ref lua_api_game_overview_commands
   "game commands").
 
 \subsection lua_api_menu_on_joypad_button_released menu:on_joypad_button_released(button)
@@ -237,7 +237,7 @@ Menus on top are notified first.
 - \c button (number): Index of the button that was released.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects
-  (like other menus or the built-in \ref lua_api_game_intro_commands
+  (like other menus or the built-in \ref lua_api_game_overview_commands
   "game commands").
 
 \subsection lua_api_menu_on_joypad_axis_moved menu:on_joypad_axis_moved(axis, state)
@@ -250,7 +250,7 @@ Menus on top are notified first.
   left or up, \c 0 means centered and \c 1 means right or down.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects
-  (like other menus or the built-in \ref lua_api_game_intro_commands
+  (like other menus or the built-in \ref lua_api_game_overview_commands
   "game commands").
 
 \subsection lua_api_menu_on_joypad_hat_moved menu:on_joypad_hat_moved(hat, direction8)
@@ -263,19 +263,19 @@ Menus on top are notified first.
   main directions.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects
-  (like other menus or the built-in \ref lua_api_game_intro_commands
+  (like other menus or the built-in \ref lua_api_game_overview_commands
   "game commands").
 
 \subsection lua_api_menu_on_command_pressed menu:on_command_pressed(command)
 
 Called during a game when the player presses a
-\ref lua_api_game_intro_commands "game command"
+\ref lua_api_game_overview_commands "game command"
 (a keyboard key or a joypad action mapped to a built-in game behavior).
 You can use this event to override the normal built-in behavior of the game
 command.
 Menus on top are notified first.
 - \c command (string): Name of the built-in game command that was pressed (see
-  the \ref lua_api_game_intro_commands "game API" for the list of existing
+  the \ref lua_api_game_overview_commands "game API" for the list of existing
   game commands).
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects
@@ -295,7 +295,7 @@ You can use this event to override the normal built-in behavior of the game
 command.
 Menus on top are notified first.
 - \c command (string): Name of the built-in game command that was released (see
-  the \ref lua_api_game_intro_commands "game API" for the list of existing
+  the \ref lua_api_game_overview_commands "game API" for the list of existing
   game commands).
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects

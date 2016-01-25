@@ -6,7 +6,7 @@
 A non-playing character (NPC)
 is somebody or something that the \ref lua_api_hero "hero" can interact with
 by pressing the
-\ref lua_api_game_intro_commands "action command"
+\ref lua_api_game_overview_commands "action command"
 or by using an
 \ref lua_api_item "equipment item"
 just in front of it.
@@ -89,7 +89,7 @@ The following events are specific to non-playing characters.
 \subsection lua_api_npc_on_interaction npc:on_interaction()
 
 Called when the \ref lua_api_hero "hero" interacts
-(the player pressed the \ref lua_api_game_intro_commands "action command")
+(the player pressed the \ref lua_api_game_overview_commands "action command")
 in front of this %NPC,
 if the %NPC has the property to notify its own Lua script.
 
@@ -97,7 +97,7 @@ if the %NPC has the property to notify its own Lua script.
 
 Called when the \ref lua_api_hero "hero" uses any
 \ref lua_api_item "equipment item"
-(the player pressed an \ref lua_api_game_intro_commands "item command") with
+(the player pressed an \ref lua_api_game_overview_commands "item command") with
 this %NPC,
 if the %NPC has the property to notify its own Lua script.
 - \c item_used (\ref lua_api_item "item"): The item currently used by
