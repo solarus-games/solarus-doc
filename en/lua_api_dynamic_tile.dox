@@ -55,7 +55,7 @@ The presence of a dynamic tile can modify the ground of the map.
 This determined by the ground property of the tile pattern.
 - Return value (string): The ground defined by this dynamic tile.
   \c "empty" means that this dynamic tile does not modify the ground of the map.
-  See \ref lua_api_map_get_ground "map:get_ground()" for the list of grounds.
+  See \ref lua_api_map_get_ground "map:get_ground()" for the list of possible grounds.
 
 \section lua_api_dynamic_tile_inherited_events Events inherited from map entity
 

@@ -356,7 +356,7 @@ Returns the kind of
 (terrain) defined by this custom entity on the map.
 - Return value (string): The ground defined by this custom entity, or \c nil
   if this custom entity does not modify the ground.
-  See \ref lua_api_map_get_ground "map:get_ground()" for the list of grounds.
+  See \ref lua_api_map_get_ground "map:get_ground()" for the list of possible grounds.
 
 \subsection lua_api_custom_entity_set_modified_ground custom_entity:set_modified_ground(modified_ground)
 
@@ -378,7 +378,7 @@ Your custom entity can move: the ground will still be correctly applied.
 - \c modified_ground (string): The ground defined by this custom entity,
   or \c nil (or \c "empty") to make this custom entity stop modifying the
   ground.
-  See \ref lua_api_map_get_ground "map:get_ground()" for the list of grounds.
+  See \ref lua_api_map_get_ground "map:get_ground()" for the list of possible grounds.
 
 \remark If you only need to modify the ground of the map dynamically,
 for example to make a moving platform over holes, a
