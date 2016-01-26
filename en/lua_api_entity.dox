@@ -312,6 +312,7 @@ Returns the coordinates of the center point of this entity on the
 - Return value 2 (number): Y coordinate of the center of this entity's
   bounding box,
   relative to the upper left corner of the map.
+- Return value 3 (number): Layer of the entity.
 
 \subsection lua_api_entity_get_ground_position entity:get_ground_position()
 
@@ -330,6 +331,7 @@ and the event
   relative to the upper left corner of the map.
 - Return value 2 (number): Y coordinate of the ground point of this entity,
   relative to the upper left corner of the map.
+- Return value 3 (number): Layer of the entity.
 
 \remark The ground point of an entity is slightly (2 pixels)
   above its origin point as returned by
