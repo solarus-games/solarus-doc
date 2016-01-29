@@ -6,10 +6,10 @@ We explain here how a quest is built.
 A quest is a data package that may be run by the Solarus C++ engine
 (the Solarus executable file).
 
-When you run the \c solarus executable file, it needs the path of the quest
+When you run the \c solarus-run executable file, it needs the path of the quest
 to launch.
 This can be done at runtime by specifying the path as a command-line argument:
-<tt>solarus_run path/to/your/quest</tt>.
+<tt>solarus-run path/to/your/quest</tt>.
 If the quest path is not specified, the current directory is considered by
 default, unless you compiled Solarus with another default quest path.
 
