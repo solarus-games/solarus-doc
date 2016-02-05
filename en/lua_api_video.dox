@@ -75,6 +75,9 @@ Returns the current video mode.
 Sets the current video mode.
 - \c video_mode (string): Name of the video mode (see the list above).
 
+\remark When the quest is run from the Solarus GUI, the user can also
+  change the video mode from the menus of the GUI.
+
 \subsection lua_api_video_switch_mode sol.video.switch_mode()
 
 Sets the next video mode in the list of video modes supported.
@@ -103,6 +106,9 @@ Returns whether the current video mode is fullscreen.
 Turns on or turns off fullscreen, keeping an equivalent video mode.
 - \c fullscreen (boolean, optional): \c true to set fullscreen (no value means
   \c true).
+
+\remark When the quest is run from the Solarus GUI, the user can also
+  switch fullscreen from the menus of the GUI.
 
 \subsection lua_api_video_get_quest_size sol.video.get_quest_size()
 

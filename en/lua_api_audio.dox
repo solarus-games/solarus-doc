@@ -114,6 +114,9 @@ and by the engine.
 - \c volume (number): The new volume of sound effects, as an integer
   between \c 0 (mute) and \c 100 (full volume).
 
+\remark When the quest is run from the Solarus GUI, the user can also
+  change the volume from the menus of the GUI.
+
 \subsection lua_api_audio_get_music_volume sol.audio.get_music_volume()
 
 Returns the current volume of musics.
@@ -122,6 +125,9 @@ This volume applies to all musics played by \ref lua_api_audio_play_music.
 "sol.audio.play_music()"
 - Return value (number): The current volume of musics, as an integer
   between \c 0 (no sound effects) and \c 100 (full volume).
+
+\remark When the quest is run from the Solarus GUI, the user can also
+  change the volume from the menus of the GUI.
 
 \subsection lua_api_audio_set_music_volume sol.audio.set_music_volume(volume)
 

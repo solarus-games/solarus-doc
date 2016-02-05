@@ -149,29 +149,40 @@ dynamically for some reason.
 
 Loads and applies the built-in settings from a file previously saved with
 \ref lua_api_main_save_settings "sol.main.save_settings()".
-The settings include the language, the video mode and the audio volume.
+Settings from the file include user preferences such as the language,
+the video mode and the audio volume.
+
+Note that all these settings can already be modified individually with the Lua
+API, so you can either use this function or implement something more fitted
+to your needs.
 
 A valid quest write directory must be set (in your
 \ref quest_properties_file "quest.dat" file
 or by calling
 \ref lua_api_main_set_quest_write_dir "sol.main.set_quest_write_dir()"),
 otherwise this function generates a Lua error.
-- \c file_name (string, optional): %Settings file to read, relative to the
+- \c file_name (string, optional): Settings file to read, relative to the
   quest write directory. The default file name is \c settings.dat.
 - Return value (boolean): \c true if settings were successfully loaded and
   applied.
 
-\remark All these settings can already be modified individually with the Lua
-  API, so you can either
-  use this function or implement something more fitted to your needs.
+\remark When you launch a quest from the Solarus GUI,
+  user preferences that are currently set in the menus of the GUI are
+  automatically written to \c settings.dat before the quest starts and are
+  automatically applied as soon as the quest starts.
 
 \subsection lua_api_main_save_settings sol.main.save_settings([file_name])
 
-Saves the built-in settings into a file.
+Saves the current built-in settings into a file.
 This file can be reloaded later with \ref lua_api_main_load_settings
 "sol.main.load_settings()" to
 restore the saved settings.
-The settings include the language, the video mode and the audio volume.
+Settings saved include user preferences such as the current language,
+the current video mode and the current audio volume.
+
+Note that all these settings can already be modified individually with the Lua
+API, so you can either use this function or implement something more fitted
+to your needs.
 
 A valid quest write directory must be set (in your
 \ref quest_properties_file "quest.dat" file
@@ -182,9 +193,10 @@ otherwise this function generates a Lua error.
   quest write directory. The default file name is \c settings.dat.
 - Return value (boolean): \c true if settings were successfully saved.
 
-\remark All these settings can already be modified individually with the Lua
-  API, so you can either
-  use this function or implement something more fitted to your needs.
+\remark When you launch a quest from the Solarus GUI,
+  user preferences that are currently set in the menus of the GUI are
+  automatically written to \c settings.dat before the quest starts and are
+  automatically applied as soon as the quest starts.
 
 \subsection lua_api_main_get_distance sol.main.get_distance(x1, y1, x2, y2)
 
