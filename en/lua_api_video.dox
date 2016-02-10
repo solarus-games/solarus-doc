@@ -59,10 +59,10 @@ Returns the text of the title bar of the window.
 
 Sets the text of the title bar of the window.
 
-Note that the window title should already be specified in your
+By default, the window title is set to the title of your quest followed
+by its version.
+Both these properties are indicated in the
 \ref quest_properties_file "quest.dat" file.
-You usually don't have to call this function, unless you need to change it
-dynamically for some reason.
 - \c window_title (string): The window title to set.
 
 \subsection lua_api_video_get_mode sol.video.get_mode()
