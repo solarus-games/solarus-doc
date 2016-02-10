@@ -5,6 +5,9 @@
 
 Some general information regarding your quest are stored in the quest
 properties file \c quest.dat.
+This include information that the Solarus GUI can use to show a description
+of each quest before the user plays,
+as well as technical settings indicating how your quest should run.
 
 \c quest.dat is mandatory: if this file does not exist, the engine considers
 that there is no quest in the directory.
@@ -28,20 +31,29 @@ Each property is declared with the syntax <tt>key = value</tt> and
 separated with commas. It is allowed to have an extra comma after
 the last property. String values are enclosed within
 double quotes.
-The properties must be:
-- \c solarus_version (string): Version of the engine your data files are
+
+The recognized properties are listed below.
+Only \c solarus_version and \c title are mandatory, but
+\c write_dir is also required if you want to be able to use savegames.
+- \c solarus_version (string): Format of the engine your data files are
   compatible with. This string should be a major and minor version, for
-  example "1.4". You can also indicate a full version string, including
-  the patch number (like "1.4.0") but the patch number will be ignored.
-  Patch versions are ignored since they don't break compatibility.
-- \c write_dir (string, optional): Directory where your quest will write its
-  savegames and setting files. It will be a subdirectory of
+  example "1.5". You can also indicate a full version string, including
+  the patch number (like "1.5.0") but the patch number will be ignored.
+  Patch versions are ignored because they don't break compatibility.
+- \c title (string): Name of your quest.
+- \c short_description (string, optional): A one-line description of the quest.
+- \c long_description (string, optional): A longer description of the quest.
+- \c author (string, optional): Person or team who created the quest.
+- \c quest_version (string, optional): Current version of your quest.
+- \c release_date (string, optional): Date of your last quest release
+  (YYYY-MM-DD).
+- \c website (string, optional): URL of your website.
+- \c write_dir (string, optional): Directory where Solarus will write
+  savegames and setting files for your quest. It will be a subdirectory of
   <tt>'$HOME/.solarus/'</tt>, automatically created by the engine.
   Its name should identify your quest, to avoid confusion with
   other Solarus quests that might also be installed on the user's machine.
   You must define it before you can use savegames or setting files.
-- \c title_bar (string, optional): Title of the window. You should probably
-  put the title of your game here.
 - \c normal_quest_size (string, optional): Usual size of the game screen in
   pixels, as two integer values separated by \c "x". Example: \c "320x240".
   The default value is \c "320x240".
@@ -62,14 +74,15 @@ your quest.
 Allowing a range of sizes instead of only one size improves the portability:
 each system and each user can choose a size that occupies the full ratio of
 the screen instead of having black bars.
-However, be aware that some users will be able to see more content than others.
+However, be aware that if you allow a range,
+some users will be able to see more game content than others!
 
 At compilation time, systems can specify their preferred quest size.
 It will be used if it is in the range of sizes allowed by your quest.
 And the quest size can also be overriden at runtime with a command-line option.
 
 At runtime, you are guaranteed that the actual quest size will be in the range
-that you allowed in this quest properties file.
+allowed in this quest properties file.
 
 \remark The quest size is the logical size of your quest and it never changes
 at runtime. Don't confuse it with the size of the window.
