@@ -349,7 +349,7 @@ Additional properties:
 - \c sprite (string, optional): Name of the animation set of a
   \ref quest_sprite_data_file "sprite" to create for the destination.
   No value means no sprite (the destination will then be invisible).
-- \c save_location (string, optional): Whether to update the
+- \c starting_location_mode (string, optional): Whether to update the
   \ref lua_api_game_set_starting_location "starting location"
   of the player when arriving to this destination.
   If yes, when the player restarts his game, he will restart at this
