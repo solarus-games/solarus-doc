@@ -446,9 +446,15 @@ restarted.
 
 \remark When the hero moves from a map to another map that belongs to a
   different world (for example, from a dungeon to the outside world) using a
-  destination entity, the starting location is automatically set to this point.
+  destination entity, by default, the starting location is automatically set
+  to this point.
   If this behavior is okay for your quest, you never need to call this function
   except the first time: when initializing a new savegame file.
+  This behavior can be changed by setting the "Save starting location"
+  property of destinations, from the quest editor or from a script
+  (with
+  \ref lua_api_destination_set_starting_location_mode
+  "destination:set_starting_location_mode()").
 
 \subsection lua_api_game_get_life game:get_life()
 

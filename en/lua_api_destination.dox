@@ -31,7 +31,35 @@ See \ref lua_api_entity_methods to know these methods.
 
 \section lua_api_destination_methods Methods of the type destination
 
-None.
+\subsection lua_api_destination_get_starting_location_mode destination:get_starting_location_mode()
+
+Returns whether this destination updates the
+\ref lua_api_game_set_starting_location "starting location"
+of the player when arriving on it.
+If yes, when the player restarts his game, he will restart at this
+destination.
+The default value is \c "when world changes".
+- Return value (string): The starting location mode. Can be one of:
+  - \c "when_world_changes": Updates the starting location if the
+    current \ref lua_api_map_get_world "world"
+    has just changed when arriving to this destination.
+  - \c "yes": Updates the starting location.
+  - \c "no": Does not update the starting location.
+
+\subsection lua_api_destination_set_starting_location_mode destination:set_starting_location_mode(mode)
+
+Sets whether this destination updates the
+\ref lua_api_game_set_starting_location "starting location"
+of the player when arriving on it.
+If yes, when the player restarts his game, he will restart at this
+destination.
+The default value is \c "when world changes".
+- \c mode (string): The starting location mode. Can be one of:
+  - \c "when_world_changes": Updates the starting location if the
+    current \ref lua_api_map_get_world "world"
+    has just changed when arriving to this destination.
+  - \c "yes": Updates the starting location.
+  - \c "no": Does not update the starting location.
 
 \section lua_api_destination_inherited_events Events inherited from map entity
 

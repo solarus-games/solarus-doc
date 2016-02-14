@@ -349,11 +349,22 @@ Additional properties:
 - \c sprite (string, optional): Name of the animation set of a
   \ref quest_sprite_data_file "sprite" to create for the destination.
   No value means no sprite (the destination will then be invisible).
+- \c save_location (string, optional): Whether to update the
+  \ref lua_api_game_set_starting_location "starting location"
+  of the player when arriving to this destination.
+  If yes, when the player restarts his game, he will restart at this
+  destination.
+  Must be one of:
+  - \c "when_world_changes" (default): Updates the starting location if the
+    current \ref lua_api_map_get_world "world"
+    has just changed when arriving to this destination.
+  - \c "yes": Updates the starting location.
+  - \c "no": Does not update the starting location.
 - \c default (boolean, optional): Sets this destination as the default one
   when teletransporting the hero to this map without destination specified.
   No value means \c false.
   Only one destination can be the default one on a map.
-  If no default destination is set, then the first one declared in set as
+  If no default destination is set, then the lowest one in Z order is set as
   the default one.
 
 Example of destination:
