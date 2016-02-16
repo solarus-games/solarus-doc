@@ -52,11 +52,11 @@ It is possible to restrict the lifetime of a timer to a context,
 like the game, the map or an enemy:
 
 \verbatim
--- Enemy that shoots a fireball in 5 seconds,
--- unless the enemy is killed in the meantime.
+-- Enemy that shoots a fireball every 5 seconds until it is killed.
 sol.timer.start(your_enemy, 5000, function()
   sol.audio.play_sound("attack_fireball")
-  your_enemy:create_enemy(...)  -- Code that creates the fireball.
+  map:create_enemy(...)  -- Code that creates the fireball.
+  return  -- Repeat the timer.
 end)
 \endverbatim
 Setting the context to an enemy ensures that when the enemy is killed,
