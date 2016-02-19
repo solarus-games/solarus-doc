@@ -18,7 +18,8 @@ It can be either centered on an
 \ref lua_api_entity "entity" and track it automatically,
 or it can be controlled manually by your scripts or by the engine.
 
-When a map starts, its camera tracks the \ref lua_api_hero "hero".
+When a map starts, its camera is initially set to track the
+\ref lua_api_hero "hero".
 
 Use \ref lua_api_camera_start_manual "camera:start_manual"
 to switch to manual state, and
@@ -48,7 +49,8 @@ color of the tileset.
 
 In tracking state, when the tracked entity crosses a separator,
 the engine automatically starts a scrolling movement on the camera.
-After the scrolling, the camera is centered on the tracked entity again.
+After the scrolling, the camera continues to normally track the entity
+on the other side of the separator.
 
 \subsection lua_api_camera_manual_state Manual state specifics
 
@@ -82,23 +84,39 @@ See \ref lua_api_entity_methods to know these methods.
 
 \section lua_api_camera_methods Methods of the type camera
 
+The following methods are specific to cameras.
+
+\subsection lua_api_camera_set_size camera:set_size(width, height)
+
 TODO
 
-camera:set_size(width, height)
+\subsection lua_api_camera_set_origin camera:set_origin(x, y)
 
-camera:set_origin(x, y)
+TODO
 
-camera:get_state()
+\subsection lua_api_camera_get_state camera:get_state()
 
-camera:start_tracking(entity)
+TODO
 
-camera:get_tracked_entity()
+\subsection lua_api_camera_start_tracking camera:start_tracking(entity)
 
-camera:start_manual()
+TODO
 
-camera:get_auto_suspend_map()
+\subsection lua_api_camera_get_tracked_entity camera:get_tracked_entity()
 
-camera:set_auto_suspend_map([suspend])
+TODO
+
+\subsection lua_api_camera_start_manual camera:start_manual()
+
+TODO
+
+\subsection lua_api_camera_get_auto_suspend_map camera:get_auto_suspend_map()
+
+TODO
+
+\subsection lua_api_camera_set_auto_suspend_map camera:set_auto_suspend_map([suspend])
+
+TODO
 
 \section lua_api_camera_inherited_events Events inherited from map entity
 
