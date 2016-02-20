@@ -96,7 +96,9 @@ TODO
 
 \subsection lua_api_camera_get_state camera:get_state()
 
-TODO
+Returns the name of the current state of the camera.
+- Return value (string): The current camera state:
+  \c "tracking" or \c "manual".
 
 \subsection lua_api_camera_start_tracking camera:start_tracking(entity)
 
