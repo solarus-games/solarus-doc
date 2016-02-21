@@ -106,7 +106,9 @@ TODO
 
 \subsection lua_api_camera_get_tracked_entity camera:get_tracked_entity()
 
-TODO
+Returns the entity currently tracked by this camera, if any.
+- Return value (entity): The tracked entity if the camera is in tracking state,
+  or \c nil if the camera is not in tracking state.
 
 \subsection lua_api_camera_start_manual camera:start_manual()
 
