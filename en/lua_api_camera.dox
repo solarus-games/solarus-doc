@@ -88,6 +88,8 @@ The following methods are specific to cameras.
 
 \subsection lua_api_camera_set_size camera:set_size(width, height)
 
+Sets the size of the camera.
+
 TODO
 
 \subsection lua_api_camera_set_origin camera:set_origin(x, y)
