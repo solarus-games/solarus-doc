@@ -21,9 +21,9 @@ or it can be controlled manually by your scripts or by the engine.
 When a map starts, its camera is initially set to track the
 \ref lua_api_hero "hero".
 
-Use \ref lua_api_camera_start_manual "camera:start_manual"
+Use \ref lua_api_camera_start_manual "camera:start_manual()"
 to switch to manual state, and
-\ref lua_api_camera_start_tracking "camera:start_tracking"
+\ref lua_api_camera_start_tracking "camera:start_tracking()"
 to switch to tracking state.
 Starting a
 \ref lua_api_movement "movement" on the camera 
@@ -45,21 +45,6 @@ if you want.
 Parts of the camera that are outside the map are displayed with the background
 color of the tileset.
 
-\subsection lua_api_camera_tracking_state Tracking state specifics
-
-In tracking state, when the tracked entity crosses a separator,
-the engine automatically starts a scrolling movement on the camera.
-After the scrolling, the camera continues to normally track the entity
-on the other side of the separator.
-
-\subsection lua_api_camera_manual_state Manual state specifics
-
-In manual state, the map is by default automatically suspended.
-This is useful to make cutscenes.
-See
-\ref lua_api_camera_set_auto_suspend_map "camera:set_auto_suspend_map()"
-if you want to change this behavior.
-
 \subsection lua_api_camera_overview_size Camera size
 
 By default, the size of the camera is the
@@ -71,7 +56,7 @@ map only on a subpart of the screen.
 You can then use the rest of the screen to display some information like a HUD.
 Use
 \ref lua_api_camera_set_size "camera:set_size()"
-and \ref lua_api_camera_set_origin "camera:set_origin()"
+and \ref lua_api_camera_set_position_on_screen "camera:set_position_on_screen()"
 to indicate the exact subpart of the screen where you want
 the camera to be displayed.
 
@@ -90,11 +75,39 @@ The following methods are specific to cameras.
 
 Sets the size of the camera.
 
-TODO
+This is the size of the rectangle the camera occupies on the screen.
+By default, this is the
+\ref lua_api_video_get_quest_size "quest size",
+meaning that the camera has the size of the whole screen.
+- \c width (number): Width of the camera in pixels.
+- \c height (number): Height of the camera in pixels.
 
-\subsection lua_api_camera_set_origin camera:set_origin(x, y)
+\subsection lua_api_camera_get_position_on_screen camera:get_position_on_screen()
 
-TODO
+Returns where the camera is displayed on the quest screen.
+
+The default position is <tt>0, 0</tt>, meaning that the upper left corner of
+the camera is displayed on the upper left corner of the screen.
+- Return value 1 (number): X coordinate of the camera on the screen,
+  in quest screen coordinates.
+- Return value 2 (number): Y coordinate of the camera on the screen,
+  in quest screen coordinates.
+
+\subsection lua_api_camera_set_position_on_screen camera:set_position_on_screen(x, y)
+
+Sets where the camera is displayed on the quest screen.
+
+You can use this function in conjunction with
+\ref lua_api_camera_set_size "camera:set_size()"
+to display the camera only on a subpart of the screen and for example
+keep the rest of the space for the HUD.
+
+The default position is <tt>0,0</tt>, meaning that the upper left corner of
+the camera is displayed on the upper left corner of the screen.
+- \c x (number): X coordinate of the camera on the screen,
+  in quest screen coordinates.
+- \c y (number): Y coordinate of the camera on the screen,
+  in quest screen coordinates.
 
 \subsection lua_api_camera_get_state camera:get_state()
 
@@ -104,7 +117,15 @@ Returns the name of the current state of the camera.
 
 \subsection lua_api_camera_start_tracking camera:start_tracking(entity)
 
-TODO
+Switches the camera to tracking state.
+
+The camera will be focused on an entity to track, and follow it when it moves.
+
+When the tracked entity crosses a separator,
+the engine automatically starts a scrolling movement on the camera.
+After the scrolling, the camera continues to normally track the entity
+on the other side of the separator.
+- \c entity (entity): The entity to track.
 
 \subsection lua_api_camera_get_tracked_entity camera:get_tracked_entity()
 
@@ -114,15 +135,33 @@ Returns the entity currently tracked by this camera, if any.
 
 \subsection lua_api_camera_start_manual camera:start_manual()
 
-TODO
+Switches the camera to manual state.
+
+The map is by default automatically suspended, which is useful to make
+cutscenes.
+See
+\ref lua_api_camera_set_auto_suspend_map "camera:set_auto_suspend_map()"
+if you want to change this behavior.
+
+\remark The camera automatically switches to manual state if you start
+  a \ref lua_api_movement_start "movement" on it.
 
 \subsection lua_api_camera_get_auto_suspend_map camera:get_auto_suspend_map()
 
-TODO
+Returns whether the camera automatically suspends the map when it is in manual
+state.
+- Return value (boolean): \c true if the map is automatically suspended when
+  the camera is in manual mode.
 
 \subsection lua_api_camera_set_auto_suspend_map camera:set_auto_suspend_map([suspend])
 
-TODO
+Sets whether the camera should automatically suspend the map when it is in
+manual state.
+
+The default value is \c true.
+- \c suspend (boolean, optional): \c true to automatically suspended the map when
+  the camera is in manual mode.
+  No value means \c true.
 
 \section lua_api_camera_inherited_events Events inherited from map entity
 
