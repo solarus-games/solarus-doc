@@ -177,5 +177,7 @@ See \ref lua_api_entity_events to know these events.
 
 None.
 
+TODO camera:on_state_changed()
+
 */
 
