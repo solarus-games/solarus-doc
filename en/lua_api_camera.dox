@@ -137,31 +137,8 @@ Returns the entity currently tracked by this camera, if any.
 
 Switches the camera to manual state.
 
-The map is by default automatically suspended, which is useful to make
-cutscenes.
-See
-\ref lua_api_camera_set_auto_suspend_map "camera:set_auto_suspend_map()"
-if you want to change this behavior.
-
 \remark The camera automatically switches to manual state if you start
   a \ref lua_api_movement_start "movement" on it.
-
-\subsection lua_api_camera_get_auto_suspend_map camera:get_auto_suspend_map()
-
-Returns whether the camera automatically suspends the map when it is in manual
-state.
-- Return value (boolean): \c true if the map is automatically suspended when
-  the camera is in manual mode.
-
-\subsection lua_api_camera_set_auto_suspend_map camera:set_auto_suspend_map([suspend])
-
-Sets whether the camera should automatically suspend the map when it is in
-manual state.
-
-The default value is \c true.
-- \c suspend (boolean, optional): \c true to automatically suspended the map when
-  the camera is in manual mode.
-  No value means \c true.
 
 \section lua_api_camera_inherited_events Events inherited from map entity
 
