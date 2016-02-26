@@ -152,9 +152,18 @@ See \ref lua_api_entity_events to know these events.
 
 \section lua_api_camera_events Events of the type camera
 
-None.
+The following events are specific to cameras.
 
-TODO camera:on_state_changed()
+\subsection lua_api_camera_on_state_changed camera:on_state_changed()
+
+Called when the state of the camera changes.
+- \c state (string): Name of the new state. See
+  \ref lua_api_camera_get_state "camera:get_state()" for the list of possible
+  states.
+
+\remark This event is called even for the initial state of the camera,
+  when the map starts.
+  This initial state is always \c "tracking".
 
 */
 
