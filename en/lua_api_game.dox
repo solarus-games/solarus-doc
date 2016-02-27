@@ -158,6 +158,10 @@ Returns whether this game is currently suspended.
   because it is paused or because there is a camera sequence.
   Only possible when the game is running.
 
+\subsection lua_api_game_set_suspended game:set_suspended()
+
+TODO
+
 \subsection lua_api_game_is_paused game:is_paused()
 
 Returns whether this game is currently paused.
