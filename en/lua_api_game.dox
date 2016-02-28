@@ -154,13 +154,38 @@ Only one game can be running at a time.
 \subsection lua_api_game_is_suspended game:is_suspended()
 
 Returns whether this game is currently suspended.
-- Return value (boolean): \c true if this game is suspended, for example
-  because it is paused or because there is a camera sequence.
+
+The game is suspended when at least one of the following conditions is true:
+- the game is \ref lua_api_game_is_paused "paused",
+- or a \ref lua_api_game_is_dialog_enabled "dialog" is active,
+- or the \ref lua_api_game_is_game_over_enabled "game-over sequence" is active,
+- or a transition between two maps is playing,
+- or you explicitly called
+  \ref lua_api_game_set_suspended "game:set_suspended(true)".
+
+&nbsp;
+
+- Return value (boolean): \c true if this game is currently suspended.
   Only possible when the game is running.
 
-\subsection lua_api_game_set_suspended game:set_suspended()
+\subsection lua_api_game_set_suspended game:set_suspended([suspended])
 
-TODO
+Suspends or unsuspends the game.
+
+Note that the game is also automatically suspended by the engine in the
+following situations:
+- when the game is \ref lua_api_game_is_paused "paused",
+- or when a \ref lua_api_game_is_dialog_enabled "dialog" is active,
+- or when the \ref lua_api_game_is_game_over_enabled "game-over sequence" is
+  active,
+- or when a transition between two maps is playing.
+
+Therefore, if you call
+\c game:set_suspended(false) during one of these sequences,
+it will only take effect at the end of it.
+- \c suspended (boolean, optional): \c true to suspend the game,
+  \c false to resume it.
+  No value means \c true.
 
 \subsection lua_api_game_is_paused game:is_paused()
 
