@@ -424,71 +424,6 @@ To get the music currently being played, see
 Returns the camera entity of the map.
 - Return value (\ref lua_api_camera "camera"): The camera.
 
-\subsection lua_api_map_get_camera_position map:get_camera_position()
-
-Returns the currently visible area of the map.
-
-Except during a
-\ref lua_api_map_move_camera "camera moving sequence",
-this area is centered on the hero, stopping on the limits of the map
-and on
-\ref lua_api_separator "separators".
-- Return value 1 (number): X coordinate of the visible area.
-- Return value 2 (number): Y coordinate of the visible area.
-- Return value 3 (number): Width of the visible area.
-- Return value 4 (number): Height of the visible area.
-
-\remark This is equivalent to <tt>map:get_camera():get_position()</tt>.
-
-\subsection lua_api_map_move_camera map:move_camera(x, y, speed, callback, [delay_before], [delay_after])
-
-Initiates a camera moving sequence.
-
-Normally, the camera is always centered on the \ref lua_api_hero "hero".
-You can use this function to temporarily move the camera somewhere else,
-like to a place where a \ref lua_api_chest "chest" or an
-\ref lua_api_enemy "enemy" will appear.
-
-The whole sequence happens as follows.
-The camera moves towards a target point.
-When the target is reached, after a first delay,
-your callback function is called.
-Then, after a second delay, the camera moves back towards the hero.
-
-During the sequence, the camera continues to stop on limits of the map
-and \ref lua_api_separator "separators".
-
-The game is suspended during the whole sequence (meaning that
-the hero and other \ref lua_api_entity "map entities" cannot move).
-- \c x (number): X coordinate of the target, relative to the map's top-left
-  corner.
-- \c y (number): Y coordinate of the target, relative to the map's top-left
-  corner.
-- \c speed (number): Speed of the camera movement in pixels per second
-  (a recommended value is \c 250).
-- \c callback (function): A function to be called when the camera reaches the
-  target (after \c delay_before).
-- \c delay_before (number, optional): A delay in milliseconds before calling
-  your function once the target is reached (default \c 1000).
-- \c delay_after (number, optional): A delay in milliseconds after calling
-  your function, before the camera goes back (default \c 1000).
-
-Example of use:
-\verbatim
--- Show a chest when the hero activates a switch.
-function my_switch:on_activated()
-  local x, y = my_chest:get_position()
-  map:move_camera(x, y, 250, function()
-    sol.audio.play_sound("chest_appears")
-    my_chest:set_enabled(true)
-  end)
-end
-\endverbatim
-
-\remark Note that this method is asynchronous.
-  Like \ref lua_api_timer "timers", this function it returns immediately.
-  Your callback will be automatically called later by the engine.
-
 \subsection lua_api_map_get_ground map:get_ground(x, y, layer)
 
 Returns the kind of ground (terrain) of a point.
@@ -1788,12 +1723,6 @@ lua_api_hero "hero".
   or \c nil if he used another way than a destination entity
   (like the side of the map or direct coordinates).
 
-\subsection lua_api_map_on_camera_back map:on_camera_back()
-
-After a camera sequence (see \ref lua_api_map_move_camera "map:move_camera()"),
-this event is triggered when the camera gets back to the \ref lua_api_hero
-"hero".
-
 \subsection lua_api_map_on_obtaining_treasure map:on_obtaining_treasure(treasure_item, treasure_variant, treasure_savegame_variable)
 
 Called when the \ref lua_api_hero "hero" is obtaining a treasure on this map,
@@ -1965,6 +1894,111 @@ Called when the user presses a mouse button while this map is active.
   \ref lua_api_video_get_quest_size "quest size" coordinates.
 - Return value (boolean): Indicates whether the event was handled. If you
   return \c true, the event won't be propagated to other objects.
+
+\section lua_api_map_methods_deprecated Deprecated methods of the type map
+
+The following methods are deprecated and may be removed it future releases.
+
+\subsection lua_api_map_get_camera_position map:get_camera_position()
+
+Returns the currently visible area of the map.
+
+\warning This method is deprecated because since Solarus 1.5,
+  the \ref lua_api_camera "camera" is now an entity.
+  Therefore, you can get its coordinates and size like any other entity.
+
+Use
+\ref lua_api_entity_get_bounding_box "map:get_camera():get_bounding_box()"
+instead.
+
+\subsection lua_api_map_move_camera map:move_camera(x, y, speed, callback, [delay_before], [delay_after])
+
+Starts a camera moving sequence.
+
+\warning This method is deprecated because since Solarus 1.5,
+  the \ref lua_api_camera "camera" is now an entity.
+  Therefore, you can move the camera like any other entity and have much
+  more customization possibilities.
+
+It can be rewritten in pure Lua as follows.
+\verbatim
+function map:move_camera(x, y, speed, callback, delay_before, delay_after)
+
+  local camera = map:get_camera()
+  local game = map:get_game()
+  local hero = map:get_hero()
+
+  delay_before = delay_before or 1000
+  delay_after = delay_after or 1000
+
+  local old_x, old_y = camera:get_position()
+  game:set_suspended(true)
+  camera:start_manual()
+
+  local movement = sol.movement.create("target")
+  movement:set_target(camera:get_position_to_track(x, y))
+  movement:set_speed(speed)
+  movement:start(camera, function()
+    sol.timer.start(map, delay_before, function()
+      callback()
+      sol.timer.start(map, delay_after, function()
+        local movement = sol.movement.create("target")
+        movement:set_target(old_x, old_y)
+        movement:set_speed(speed)
+        movement:start(camera, function()
+          game:set_suspended(false)
+          camera:start_tracking(hero)
+          if map:on_camera_back ~= nil then
+            map:on_camera_back()
+          end
+        end)
+      end)
+    end)
+  end)
+end
+\endverbatim
+
+This function temporarily moves the camera somewhere else,
+like to a place where a \ref lua_api_chest "chest" or an
+\ref lua_api_enemy "enemy" will appear.
+
+The camera first moves towards a target point.
+When the target is reached, after a first delay,
+your callback function is called.
+Then, after a second delay, the camera moves back towards the hero.
+The game is suspended during the whole sequence.
+- \c x (number): X coordinate of the target, relative to the map's top-left
+  corner.
+- \c y (number): Y coordinate of the target, relative to the map's top-left
+  corner.
+- \c speed (number): Speed of the camera movement in pixels per second.
+- \c callback (function): A function to be called when the camera reaches the
+  target (after \c delay_before).
+- \c delay_before (number, optional): A delay in milliseconds before calling
+  your function once the target is reached (default \c 1000).
+- \c delay_after (number, optional): A delay in milliseconds after calling
+  your function, before the camera goes back (default \c 1000).
+
+\section lua_api_map_events_deprecated Deprecated events of a map
+
+The following events are deprecated and may be removed it future releases.
+
+\subsection lua_api_map_on_camera_back map:on_camera_back()
+
+After a camera sequence initiated by
+\ref lua_api_map_move_camera "map:move_camera()",
+this event is triggered when the camera gets back to the \ref lua_api_hero
+"hero".
+
+\warning This event is deprecated because since Solarus 1.5,
+  \ref lua_api_map_move_camera "camera:move()" is deprecated.
+  The \ref lua_api_camera "camera" is now an entity and now has
+  much more customization possibilities.
+
+Use \ref lua_api_camera_on_state_changed
+"camera:on_state_changed()" instead,
+or the callback parameter of
+\ref lua_api_movement_start "movement:start()"
 
 */
 
