@@ -109,6 +109,28 @@ the camera is displayed on the upper left corner of the screen.
 - \c y (number): Y coordinate of the camera on the screen,
   in quest screen coordinates.
 
+\subsection lua_api_camera_get_position_to_track camera:get_position_to_track(entity), camera:get_position_to_track(x, y)
+
+Returns the coordinates this camera should have in order to track the given
+entity or point,
+respecting constraints of map limits and separators.
+
+The returned coordinates make their best to have the entity or point
+centered in the camera, but make sure that the camera does not cross
+\ref lua_api_separator "separators" or map limits.
+This function can be used to compute legal coordinates for the camera,
+and for example pass them to
+\ref lua_api_entity_set_position "camera:set_position()"
+or start a
+\ref lua_api_movement_start "movement".
+
+To get coordinates that center the camera on a map entity:
+- \c entity (\ref lua_api_entity "entity") The entity to center the camera on.
+
+To get coordinates that center the camera on a point:
+- \c x (number): X coordinate of the point to center the camera on.
+- \c y (number): Y coordinate of the point to center the camera on.
+
 \subsection lua_api_camera_get_state camera:get_state()
 
 Returns the name of the current state of the camera.
