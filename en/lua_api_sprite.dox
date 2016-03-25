@@ -58,11 +58,21 @@ Returns the name of the animation set used by this sprite.
 Returns the name of the current animation of this sprite.
 - Return value (string): Name of the current animation.
 
-\subsection lua_api_sprite_set_animation sprite:set_animation(animation_name)
+\subsection lua_api_sprite_set_animation sprite:set_animation(animation_name, [next_action])
 
 Sets the current animation of this sprite.
 - \c animation_name (string): Name of the animation to set.
   This animation must exist in the animation set.
+- \c next_action (function or string, optional): What to do when the animation
+  finishes.
+  This parameter only has an effect if the animation finishes, that is, if it
+  does not loop.
+  If you pass a function, this function will be called when the animation
+  finishes.
+  If you pass a string, this should be the name of an animation of the sprite,
+  and this animation will automatically be played next.
+  No value means no action after the animation finishes: in this case, the
+  sprite stops being displayed.
 
 \subsection lua_api_sprite_has_animation sprite:has_animation(animation_name)
 
