@@ -138,7 +138,7 @@ Removes and destroys a
 It may have been created at the creation of the custom entity,
 or when you called
 \ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
-- \c sprite (\ref lua_api_sprite "sprite"): The sprite to remove.
+- \c sprite (\ref lua_api_sprite "sprite", optional): The sprite to remove.
   The default value is the first sprite that was created.
 
 \subsection lua_api_custom_entity_is_drawn_in_y_order custom_entity:is_drawn_in_y_order()
