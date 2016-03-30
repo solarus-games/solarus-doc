@@ -632,7 +632,7 @@ position.
 
 \subsection lua_api_entity_get_sprite entity:get_sprite([name])
 
-Returns a sprite representing this entity.
+Returns a \ref lua_api_sprite "sprite" representing this entity.
 - \c name (string, optional): Name of the sprite to get.
   Only useful for entities that have multiple sprites.
   No value means the main sprite.
@@ -661,7 +661,53 @@ Returns a sprite representing this entity.
   \ref lua_api_enemy "enemies"
   and
   \ref lua_api_custom_entity "custom entities",
-  the main sprite is the first one created.
+  the main sprite is the first one.
+
+\subsection lua_api_entity_get_sprites entity:get_sprites()
+
+Returns an iterator to all
+\ref lua_api_sprite "sprites" of this entity.
+
+At each step, the iterator provides two values:
+the name of a sprite
+(which is optional, \c nil if the sprite has no name)
+and the sprite itself.
+See \ref lua_api_entity_get_sprite "entity:get_sprite()"
+for more details about named sprites.
+
+Sprites are returned in their drawing order.
+Note that this order can be changed with
+\ref lua_api_entity_bring_sprite_to_front "entity:bring_sprite_to_front()"
+and
+\ref lua_api_entity_bring_sprite_to_back "entity:bring_sprite_to_back()".
+
+The typical usage of this function is:
+\verbatim
+for sprite_name, sprite in entity:get_sprites() do
+  -- some code related to the sprite
+end
+\endverbatim
+- Return value (function): An iterator to all sprites of this entity.
+
+\subsection lua_api_entity_bring_sprite_to_front entity:bring_sprite_to_front(sprite)
+
+Reorders a
+\ref lua_api_sprite "sprite" of this entity to be displayed after other sprites
+(displayed to the front).
+
+This function is only useful for entities that have multiple sprites.
+- \c sprite (\ref lua_api_sprite "sprite"): The sprite to reorder.
+  It must belong to this entity.
+
+\subsection lua_api_entity_bring_sprite_to_back entity:bring_sprite_to_back(sprite)
+
+Reorders a
+\ref lua_api_sprite "sprite" of this entity to be displayed before other sprites
+(displayed to the back).
+
+This function is only useful for entities that have multiple sprites.
+- \c sprite (\ref lua_api_sprite "sprite"): The sprite to reorder.
+  It must belong to this entity.
 
 \subsection lua_api_entity_is_visible entity:is_visible()
 
