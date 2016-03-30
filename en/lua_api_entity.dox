@@ -670,12 +670,12 @@ Returns an iterator to all
 
 At each step, the iterator provides two values:
 the name of a sprite
-(which is optional, \c nil if the sprite has no name)
+(which is an empty string if the sprite has no name)
 and the sprite itself.
 See \ref lua_api_entity_get_sprite "entity:get_sprite()"
 for more details about named sprites.
 
-Sprites are returned in their drawing order.
+Sprites are returned in their displaying order.
 Note that this order can be changed with
 \ref lua_api_entity_bring_sprite_to_front "entity:bring_sprite_to_front()"
 and
