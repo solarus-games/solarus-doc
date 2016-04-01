@@ -65,6 +65,11 @@ color is blended onto the existing pixels.
 - \c width (number, optional): Width of the region to fill on this surface.
 - \c height (number, optional): Height of the region to fill on this surface.
 
+\subsection lua_api_surface_get_opacity surface:get_opacity()
+
+Returns the opacity of this surface.
+- Return value (integer): The opacity: \c 0 (transparent) to \c 255 (opaque).
+
 \subsection lua_api_surface_set_opacity surface:set_opacity(opacity)
 
 Sets the opacity of this surface.
