@@ -633,35 +633,36 @@ position.
 \subsection lua_api_entity_get_sprite entity:get_sprite([name])
 
 Returns a \ref lua_api_sprite "sprite" representing this entity.
+
+To manage entities with multiple sprites, you can set names
+with sprite creation methods like
+\ref lua_api_enemy_create_sprite "enemy:create_sprite()"
+and
+\ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
+However, it is easier to just leave the names blank and simply store the
+result of these sprite creation methods.
+The name is more useful for built-in entities that have multiple
+sprites automatically created by the engine.
+Such entities are the
+\ref lua_api_hero "hero",
+\ref lua_api_pickable "pickable treasures",
+\ref lua_api_carried_object "carried objects"
+and
+\ref lua_api_crystal "crystals".
+See the documentation pages of these entities to know their exact sprites,
+the name of these sprites and which one is their main sprite.
+For
+\ref lua_api_enemy "enemies"
+and
+\ref lua_api_custom_entity "custom entities",
+the main sprite is the first one in Z order.
+
 - \c name (string, optional): Name of the sprite to get.
   Only useful for entities that have multiple sprites.
   No value means the main sprite.
 - Return value (\ref lua_api_sprite "sprite"): The entity sprite with this name,
   or its main sprite if no name is specified.
   Returns \c nil if the entity has no such sprite.
-
-\remark To manage entities with multiple sprites, you can set names
-  with sprite creation methods like
-  \ref lua_api_enemy_create_sprite "enemy:create_sprite()"
-  and
-  \ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
-  However, it is easier to just leave the names blank and simply store the
-  result of these sprite creation methods.
-  The name is more useful for built-in entities that have multiple
-  sprites automatically created by the engine.
-  Such entities are the
-  \ref lua_api_hero "hero",
-  \ref lua_api_pickable "pickable treasures",
-  \ref lua_api_carried_object "carried objects"
-  and
-  \ref lua_api_crystal "crystals".
-  See the documentation pages of these entities to know their exact sprites,
-  the name of these sprites and which one is their main sprite.
-  For
-  \ref lua_api_enemy "enemies"
-  and
-  \ref lua_api_custom_entity "custom entities",
-  the main sprite is the first one.
 
 \subsection lua_api_entity_get_sprites entity:get_sprites()
 
