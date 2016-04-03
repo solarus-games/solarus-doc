@@ -655,7 +655,12 @@ For
 \ref lua_api_enemy "enemies"
 and
 \ref lua_api_custom_entity "custom entities",
-the main sprite is the first one in Z order.
+the main sprite is the first one in Z order,
+which is the sprite creation order unless you
+call
+\ref lua_api_entity_bring_sprite_to_front "entity:bring_sprite_to_front()"
+or
+\ref lua_api_entity_bring_sprite_to_back "entity:bring_sprite_to_back()".
 
 - \c name (string, optional): Name of the sprite to get.
   Only useful for entities that have multiple sprites.
