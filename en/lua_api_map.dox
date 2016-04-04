@@ -1937,23 +1937,27 @@ function map:move_camera(x, y, speed, callback, delay_before, delay_after)
 
   local movement = sol.movement.create("target")
   movement:set_target(camera:get_position_to_track(x, y))
+  movement:set_ignore_obstacles(true)
   movement:set_speed(speed)
   movement:start(camera, function()
-    sol.timer.start(map, delay_before, function()
+    local timer_1 = sol.timer.start(map, delay_before, function()
       callback()
-      sol.timer.start(map, delay_after, function()
+      local timer_2 = sol.timer.start(map, delay_after, function()
         local movement = sol.movement.create("target")
         movement:set_target(old_x, old_y)
+        movement:set_ignore_obstacles(true)
         movement:set_speed(speed)
         movement:start(camera, function()
           game:set_suspended(false)
           camera:start_tracking(hero)
-          if map:on_camera_back ~= nil then
+          if map.on_camera_back ~= nil then
             map:on_camera_back()
           end
         end)
       end)
+      timer_2:set_suspended_with_map(false)
     end)
+    timer_1:set_suspended_with_map(false)
   end)
 end
 \endverbatim
