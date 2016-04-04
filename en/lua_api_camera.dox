@@ -195,9 +195,8 @@ Called when the state of the camera changes.
   \ref lua_api_camera_get_state "camera:get_state()" for the list of possible
   states.
 
-\remark This event is called even for the initial state of the camera,
-  when the map starts.
-  This initial state is always \c "tracking".
+\remark When the map starts, the initial state of the camera always
+  \c "tracking", because the camera initially tracks the hero.
 
 */
 
