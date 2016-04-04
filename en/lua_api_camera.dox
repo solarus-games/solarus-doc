@@ -60,6 +60,17 @@ and \ref lua_api_camera_set_position_on_screen "camera:set_position_on_screen()"
 to indicate the exact subpart of the screen where you want
 the camera to be displayed.
 
+\subsection lua_api_camera_suspending Suspending the game
+
+Moving the camera does not automatically suspends the game,
+except when it is scrolling on a
+\ref lua_api_separator "separator" in tracking state.
+You can call
+\ref lua_api_game_set_suspended "game:set_suspended()"
+if you want the game to be suspended during your camera sequence.
+Note that unlike most entities, the camera can still move when the game
+is suspended.
+
 \section lua_api_camera_inherited_methods Methods inherited from map entity
 
 A camera is a particular \ref lua_api_entity "map entity".
