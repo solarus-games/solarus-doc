@@ -145,6 +145,7 @@ The camera will be focused on an entity to track, and follow it when it moves.
 
 When the tracked entity crosses a separator,
 the engine automatically starts a scrolling movement on the camera.
+The game is automatically suspended during the scrolling.
 After the scrolling, the camera continues to normally track the entity
 on the other side of the separator.
 - \c entity (entity): The entity to track.
