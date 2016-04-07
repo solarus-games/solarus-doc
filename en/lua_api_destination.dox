@@ -36,10 +36,9 @@ See \ref lua_api_entity_methods to know these methods.
 Returns whether this destination updates the
 \ref lua_api_game_set_starting_location "starting location"
 of the player when arriving on it.
-This is only possible for destinations that have a name.
 If yes, when the player restarts his game, he will restart at this
 destination.
-The default value is \c "when world changes".
+The default value is \c "when_world_changes".
 - Return value (string): The starting location mode. Can be one of:
   - \c "when_world_changes": Updates the starting location if the
     current \ref lua_api_map_get_world "world"
@@ -52,7 +51,6 @@ The default value is \c "when world changes".
 Sets whether this destination updates the
 \ref lua_api_game_set_starting_location "starting location"
 of the player when arriving on it.
-This is only possible for destinations that have a name.
 If yes, when the player restarts his game, he will restart at this
 destination.
 The default value is \c "when world changes".
