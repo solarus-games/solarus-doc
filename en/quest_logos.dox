@@ -1,0 +1,44 @@
+/**
+\page quest_logos Quest logos and icons
+
+\tableofcontents
+
+The \c "logos/" directory of your quest can contain a logo and some icons
+for your quest.
+The Solarus GUI uses them in the quest list to represent each quest before
+the user plays.
+
+The logo and icons are optional,
+but it is recommended to make some for your quest to be
+better identified in the quest list of the Solarus GUI.
+
+\section quest_logos_logo Quest logo
+
+The logo of your quest should be a PNG image of size 200x140
+called \c "logos/logo.png".
+The logo is optional.
+
+\section quest_logos_icons Quest icons
+
+An icon is also useful for the Solarus GUI to distinguish your quest.
+Similarly to the logo, the icon is optional.
+Multiple icon sizes are allowed,
+and each size should be in a separate PNG file.
+The following icon file names are allowed, with the corresponding sizes
+from 16x16 pixels to 1024x1024 pixels:
+- \c "logos/icon_16.png",
+- \c "logos/icon_24.png",
+- \c "logos/icon_32.png",
+- \c "logos/icon_48.png",
+- \c "logos/icon_64.png",
+- \c "logos/icon_128.png",
+- \c "logos/icon_256.png",
+- \c "logos/icon_512.png",
+- \c "logos/icon_1024.png".
+
+It is possible (and recommended) to provide an icon with multiple sizes.
+The Solarus GUI will then automatically pick the most suitable one(s) to
+fit its needs.
+
+*/
+
