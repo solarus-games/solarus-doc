@@ -15,15 +15,17 @@ Future releases may support more music formats.
 \section quest_musics_loop Loop settings
 
 When starting a map, its music is automatically played
-and will loop when reaching the end.
+and will loop to the beginning if it finishes.
 When you play a music from a script
 (using
 \ref lua_api_audio_play_music "sol.audio.play_music()"),
 you can specify the action to do when the music finishes.
-By default, this action is to loop the music to the beginning.
+By default, this action is also to loop the music to the beginning.
 
-However, some musics already have their own loop internal loop information.
-Such musics are able to loop to a specific point rather than
+However, some musics already have their own loop internal loop.
+It means that they don't finish (they loop by themselves)
+so the rules above have no effect on them.
+Instead, such musics are able to loop to a specific point rather than
 to the beginning.
 - This is the case of SPC musics because of their special
   emulation format.
@@ -31,13 +33,16 @@ to the beginning.
   some point, but SPC musics have no end.
 - This can also be the case of IT musics
   if they contain internal loop information to play forever.
-- For OGG musics, Solarus detects the tags \c LOOP_START and
-  \c LOOP_END.
-  These tags are both optional. They should be set to a number of PCM samples.
-  If \c LOOP_START is set, then the music loops from \c LOOP_END to this point
-  of the file. 
-  By default, \c LOOP_END is the end of the file so
-  is it rarely useful to set it.
+- For OGG musics, Solarus detects the metadata tags \c LOOPSTART,
+  \c LOOPEND and \c LOOPLENGTH.
+  These tags are all optional. They should be set to a number of PCM samples.
+  There will be an internal loop if \c LOOPSTART is specified.
+  You can then use either \c LOOPEND or \c LOOPLENGTH to indicate from
+  where you want the music to loop (by default: from the end of the file).
+  If \c LOOPEND is specified, the music will loop from position \c LOOPEND
+  to position \c LOOPSTART.
+  Otherwise, if \c LOOPLENGTH is specified, the music will loop from position
+  <tt>LOOPSTART + LOOPLENGTH</tt> to position \c LOOPSTART.
 
 */
 
