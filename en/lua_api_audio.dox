@@ -55,24 +55,14 @@ the new one.
 When the music reaches the end, the \c action parameter indicates what to do
 next. The default behavior is to loop from the beginning.
 
-However, some musics don't have an end because they already loop forever
-internally.
-The \c action parameter has no effect on such musics.
-- This is the case of all <tt>.spc</tt> musics because of their special
-  emulation format.
-  Some of them simply play forever, other play an empty sound forever after
-  some point, but they have no end.
-- This can also be the case of some <tt>.it</tt> musics
-  if they contain internal loop information to play forever.
-- For <tt>.ogg</tt> musics, Solarus detects tags \c LOOP_START and
-  \c LOOP_END.
-  These values are both optional. They should be set to a number of PCM samples.
-  If \c LOOP_START is set, then the music loops from \c LOOP_END to this point
-  of the file. 
-  By default, \c LOOP_END is the end of the file so
-  is it rarely useful to set it.
+However, some music files already have their own loop internal loop information.
+Such musics are able to loop to a specific point rather than
+to the beginning.
+Since they already loop forever internally, they don't have an end
+and the \c action parameter has no effect on them.
+See \ref quest_musics_loop "Music loop settings"
+to know how Solarus supports internal loop information for each format.
 
-Parameters:
 - \c music_id (string): Name of the music file to play, relative to the
   \c musics directory and without extension. The following extensions will be
   tried in this order: \c <tt>.ogg</tt>, \c <tt>.it</tt> and \c <tt>.spc</tt>.
