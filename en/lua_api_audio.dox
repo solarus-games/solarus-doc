@@ -44,21 +44,42 @@ This function does nothing if you already called it before.
 
 Plays a music.
 
-Generates a Lua error if the music does not exist.
+If the music does not exist, a Lua error is generated.
 
 Only one music can be played at a time.
-If the same music is already playing, it continues normally and does not
+If the same music was already playing, it continues normally and does not
 restart.
 If a different music was already playing, it is stopped and replaced by
 the new one.
+
+When the music reaches the end, the \c action parameter indicates what to do
+next. The default behavior is to loop from the beginning.
+
+However, some musics don't have an end because they already loop forever
+internally.
+The \c action parameter has no effect on such musics.
+- This is the case of all <tt>.spc</tt> musics because of their special
+  emulation format.
+  Some of them simply play forever, other play an empty sound forever after
+  some point, but they have no end.
+- This can also be the case of some <tt>.it</tt> musics
+  if they contain internal loop information to play forever.
+- For <tt>.ogg</tt> musics, Solarus detects tags \c LOOP_START and
+  \c LOOP_END.
+  These values are both optional. They should be set to a number of PCM samples.
+  If \c LOOP_START is set, then the music loops from \c LOOP_END to this point
+  of the file. 
+  By default, \c LOOP_END is the end of the file so
+  is it rarely useful to set it.
+
+Parameters:
 - \c music_id (string): Name of the music file to play, relative to the
   \c musics directory and without extension. The following extensions will be
   tried in this order: \c <tt>.ogg</tt>, \c <tt>.it</tt> and \c <tt>.spc</tt>.
-  \c nil stops playing any music.
-  The second parameter has no effect in this case.
+  \c nil stops playing any music (the second parameter has no effect in this case).
   If you set the music name to the same music that is already playing, or to
-  the special value \c "same", then this function does nothing.
-  The music keeps playing (it does not restart) and the second parameter
+  the special value \c "same", then this function does nothing:
+  the music keeps playing (it does not restart) and the second parameter
   is ignored.
 - \c action (function or boolean, optional): What to do when the music
   finishes (reaches its end).
@@ -68,15 +89,6 @@ the new one.
   It will be called when the music finishes.
   This allows you to perform an action of your choice, like playing
   another music.
-
-\remark Some musics don't have an end.
-  This is the case of all <tt>.spc</tt> musics because of their special
-  emulation format.
-  Some of them simply play forever, other play an empty sound forever after
-  some point, but they have no end.
-  This can also be the case of some <tt>.it</tt> musics if they
-  contain internal loop information to play forever.
-  The \c action parameter has no effect on such musics.
 
 \subsection lua_api_audio_get_music sol.audio.get_music()
 
