@@ -26,12 +26,12 @@ A map is composed of the following information:
 - A background music.
 - The world it belongs to (optional). Allows to groups maps together.
 - Its location relative to its world.
-- The floor it belongs to (if any),
+- The floor it belongs to (if any).
 - All entities of the map (tiles, enemies, chests, pots, switches, etc.),
   separated in different layers.
 
 All of this is stored in the map data file \c xx.dat.
-We now specify its syntax below.
+We now specify its syntax.
 
 \section quest_map_data_file_syntax Syntax of the map data file
 
