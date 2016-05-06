@@ -314,6 +314,30 @@ Returns the coordinates of the center point of this entity on the
   relative to the upper left corner of the map.
 - Return value 3 (number): Layer of the entity.
 
+\subsection lua_api_entity_get_facing_position entity:get_facing_position()
+
+Returns the coordinates of the point this entity is looking at.
+This point depends on the direction of the sprite if any.
+If the entity has no sprite, or if the sprite has not 4 directions,
+then the movement is considered.
+If there is no movement either, the entity is assumed to look to the North.
+- Return value 1 (number): X coordinate of the facing point of this entity,
+  relative to the upper left corner of the map.
+- Return value 2 (number): Y coordinate of the facing point of this entity,
+  relative to the upper left corner of the map.
+- Return value 3 (number): Layer of the entity.
+
+\subsection lua_api_entity_get_facing_entity entity:get_facing_entity()
+
+Returns the entity this entity is looking at, if any.
+
+This is an entity overlapping the
+\ref lua_api_entity_get_facing_position "facing position" of this entity.
+If several entities are overlapping the facing position,
+the first one in Z order is returned.
+- Return value (entity): The facing entity, or \c nil
+  if there is no entity in front of this entity.
+
 \subsection lua_api_entity_get_ground_position entity:get_ground_position()
 
 Returns the coordinates of the point used for ground detection for this
@@ -437,7 +461,8 @@ the specified collision test.
   - \c "center": Collision if the \ref lua_api_entity_get_center_position
     "center point" of the other entity is inside the bounding box of this
     entity.
-  - \c "facing": Collision if the facing point of the other
+  - \c "facing": Collision if the
+    \ref lua_api_entity_get_facing_position "facing position" of the other
     entity's bounding box is touching this entity's bounding box.
     Bounding boxes don't necessarily overlap, but they are in
     contact: there is no space between them.

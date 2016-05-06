@@ -279,7 +279,8 @@ when another entity.
   - \c "center": Collision if the \ref lua_api_entity_get_center_position
     "center point" of the other entity is inside the bounding box of your
     custom entity.
-  - \c "facing": Collision if the facing point of the other
+  - \c "facing": Collision if the
+    \ref lua_api_entity_get_facing_position "facing position" of the other
     entity's bounding box is touching your custom entity's bounding box.
     Bounding boxes don't necessarily overlap, but they are in
     contact: there is no space between them.
