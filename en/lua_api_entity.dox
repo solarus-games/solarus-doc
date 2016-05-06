@@ -317,8 +317,8 @@ Returns the coordinates of the center point of this entity on the
 \subsection lua_api_entity_get_facing_position entity:get_facing_position()
 
 Returns the coordinates of the point this entity is looking at.
-This point depends on the direction of the sprite if any.
-If the entity has no sprite, or if the sprite has not 4 directions,
+This point depends on the direction of the main sprite if any.
+If the entity has no sprite, or if the main sprite has not 4 directions,
 then the movement is considered.
 If there is no movement either, the entity is assumed to look to the North.
 - Return value 1 (number): X coordinate of the facing point of this entity,
