@@ -110,6 +110,17 @@ Turns on or turns off fullscreen, keeping an equivalent video mode.
 \remark When the quest is run from the Solarus GUI, the user can also
   switch fullscreen from the menus of the GUI.
 
+\subsection lua_api_video_cursor_visible sol.video.is_cursor_visible()
+
+Returns whether the mouse cursor is currently visible.
+- Return value (boolean): \c true if the mouse cursor is currently visible.
+
+\subsection lua_api_video_set_cursor_visible sol.video.set_cursor_visible([cursor_visible])
+
+Shows or hides the mouse cursor, keeping an equivalent video mode.
+- \c visible_cursor (boolean, optional): \c true to show mouse cursor (no value means
+  \c true).
+
 \subsection lua_api_video_get_quest_size sol.video.get_quest_size()
 
 Returns the size of the quest screen.
