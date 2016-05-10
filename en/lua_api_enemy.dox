@@ -415,7 +415,7 @@ Sets the \ref lua_api_pickable
 
 \subsection lua_api_enemy_is_traversable enemy:is_traversable()
 
-Returns whether this enemy is traversed by other entities.
+Returns whether this enemy can be traversed by other entities.
 - Return value (boolean): \c true if this enemy is traversable.
 
 \subsection lua_api_enemy_set_traversable enemy:set_traversable([traversable])

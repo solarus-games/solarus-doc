@@ -70,7 +70,49 @@ See \ref lua_api_entity_methods to know these methods.
 
 \section lua_api_npc_methods Methods of the type non-playing character
 
-None.
+The following methods are specific to non-playing characters.
+
+\subsection lua_api_npc_is_traversable npc:is_traversable()
+
+Returns whether this NPC can be traversed by other entities.
+
+By default, NPCs are not traversable.
+However, be aware that some entities can override this setting.
+Indeed,
+other NPCs,
+\ref lua_api_enemy "enemies"
+and projectiles
+(\ref lua_api_carried_object "thrown objects",
+\ref lua_api_arrow "arrows",
+\ref lua_api_boomerang "boomerang")
+can traverse usual NPCs but
+cannot traverse generalized NPCs.
+And \ref lua_api_custom_entity "custom entities" can have finer customization.
+
+- Return value (boolean): \c true if this NPC is traversable.
+
+\subsection lua_api_npc_set_traversable npc:set_traversable([traversable])
+
+Sets whether this NPC can be traversed by other entities.
+
+By default, NPCs are not traversable.
+However, be aware that some entities can override this setting.
+Indeed,
+other NPCs,
+\ref lua_api_enemy "enemies"
+and projectiles
+(\ref lua_api_carried_object "thrown objects",
+\ref lua_api_arrow "arrows",
+\ref lua_api_boomerang "boomerang")
+can traverse usual NPCs but
+cannot traverse generalized NPCs.
+And \ref lua_api_custom_entity "custom entities" can have finer customization.
+
+If you want to allow the
+\ref lua_api_enemy "hero"
+to be able to traverse this NPC, you can use this function.
+- \c traversable (boolean, optional): \c true to make this NPC traversable.
+  No value means \c true.
 
 \section lua_api_npc_inherited_events Events inherited from map entity
 
