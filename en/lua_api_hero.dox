@@ -140,16 +140,27 @@ This speed is automatically reduced when the hero walks on special ground like
 grass, ladders or holes.
 - \c walking speed (number): The speed of normal walk in pixels par second.
 
-\subsection lua_api_hero_save_solid_ground hero:save_solid_ground([x, y, layer])
+\subsection lua_api_hero_save_solid_ground hero:save_solid_ground([x, y, layer]), hero:save_solid_ground(callback)
 
-Memorizes a position to go back to if the hero falls into a hole or other bad
+Sets a position to go back to if the hero falls into a hole or other bad
 ground.
 
 This replaces the usual behavior which is going back to the last
 solid position before the fall.
+
+The position can be specified either as coordinates and a layer,
+or as a function that returns coordinates and a layer.
+Using a function allows to decide the position at the last moment.
+
+To memorize a position directly:
 - \c x (number, optional): X coordinate to memorize (default: current position).
 - \c y (number, optional): Y coordinate to memorize (default: current position).
 - \c layer (number, optional): Layer to memorize (default: current position).
+
+To set a function that indicates the position to go back to:
+- \c callback (function): A function to be called whenever the hero falls into
+  bad ground. The function should return 2 or 3 values: x, y and optionally
+  the layer (no layer value means keeping the layer unchanged).
 
 \subsection lua_api_hero_reset_solid_ground hero:reset_solid_ground()
 
@@ -168,6 +179,10 @@ other bad ground now.
 This is the position that was previously memorized by the last call to
 \ref lua_api_hero_save_solid_ground "hero:save_solid_ground()",
 if any.
+If the position was passed to 
+\ref lua_api_hero_save_solid_ground "hero:save_solid_ground()"
+as a function, then this function is called to get a position.
+
 Otherwise, this is the position of the hero the last time he was on solid
 ground.
 - Return value 1 (number): X coordinate where to get back to solid ground,
