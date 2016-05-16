@@ -462,31 +462,45 @@ that overlap this point.
   \c "prickles" or
   \c "lava".
 
-\subsection lua_api_map_draw_sprite map:draw_sprite(sprite, x, y)
+\subsection lua_api_map_draw_visual map:draw_visual(drawable, x, y)
 
-Draws a \ref lua_api_sprite "sprite" on the screen
+Draws a \ref lua_api_drawable "drawable object"
+(\ref lua_api_surface "surface",
+\ref lua_api_text_surface "text surface"
+or \ref lua_api_sprite "sprite")
+on the
+\ref lua_api_map_get_camera "camera"
 at the given map coordinates.
 
 This function can be used as an alternative to
-\ref lua_api_drawable_draw "sprite:draw()" in order to draw the sprite
+\ref lua_api_drawable_draw "drawable:draw()" in order to draw the object
 relative to the map (instead of relative to the screen).
 
-More precisely, the origin point of the sprite will be displayed at this
+If the object to draw is a
+\ref lua_api_sprite "sprite",
+its origin point will be displayed at the given
 location, relative to the the upper left corner of the map.
-
-Normally, \ref lua_api_entity "map entities" automatically draw their
-sprites, so you don't have to call this function.
-However, you may need this function if you want to draw something
-relative to map coordinates but without using a map entity.
 
 This function should only be called during the drawing phase of the map,
 for example from
 \ref lua_api_map_on_draw "map:on_draw()"
 or from
-\ref lua_api_enemy_on_pre_draw "enemy:on_pre_draw()".
-- \c sprite (\ref lua_api_sprite "sprite"): The sprite to draw on the map.
-- \c x (number): X coordinate of where to draw the sprite, in map coordinates.
-- \c y (number): Y coordinate of where to draw the sprite, in map coordinates.
+\ref lua_api_custom_entity_on_pre_draw "custom_entity:on_pre_draw()".
+- \c drawable (\ref lua_api_drawable "drawable"): The visual object to draw
+  on the map.
+- \c x (number): X coordinate of where to draw the object, in map coordinates.
+- \c y (number): Y coordinate of where to draw the object, in map coordinates.
+
+\subsection lua_api_map_draw_sprite map:draw_sprite(sprite, x, y)
+
+Draws a \ref lua_api_sprite "sprite" on the screen
+at the given map coordinates.
+
+\warning This method is deprecated since Solarus 1.5.
+
+Use
+\ref lua_api_map_draw_visual "map:draw_visual()"
+instead.
 
 \subsection lua_api_map_get_crystal_state map:get_crystal_state()
 

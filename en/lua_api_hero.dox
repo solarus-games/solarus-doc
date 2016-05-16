@@ -153,14 +153,15 @@ or as a function that returns coordinates and a layer.
 Using a function allows to decide the position at the last moment.
 
 To memorize a position directly:
-- \c x (number, optional): X coordinate to memorize (default: current position).
-- \c y (number, optional): Y coordinate to memorize (default: current position).
-- \c layer (number, optional): Layer to memorize (default: current position).
+- \c x (number, optional): X coordinate to memorize (no value means the current position).
+- \c y (number, optional): Y coordinate to memorize (no value means the current position).
+- \c layer (number, optional): Layer to memorize (no value means the current position).
 
 To set a function that indicates the position to go back to:
 - \c callback (function): A function to be called whenever the hero falls into
   bad ground. The function should return 2 or 3 values: x, y and optionally
   the layer (no layer value means keeping the layer unchanged).
+  A \c nil value unsets any position or function that was previously set.
 
 \subsection lua_api_hero_reset_solid_ground hero:reset_solid_ground()
 
@@ -171,6 +172,9 @@ The initial behavior is restored: the hero will now get
 back to where he was just before falling, instead going to of a memorized
 position.
 
+This is equivalent to
+<tt>hero:save_solid_ground(nil)</tt>.
+
 \subsection lua_api_hero_get_solid_ground_position hero:get_solid_ground_position()
 
 Returns the position where the hero gets back if he falls into a hole or
@@ -179,7 +183,7 @@ other bad ground now.
 This is the position that was previously memorized by the last call to
 \ref lua_api_hero_save_solid_ground "hero:save_solid_ground()",
 if any.
-If the position was passed to 
+If the position was passed to
 \ref lua_api_hero_save_solid_ground "hero:save_solid_ground()"
 as a function, then this function is called to get a position.
 
