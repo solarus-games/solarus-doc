@@ -446,6 +446,23 @@ Makes the hero jump towards the specified direction.
   traverse obstacles during this movement (default \c false).
   Make sure the movement does not end inside an obstacle.
 
+\subsection lua_api_hero_start_plunging hero:start_plunging()
+
+TODO
+
+\subsection lua_api_hero_start_back_to_solid_ground hero:start_back_to_solid_ground()
+
+Starts moving the hero back to solid ground.
+
+This function does the same thing as what happens after falling into a hole
+or drowning: the hero starts going back to the
+\ref lua_api_hero_get_solid_ground_position "solid ground position" and then
+the control is restored to the player. No sound is automatically played.
+
+If \ref lua_api_hero_save_solid_ground "hero:save_solid_ground()" was called before,
+then the solid ground position is the one that was specified there.
+Otherwise, the solid ground position is the last known place with solid ground.
+
 \subsection lua_api_hero_start_attack hero:start_attack()
 
 Makes the hero perform his main attack (swinging his sword).
@@ -610,6 +627,23 @@ Called when the built-in state of the hero changes.
 \remark This event is called even for the initial state of the hero,
   right after \ref lua_api_game_on_started "game:on_started()".
   This initial state is always \c "free".
+
+\subsection lua_api_hero_on_drowning hero:on_drowning()
+
+Called when the hero starts drowning into water or lava.
+
+This is only possible if the player does not have the
+\ref lua_api_game_get_ability "swimming ability".
+
+This happens during the \c plunging state,
+when the plunging sprite animation finishes.
+
+If you don't define this event, then by default, the engine
+removes 1
+\ref lua_api_game_remove_life "life point"
+if in water (4 life points if in lava)
+and gets the hero
+\ref lua_api_hero_start_back_to_solid_ground "back to solid ground".
 
 \subsection lua_api_hero_on_taking_damage hero:on_taking_damage(damage)
 
