@@ -640,6 +640,8 @@ actions like attacking, swimming or running.
   - \c "shield": Protection against enemies.
     Determines whether the hero can avoid some kinds of attacks.
   - \c "lift": Ability to lift heavy objects.
+  - \c "jump_over_water": Automatically jump when arriving into
+    water without the \c "swim" ability.
   - \c "swim": Ability to swim in deep water.
   - \c "run": Ability to run when pressing the action command.
   - \c "detect_weak_walls": Notifies the player with a sound when a weak wall
