@@ -802,6 +802,8 @@ When an obstacle is reached, this event is called instead of
 Called when a
 \ref lua_api_movement "movement"
 is started on this entity.
+- \c movement (\ref lua_api_movement "movement"): The movement that was just
+  started on this entity.
 
 \subsection lua_api_entity_on_movement_changed entity:on_movement_changed(movement)
 
