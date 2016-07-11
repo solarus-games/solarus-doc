@@ -36,6 +36,44 @@ Draws a subrectangle of this object on a destination surface.
 - \c y (number, optional): Y coordinate of where to draw this rectangle.
   on the destination surface (default \c 0).
 
+\subsection lua_api_drawable_get_blend_mode drawable:get_blend_mode()
+
+Returns the blend mode of this drawable object.
+
+The blend mode defines how this drawable object will be drawn on other surfaces
+when you call
+\ref lua_api_drawable_draw "drawable:draw()" or
+\ref lua_api_drawable_draw_region "drawable:draw_region()".
+- Return value (string): The blend mode.
+  See \ref lua_api_drawable_set_blend_mode "drawable:set_blend_mode()"
+  for the possible values.
+
+\subsection lua_api_drawable_set_blend_mode drawable:set_blend_mode(blend_mode)
+
+Sets the blend mode of this drawable object.
+
+The blend mode defines how this drawable object will be drawn on other surfaces
+when you call
+\ref lua_api_drawable_draw "drawable:draw()" or
+\ref lua_api_drawable_draw_region "drawable:draw_region()".
+- \c blend_mode (string): The blend mode. Can be one of:
+  - \c "none": No blending. The destination surface is replaced by the pixels
+    of this drawable object.<br>
+    <tt>dstRGBA = srcRGBA</tt>
+  - \c "alpha_blending" (default): This drawable object is alpha-blended onto
+    the destination surface.<br>
+    <tt>dstRGB = (srcRGB * srcA) + (dstRGB * (1 - srcA))</tt><br>
+    <tt>dstA = srcA + (dstA * (1 - srcA))</tt>
+  - \c "additive_blending": This drawable object is drawn onto the destination
+    surface with additive blending.
+    The clarity of the destination surface is kept.
+    Useful to color and lighten the destination surface.<br>
+    <tt>dstRGB = (srcRGB * srcA) + dstRGB</tt>
+  - \c "color_modulate": Color modulation.
+    Can be used to darken the destination surface
+    without degrading its content.<br>
+    <tt>dstRGB = srcRGB * dstRGB</tt>
+
 \subsection lua_api_drawable_fade_in drawable:fade_in([delay], [callback])
 
 Starts a fade-in effect on this object.
