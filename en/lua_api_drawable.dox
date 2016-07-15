@@ -60,16 +60,16 @@ when you call
   - \c "none": No blending. The destination surface is replaced by the pixels
     of this drawable object.<br>
     <tt>dstRGBA = srcRGBA</tt>
-  - \c "alpha_blending" (default): This drawable object is alpha-blended onto
+  - \c "blend" (default): This drawable object is alpha-blended onto
     the destination surface.<br>
     <tt>dstRGB = (srcRGB * srcA) + (dstRGB * (1 - srcA))</tt><br>
     <tt>dstA = srcA + (dstA * (1 - srcA))</tt>
-  - \c "additive_blending": This drawable object is drawn onto the destination
+  - \c "add": This drawable object is drawn onto the destination
     surface with additive blending.
     The clarity of the destination surface is kept.
     Useful to color and lighten the destination surface.<br>
     <tt>dstRGB = (srcRGB * srcA) + dstRGB</tt>
-  - \c "color_modulate": Color modulation.
+  - \c "multiply": Color modulation.
     Can be used to darken the destination surface
     without degrading its content.<br>
     <tt>dstRGB = srcRGB * dstRGB</tt>
