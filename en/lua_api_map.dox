@@ -1661,9 +1661,9 @@ on the map.
     \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
-  - \c width (number, optional): Width of the entity in pixels
+  - \c width (number): Width of the entity in pixels
     (default \c 16).
-  - \c height (number, optional): Height of the entity in pixels
+  - \c height (number): Height of the entity in pixels
     (default \c 16).
   - \c sprite (string, optional): Name of the animation set of a
     \ref lua_api_sprite "sprite" to create for the custom entity.
