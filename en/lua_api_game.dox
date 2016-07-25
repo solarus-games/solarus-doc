@@ -187,6 +187,9 @@ it will only take effect at the end of it.
   \c false to resume it.
   No value means \c true.
 
+\note When the hero goes to another map, the game is automatically
+  unsuspended after the map opening transition.
+
 \subsection lua_api_game_is_paused game:is_paused()
 
 Returns whether this game is currently paused.
