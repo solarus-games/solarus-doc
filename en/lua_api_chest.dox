@@ -122,15 +122,19 @@ The following events are specific to chests.
 
 Called when the hero opens this chest.
 
-If you don't define this event, then by default,
+At this point, if the chest is saved, then the engine has already set the
+corresponding savegame value to \c true (\c treasure_savegame_variable),
+no matter if this event is defined.
+
+Then, if you don't define this event, by default,
 the engine gives the treasure to the player
-(if there is no treasure, then nothing happens and
+(if there is no treasure, then nothing else happens and
 the hero is automatically unfrozen).
 
 Your script can define this event to customize what happens.
-You may either give a treasure decided dynamically
-(by calling \ref lua_api_hero_start_treasure "hero:start_treasure()")
-or do something else: show a dialog, play a sound, close the chest
+By calling \ref lua_api_hero_start_treasure "hero:start_treasure()",
+you can either give the chest's treasure or a treasure decided dynamically.
+Or you can do something else: show a dialog, play a sound, close the chest
 again, etc.
 
 The hero is automatically frozen during the whole process of opening a chest.
