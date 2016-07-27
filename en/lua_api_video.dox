@@ -59,10 +59,10 @@ Returns the text of the title bar of the window.
 
 Sets the text of the title bar of the window.
 
-Note that the window title should already be specified in your
+By default, the window title is set to the title of your quest followed
+by its version.
+Both these properties are indicated in the
 \ref quest_properties_file "quest.dat" file.
-You usually don't have to call this function, unless you need to change it
-dynamically for some reason.
 - \c window_title (string): The window title to set.
 
 \subsection lua_api_video_get_mode sol.video.get_mode()
@@ -74,6 +74,9 @@ Returns the current video mode.
 
 Sets the current video mode.
 - \c video_mode (string): Name of the video mode (see the list above).
+
+\remark When the quest is run from the Solarus GUI, the user can also
+  change the video mode from the menus of the GUI.
 
 \subsection lua_api_video_switch_mode sol.video.switch_mode()
 
@@ -102,6 +105,20 @@ Returns whether the current video mode is fullscreen.
 
 Turns on or turns off fullscreen, keeping an equivalent video mode.
 - \c fullscreen (boolean, optional): \c true to set fullscreen (no value means
+  \c true).
+
+\remark When the quest is run from the Solarus GUI, the user can also
+  switch fullscreen from the menus of the GUI.
+
+\subsection lua_api_video_is_cursor_visible sol.video.is_cursor_visible()
+
+Returns whether the mouse cursor is currently visible.
+- Return value (boolean): \c true if the mouse cursor is currently visible.
+
+\subsection lua_api_video_set_cursor_visible sol.video.set_cursor_visible([cursor_visible])
+
+Shows or hides the mouse cursor, keeping an equivalent video mode.
+- \c visible_cursor (boolean, optional): \c true to show mouse cursor (no value means
   \c true).
 
 \subsection lua_api_video_get_quest_size sol.video.get_quest_size()

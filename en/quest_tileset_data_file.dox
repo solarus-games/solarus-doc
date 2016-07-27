@@ -107,7 +107,7 @@ Each tile pattern must have the following properties:
   - \c "ladder": A ladder (the hero walks slowly on it).
   - \c "prickles": Untraversable spikes (it hurts the hero).
   - \c "lava": Lava (the hero drowns and gets hurt).
-- \c default_layer (number): The initial layer (\c 0 to \c 2)
+- \c default_layer (number): The initial layer
   to be used when creating a
   tile with this pattern on a map with a map editor. This information is
   only useful for map editors (the engine does not use it).
@@ -158,7 +158,7 @@ Each tile pattern must have the following properties:
     corner of the map).
     Note that collisions properties remain applied to the
     real position of the tiles and not to where they are displayed.
-    Usually, parallax scrolling is used for decoration only. 
+    Usually, parallax scrolling is used for decoration only.
     Parallax scrolling tile pattern can also be multi-frame.
     Example of use: a rich background panorama.
   - \c "self": When the camera moves, the pattern scrolls on
@@ -168,7 +168,7 @@ Each tile pattern must have the following properties:
     you cannot make big scrolling backgrounds composed of different tiles
     (use parallax patterns for this)
     because nothing actually moves with the camera, tiles just scroll on
-    themselves. 
+    themselves.
     Self-scrolling tile patterns cannot be multi-frame.
     Example of use: holes in dungeons.
 - \c repeat_mode (string, optional): How the pattern is supposed to be

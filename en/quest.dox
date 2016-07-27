@@ -4,16 +4,21 @@
 We explain here how a quest is built.
 
 A quest is a data package that may be run by the Solarus C++ engine
-(the Solarus executable file).
+(either by the \c solarus-run executable
+or by the Solarus GUI).
 
-When you run the \c solarus executable file, it needs the path of the quest
+When you run the \c solarus-run executable file, it needs the path of the quest
 to launch.
 This can be done at runtime by specifying the path as a command-line argument:
-<tt>solarus_run path/to/your/quest</tt>.
+<tt>solarus-run path/to/your/quest</tt>.
 If the quest path is not specified, the current directory is considered by
 default, unless you compiled Solarus with another default quest path.
 
-The quest in this path may have one of the following two forms:
+When you run the Solarus GUI (the \c solarus executable file),
+you can select graphically the quest to run
+and you can change some settings.
+
+In both cases, the quest may have one of the following two forms:
 - A zip archive called \c data.solarus or \c data.solarus.zip
   and containing all data of your quest.
   This archive form is useful when your quest is finished and you distribute it
@@ -37,6 +42,10 @@ of a quest and the syntax of each file.
   (maps, sprites, enemies...) with their id and human-readable name.
 - \subpage quest_main_script "main.lua": main Lua script of your quest.
 - \c *.lua: other Lua scripts, possibly organized in subdirectories.
+- \subpage quest_logos "logos/": icons and logos of your quest, used
+  by the Solarus GUI to represent your game.
+  - \c logos/logo.png: a 200x140 logo of your quest.
+  - \c logos/icon_*.png: icon of your quest with various possible sizes.
 - \subpage quest_sounds "sounds/": contains all sound effects.
   - \c sounds/\asterisk.ogg: your sound files.
 - \subpage quest_musics "musics/": contains all musics.
@@ -75,6 +84,9 @@ of a quest and the syntax of each file.
 - \c enemies/: contains all enemy Lua scripts.
   - \ref lua_api_enemy "enemies/xx.lua": Lua script that defines the
     properties and the behavior of the enemy model \c "xx".
+- \c entities/: contains all custom entity Lua scripts.
+  - \ref lua_api_custom_entity "entities/xx.lua": Lua script that defines the
+    properties and the behavior of the custom entity model \c "xx".
 
 */
 

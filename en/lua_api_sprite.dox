@@ -58,11 +58,21 @@ Returns the name of the animation set used by this sprite.
 Returns the name of the current animation of this sprite.
 - Return value (string): Name of the current animation.
 
-\subsection lua_api_sprite_set_animation sprite:set_animation(animation_name)
+\subsection lua_api_sprite_set_animation sprite:set_animation(animation_name, [next_action])
 
 Sets the current animation of this sprite.
 - \c animation_name (string): Name of the animation to set.
   This animation must exist in the animation set.
+- \c next_action (function or string, optional): What to do when the animation
+  finishes.
+  This parameter only has an effect if the animation finishes, that is, if it
+  does not loop.
+  If you pass a function, this function will be called when the animation
+  finishes.
+  If you pass a string, this should be the name of an animation of the sprite,
+  and this animation will automatically be played next.
+  No value means no action after the animation finishes: in this case, the
+  sprite stops being displayed.
 
 \subsection lua_api_sprite_has_animation sprite:has_animation(animation_name)
 
@@ -101,6 +111,12 @@ Sets the current frame of this sprite.
 - \c frame (number): The frame to set (the first one is \c 0).
   This frame must exist in the current direction.
 
+\subsection lua_api_sprite_get_num_frames sprite:get_num_frames()
+
+Returns the number of frames of this sprites in the current animation and
+direction.
+- Return value (number): The number of frames.
+
 \subsection lua_api_sprite_get_frame_delay sprite:get_frame_delay()
 
 Returns the delay between two frames of this sprite in the current animation.
@@ -120,6 +136,30 @@ Use this function if you want to override the normal delay
 - \c delay (number): The new delay in milliseconds. \c nil means infinite
   and is only allowed for single-frame animations.
 
+\subsection lua_api_sprite_get_size sprite:get_size()
+
+Returns the frame size of this sprite in the current animation and direction.
+
+The frame size is the same for all frames of a given animation and direction.
+- Return value 1 (number): The width of a frame.
+- Return value 2 (number): The height of a frame.
+
+\subsection lua_api_sprite_get_origin sprite:get_origin()
+
+Returns the coordinates of the origin point of this sprite in the current
+animation and direction, relative to the upper left corner of a frame.
+
+The origin is the point of synchronization for sprites that have several
+animations or directions of different sizes,
+and for entity sprites that are larger than the entity itself.
+
+See \ref lua_api_entity_get_origin "entity:get_origin()" for more details.
+
+In a given animation and direction of a sprite,
+the origin point is the same for all frames.
+- Return value 1 (number): X coordinate of the origin point.
+- Return value 2 (number): Y coordinate of the origin point.
+
 \subsection lua_api_sprite_is_paused sprite:is_paused()
 
 Returns whether this sprite is paused.
@@ -138,7 +178,7 @@ suspended.
 - \c ignore (boolean, optional): \c true to continue animation even when the map is
   suspended, \c false otherwise. No value means \c true.
 
-\subsection lua_api_sprite_synchronize sprite:synchronize(reference_sprite)
+\subsection lua_api_sprite_synchronize sprite:synchronize([reference_sprite])
 
 Synchronizes the frames of this sprite with the frames of a reference sprite.
 The synchronization will be performed whenever both animation names match.

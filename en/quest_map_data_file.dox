@@ -26,12 +26,12 @@ A map is composed of the following information:
 - A background music.
 - The world it belongs to (optional). Allows to groups maps together.
 - Its location relative to its world.
-- The floor it belongs to (if any),
+- The floor it belongs to (if any).
 - All entities of the map (tiles, enemies, chests, pots, switches, etc.),
   separated in different layers.
 
 All of this is stored in the map data file \c xx.dat.
-We now specify its syntax below.
+We now specify its syntax.
 
 \section quest_map_data_file_syntax Syntax of the map data file
 
@@ -56,7 +56,8 @@ double quotes.
 The following properties must be defined:
 - \c width (number): Width of the map in pixels. Must be a multiple of 8.
 - \c height (number): Height of the map in pixels. Must be a multiple of 8.
-- \c num_layers (number): Number of layers of the map.
+- \c min_layer (number): Index of the lowest layer (0 or less).
+- \c max_layer (number): Index of the highest layer (0 or less).
 - \c world (string, optional): A name that identifies a group of maps this map
   belongs to. Worlds allow to group maps together.
   The world can be any arbitrary name.
@@ -201,7 +202,6 @@ The following properties exist for all types of entities:
   \ref quest_map_data_file_syntax_tile "tiles": this is because tiles
   don't exist individually at runtime for performance reasons.
 - \c layer (number): Layer where the entity is on the map.
-  The lowest layer is \c 0.
 - \c x (number): X coordinate of the entity relative to the upper-left corner
   of the map.
   The \ref lua_api_entity_get_origin "origin point" of the entity will be
@@ -349,11 +349,22 @@ Additional properties:
 - \c sprite (string, optional): Name of the animation set of a
   \ref quest_sprite_data_file "sprite" to create for the destination.
   No value means no sprite (the destination will then be invisible).
+- \c starting_location_mode (string, optional): Whether to update the
+  \ref lua_api_game_set_starting_location "starting location"
+  of the player when arriving to this destination.
+  If yes, when the player restarts his game, he will restart at this
+  destination.
+  Must be one of:
+  - \c "when_world_changes" (default): Updates the starting location if the
+    current \ref lua_api_map_get_world "world"
+    has just changed when arriving to this destination.
+  - \c "yes": Updates the starting location.
+  - \c "no": Does not update the starting location.
 - \c default (boolean, optional): Sets this destination as the default one
   when teletransporting the hero to this map without destination specified.
   No value means \c false.
   Only one destination can be the default one on a map.
-  If no default destination is set, then the first one declared in set as
+  If no default destination is set, then the lowest one in Z order is set as
   the default one.
 
 Example of destination:
@@ -615,8 +626,6 @@ Additional properties:
 - \c direction (number): Initial direction of the enemy, between
   \c 0 (East) and \c 3 (South).
 - \c breed (string): Model of enemy to create.
-- \c rank (number, optional): \c 0 for a normal enemy (default),
-  \c 1 for a miniboss, \c 2 for a boss.
 - \c savegame_variable (string, optional): Name of the boolean value that
   stores in the savegame whether this enemy is dead.
   No value means that the enemy is not saved.
@@ -941,6 +950,7 @@ Additional properties:
 - \c speed (number, optional): Speed of the movement applied to the hero by
   the stream, in pixels per second.
   The default value is \c 64.
+  A speed of \c 0 means that the hero will never be moved by the stream.
 - \c allow_movement (boolean, optional): Whether the player can still move the
   hero when he is on the stream.
   The default value is \c true.

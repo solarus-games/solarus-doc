@@ -79,22 +79,22 @@ Sets whether circles are made clockwise or counter-clockwise.
 \subsection lua_api_circle_movement_get_initial_angle circle_movement:get_initial_angle()
 
 Returns the angle from where the first circle starts.
-- Return value (number): The initial angle in radians.
+- Return value (number): The initial angle in degrees.
 
 \subsection lua_api_circle_movement_set_initial_angle circle_movement:set_initial_angle(initial_angle)
 
 Sets the angle from where the first circle should start.
-- \c initial_angle (number): The initial angle in radians.
+- \c initial_angle (number): The initial angle in degrees.
 
 \subsection lua_api_circle_movement_get_angle_speed circle_movement:get_angle_speed()
 
 Returns the speed of the angle variation.
-- Return value (number): The angle speed in radians per second.
+- Return value (number): The angle speed in degrees per second.
 
 \subsection lua_api_circle_movement_set_angle_speed circle_movement:set_angle_speed(angle_speed)
 
 Sets the speed of the angle variation.
-- \c angle_speed (number): The new angle speed in radians per second.
+- \c angle_speed (number): The new angle speed in degrees per second.
 
 \subsection lua_api_circle_movement_get_max_rotations circle_movement:get_max_rotations()
 

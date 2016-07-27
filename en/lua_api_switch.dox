@@ -52,11 +52,10 @@ See \ref lua_api_entity_methods to know these methods.
 
 The following methods are specific to switches.
 
-\subsection lua_api_switch_get_sprite switch:get_sprite()
+\subsection lua_api_switch_is_walkable switch:is_walkable()
 
-Returns the sprite of this switch.
-- Return value (\ref lua_api_sprite "sprite"): The sprite of this switch,
-  or \c nil if the switch has no sprite.
+Returns whether this is a walkable switch.
+- Return value (boolean): \c true if this switch is a walkable one.
 
 \subsection lua_api_switch_is_activated switch:is_activated()
 
@@ -72,12 +71,24 @@ is triggered.
 - \c activated (boolean, optional): \c true to make the switch activated,
   \c false to make is inactivated. No value means \c true.
 
+\subsection lua_api_switch_is_locked switch:is_locked()
+
+Returns whether this switch is current locked.
+
+When a switch is locked, its state cannot change anymore:
+it can no longer be activated or inactivated by other entities.
+However, it can still changed programmatically by calling
+\ref lua_api_switch_set_activated "switch:set_activated()".
+- Return value (boolean): \c true if this switch is currently activated.
+
 \subsection lua_api_switch_set_locked switch:set_locked([locked]) 
 
 Locks this switch in its current state or unlocks it.
 
 When a switch is locked, its state cannot change anymore:
-it can no longer be activated or inactivated
+it can no longer be activated or inactivated by other entities.
+However, it can still changed programmatically by calling
+\ref lua_api_switch_set_activated "switch:set_activated()".
 - \c locked (boolean, optional): \c true to lock the switch, \c false to
   unlock it. No value means \c true.
 

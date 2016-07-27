@@ -137,7 +137,7 @@ Returns the type of entity.
   \c "arrow",
   \c "hookshot",
   \c "boomerang" or
-  \c "custom_entity",
+  \c "custom_entity".
 
 \remark The type \c "tile" is not is this list because
   \ref lua_api_tile "tiles" don't exist at
@@ -226,6 +226,9 @@ other entities.
 
 \remark Note that the \ref lua_api_sprite "sprites" of an entity may have a
   different size than the entity itself.
+  See
+  \ref lua_api_sprite_get_size "sprite:get_size()"
+  to know it.
 
 \subsection lua_api_entity_get_origin entity:get_origin()
 
@@ -277,9 +280,9 @@ Returns the position of this entity on the \ref lua_api_map "map"
 - Return value 2 (number): Y coordinate of the \ref lua_api_entity_get_origin
   "origin point" of the entity,
   relative to the upper left corner of the map.
-- Return value 3 (number): Layer where the entity is on the map,
-  between \c 0 (the lowest one) and
-  \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+- Return value 3 (number): Layer where the entity is on the map, between
+  \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+  \ref lua_api_map_get_max_layer "map:get_max_layer()".
 
 \subsection lua_api_entity_set_position entity:set_position(x, y, [layer]):
 
@@ -292,9 +295,9 @@ Any previous movement or other action performed by the entity
 continues normally.
 - \c x (number): X coordinate to set.
 - \c y (number): Y coordinate to set.
-- \c layer (number, optional): Layer to set,
-  between \c 0 (the lowest one) and
-  \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+- \c layer (number, optional): Layer to set, between
+  \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+  \ref lua_api_map_get_max_layer "map:get_max_layer()".
   By default, the layer is unchanged.
 
 \remark Be careful: this function does not check collisions with obstacles.
@@ -309,6 +312,74 @@ Returns the coordinates of the center point of this entity on the
 - Return value 2 (number): Y coordinate of the center of this entity's
   bounding box,
   relative to the upper left corner of the map.
+- Return value 3 (number): Layer of the entity.
+
+\subsection lua_api_entity_get_facing_position entity:get_facing_position()
+
+Returns the coordinates of the point this entity is looking at.
+This point depends on the direction of the main sprite if any.
+If the entity has no sprite, or if the main sprite has not 4 directions,
+then the movement is considered.
+If there is no movement either, the entity is assumed to look to the North.
+- Return value 1 (number): X coordinate of the facing point of this entity,
+  relative to the upper left corner of the map.
+- Return value 2 (number): Y coordinate of the facing point of this entity,
+  relative to the upper left corner of the map.
+- Return value 3 (number): Layer of the entity.
+
+\subsection lua_api_entity_get_facing_entity entity:get_facing_entity()
+
+Returns the entity this entity is looking at, if any.
+
+This is an entity overlapping the
+\ref lua_api_entity_get_facing_position "facing position" of this entity.
+If several entities are overlapping the facing position,
+the first one in Z order is returned.
+- Return value (entity): The facing entity, or \c nil
+  if there is no entity in front of this entity.
+
+\subsection lua_api_entity_get_ground_position entity:get_ground_position()
+
+Returns the coordinates of the point used for ground detection for this
+entity on the \ref lua_api_map "map".
+
+The ground position is the point tested by all features related to the ground,
+like all effects of various grounds on the
+\ref lua_api_hero "hero",
+the result of
+\ref lua_api_entity_get_ground_below "entity:get_ground_below()"
+and the event
+\ref lua_api_custom_entity_on_ground_below_changed
+"custom_entity:on_ground_below_changed()".
+- Return value 1 (number): X coordinate of the ground point of this entity,
+  relative to the upper left corner of the map.
+- Return value 2 (number): Y coordinate of the ground point of this entity,
+  relative to the upper left corner of the map.
+- Return value 3 (number): Layer of the entity.
+
+\remark The ground point of an entity is slightly (2 pixels)
+  above its origin point as returned by
+  \ref lua_api_entity_get_position "entity:get_position()".
+
+\subsection lua_api_entity_get_ground_below entity:get_ground_below()
+
+Returns the map's ground below this entity.
+
+The ground is defined by the topmost
+\ref lua_api_tile "tile" below this entity,
+plus potential dynamic entities that may affect the ground,
+like
+\ref lua_api_dynamic_tile "dynamic tiles",
+\ref lua_api_destructible "destructibles"
+and
+\ref lua_api_custom_entity "custom entities".
+
+The exact point tested is the one returned by
+\ref lua_api_entity_get_ground_position "entity:get_ground_position()",
+and it is slightly different from
+\ref lua_api_entity_get_position "entity:get_position()".
+- Return value (string): The ground below this entity.
+  See \ref lua_api_map_get_ground "map:get_ground()" for the list of possible grounds.
 
 \subsection lua_api_entity_get_bounding_box entity:get_bounding_box()
 
@@ -334,12 +405,32 @@ other entities.
 - Return value 4 (number): Height of the bounding box.
 
 \remark The sprites of this entity (if any) may exceed the bounding box.
+  See
+  \ref lua_api_entity_get_max_bounding_box
+  "entity:get_max_bounding_box()".
 
-\subsection lua_api_entity_overlaps entity:overlaps(x, y, [width, height]), entity:overlaps(other_entity)
+\subsection lua_api_entity_get_max_bounding_box entity:get_max_bounding_box()
+
+Returns the rectangle surrounding the bounding box of this entity
+plus the bounding boxes of its sprites
+in all their possible animations and directions.
+
+This is usually larger than
+\ref lua_api_entity_get_bounding_box
+"entity:get_bounding_box()", because the sprite of an entity often
+exceeds its bounding box.
+- Return value 1 (number): X coordinate of the upper left corner of the
+  sprites bounding box.
+- Return value 2 (number): Y coordinate of the upper left corner of the
+  sprites bounding box.
+- Return value 3 (number): Width of the sprites bounding box.
+- Return value 4 (number): Height of the sprites bounding box.
+
+\subsection lua_api_entity_overlaps_rectangle entity:overlaps(x, y, [width, height])
 
 Returns whether the
 \ref lua_api_entity_get_bounding_box "bounding box"
-of this entity overlaps the specified rectangle, point or entity.
+of this entity overlaps the specified rectangle or point.
 
 To test if this entity overlaps a rectangle or a point (a point is a rectangle
 of size 1x1):
@@ -352,9 +443,50 @@ of size 1x1):
 - Return value (boolean): \c true if the bounding box of this entity overlaps
   the rectangle.
 
-To test if this entity overlaps another entity:
-- \c other_entity (entity): An entity to check.
-- Return value (boolean): \c true if both bounding boxes overlap.
+\subsection lua_api_entity_overlaps_entity entity:overlaps(other_entity, [collision_mode])
+
+Returns whether another entity collides with this entity according to
+the specified collision test.
+- \c entity (entity): Another entity.
+- \c collision_mode (string, optional): Specifies what kind of collision you
+  want to test. This may be one of:
+  - \c "overlapping": Collision if the
+    \ref lua_api_entity_get_bounding_box "bounding box"
+    of both entities overlap.
+    This is the default value.
+  - \c "containing": Collision if the bounding box of the other entity is
+    fully inside the bounding box of this entity.
+  - \c "origin": Collision if the \ref lua_api_entity_get_origin "origin point"
+    or the other entity is inside the bounding box of this entity.
+  - \c "center": Collision if the \ref lua_api_entity_get_center_position
+    "center point" of the other entity is inside the bounding box of this
+    entity.
+  - \c "facing": Collision if the
+    \ref lua_api_entity_get_facing_position "facing position" of the other
+    entity's bounding box is touching this entity's bounding box.
+    Bounding boxes don't necessarily overlap, but they are in
+    contact: there is no space between them.
+    When you consider the bounding box of an entity,
+    which is a rectangle with four sides,
+    the facing point is the middle point of the side the entity is oriented to.
+    This \c "facing" collision test is useful when the other entity cannot
+    traverse your custom entity.
+    For instance, if the other entity has direction "east", there is a
+    collision if the middle of the east side of its bounding box touches
+    (but does not necessarily overlap) this entity's bounding box.
+    This is typically what you need to let the hero interact with
+    this entity when he is looking at it.
+  - \c "touching": Like \c "facing", but accepts all four sides of the other
+    entity's bounding box, no matter its direction.
+  - \c "sprite": Collision if a sprite of the other entity overlaps a sprite of
+    this entity.
+    The collision test is pixel precise.
+- Return value (boolean): \c true if a collision is detected with this collision test.
+
+\remark For custom entities, see also
+  \ref lua_api_custom_entity_add_collision_test
+  "custom_entity:add_collision_test()"
+  to be automatically notified when a collision is detected.
 
 \subsection lua_api_entity_get_distance entity:get_distance(x, y), entity:get_distance(other_entity)
 
@@ -492,28 +624,121 @@ The default value is \c 0.
 
 \subsection lua_api_entity_is_in_same_region entity:is_in_same_region(other_entity)
 
-Returns whether another entity is in the same region than this one.
+Returns whether this entity is in the same region as another one.
 
 Regions of the map are defined by the position of
-\ref lua_api_separator "separators".
+\ref lua_api_separator "separators" and map limits.
+The region of an entity is the one of its center point.
+
+Regions should be rectangular.
+Non-convex regions, for example with an "L" shape, are not supported by this
+function.
+
 You can use this function to make sure that an
 \ref lua_api_enemy "enemy" close to the
 \ref lua_api_hero "hero" but in the other side of a separator won't attack him.
 - \c other_entity (entity): Another entity.
 - Return value (boolean): \c true if both entities are in the same region.
 
-\subsection lua_api_entity_test_obstacles entity:test_obstacles(dx, dy, [layer])
+\subsection lua_api_entity_test_obstacles entity:test_obstacles([dx, dy, [layer]])
 
 Returns whether there would be a collision with obstacles
 if this map entity was translated.
-- \c dx (number): X component of the translation in pixels
+- \c dx (number, optional): X component of the translation in pixels
   (\c 0 means the current X position).
-- \c dx (number): Y component of the translation in pixels
+  No value means \c 0.
+- \c dx (number, optional): Y component of the translation in pixels
   (\c 0 means the current Y position).
+  No value means \c 0.
 - \c layer (number, optional): Layer to test.
   No value means the current layer.
 - Return value (boolean): \c true if there would be a collision in this
 position.
+
+\subsection lua_api_entity_get_sprite entity:get_sprite([name])
+
+Returns a \ref lua_api_sprite "sprite" representing this entity.
+
+To manage entities with multiple sprites, you can set names
+with sprite creation methods like
+\ref lua_api_enemy_create_sprite "enemy:create_sprite()"
+and
+\ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
+However, it is easier to just leave the names blank and simply store the
+result of these sprite creation methods.
+The name is more useful for built-in entities that have multiple
+sprites automatically created by the engine.
+Such entities are the
+\ref lua_api_hero "hero",
+\ref lua_api_pickable "pickable treasures",
+\ref lua_api_carried_object "carried objects"
+and
+\ref lua_api_crystal "crystals".
+See the documentation pages of these entities to know their exact sprites,
+the name of these sprites and which one is their main sprite.
+For
+\ref lua_api_enemy "enemies"
+and
+\ref lua_api_custom_entity "custom entities",
+the main sprite is the first one in Z order,
+which is the sprite creation order unless you
+call
+\ref lua_api_entity_bring_sprite_to_front "entity:bring_sprite_to_front()"
+or
+\ref lua_api_entity_bring_sprite_to_back "entity:bring_sprite_to_back()".
+
+- \c name (string, optional): Name of the sprite to get.
+  Only useful for entities that have multiple sprites.
+  No value means the main sprite.
+- Return value (\ref lua_api_sprite "sprite"): The entity sprite with this name,
+  or its main sprite if no name is specified.
+  Returns \c nil if the entity has no such sprite.
+
+\subsection lua_api_entity_get_sprites entity:get_sprites()
+
+Returns an iterator to all
+\ref lua_api_sprite "sprites" of this entity.
+
+At each step, the iterator provides two values:
+the name of a sprite
+(which is an empty string if the sprite has no name)
+and the sprite itself.
+See \ref lua_api_entity_get_sprite "entity:get_sprite()"
+for more details about named sprites.
+
+Sprites are returned in their displaying order.
+Note that this order can be changed with
+\ref lua_api_entity_bring_sprite_to_front "entity:bring_sprite_to_front()"
+and
+\ref lua_api_entity_bring_sprite_to_back "entity:bring_sprite_to_back()".
+
+The typical usage of this function is:
+\verbatim
+for sprite_name, sprite in entity:get_sprites() do
+  -- some code related to the sprite
+end
+\endverbatim
+- Return value (function): An iterator to all sprites of this entity.
+
+\subsection lua_api_entity_bring_sprite_to_front entity:bring_sprite_to_front(sprite)
+
+Reorders a
+\ref lua_api_sprite "sprite" of this entity to be displayed after other sprites
+(displayed to the front).
+
+This function is only useful for entities that have multiple sprites.
+- \c sprite (\ref lua_api_sprite "sprite"): The sprite to reorder.
+  It must belong to this entity.
+
+\subsection lua_api_entity_bring_sprite_to_back entity:bring_sprite_to_back(sprite)
+
+Reorders a
+\ref lua_api_sprite "sprite" of this entity to be displayed before other sprites
+(displayed to the back).
+
+This function is only useful for entities that have multiple sprites.
+- \c sprite (\ref lua_api_sprite "sprite"): The sprite to reorder.
+  It must belong to this entity.
 
 \subsection lua_api_entity_is_visible entity:is_visible()
 
@@ -571,6 +796,14 @@ of this entity was stopped because of an obstacle.
 When an obstacle is reached, this event is called instead of
 \ref lua_api_entity_on_position_changed "entity:on_position_changed()".
 - \c movement (\ref lua_api_movement "movement"): The movement of the entity.
+
+\subsection lua_api_entity_on_movement_started entity:on_movement_started(movement)
+
+Called when a
+\ref lua_api_movement "movement"
+is started on this entity.
+- \c movement (\ref lua_api_movement "movement"): The movement that was just
+  started on this entity.
 
 \subsection lua_api_entity_on_movement_changed entity:on_movement_changed(movement)
 

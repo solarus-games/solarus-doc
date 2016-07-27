@@ -19,7 +19,7 @@ the engine automatically calls
 \ref lua_api_main_on_key_pressed "sol.main:on_key_pressed()".
 
 Also note that during the game, there exists the higher-level notion of
-\ref lua_api_game_intro_commands "game commands" to ease your life.
+\ref lua_api_game_overview_commands "game commands" to ease your life.
 
 \section lua_api_input_functions Functions of sol.input
 

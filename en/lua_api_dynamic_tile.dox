@@ -40,7 +40,22 @@ See \ref lua_api_entity_methods to know these methods.
 
 \section lua_api_dynamic_tile_methods Methods of the type dynamic tile
 
-None.
+The following methods are specific to dynamic tiles.
+
+\subsection lua_api_dynamic_tile_get_pattern_id dynamic_tile:get_pattern_id()
+
+Returns the id of the tile pattern of this dynamic tile.
+- Return value (string): The tile pattern id in the tileset.
+
+\subsection lua_api_dynamic_tile_get_modified_ground dynamic_tile:get_modified_ground()
+
+Returns the ground defined by this dynamic tile on the map.
+
+The presence of a dynamic tile can modify the ground of the map.
+This is determined by the ground property of the tile pattern.
+- Return value (string): The ground defined by this dynamic tile.
+  \c "empty" means that this dynamic tile does not modify the ground of the map.
+  See \ref lua_api_map_get_ground "map:get_ground()" for the list of possible grounds.
 
 \section lua_api_dynamic_tile_inherited_events Events inherited from map entity
 

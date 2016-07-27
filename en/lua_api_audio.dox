@@ -44,21 +44,32 @@ This function does nothing if you already called it before.
 
 Plays a music.
 
-Generates a Lua error if the music does not exist.
+If the music does not exist, a Lua error is generated.
 
 Only one music can be played at a time.
-If the same music is already playing, it continues normally and does not
+If the same music was already playing, it continues normally and does not
 restart.
 If a different music was already playing, it is stopped and replaced by
 the new one.
+
+When the music reaches the end, the \c action parameter indicates what to do
+next. The default behavior is to loop from the beginning.
+
+However, some music files already have their own loop internal loop information.
+Such musics are able to loop to a specific point rather than
+to the beginning.
+Since they already loop forever internally, they don't have an end
+and the \c action parameter has no effect on them.
+See \ref quest_musics_loop "Music loop settings"
+to know how Solarus supports internal loop information for each format.
+
 - \c music_id (string): Name of the music file to play, relative to the
   \c musics directory and without extension. The following extensions will be
   tried in this order: \c <tt>.ogg</tt>, \c <tt>.it</tt> and \c <tt>.spc</tt>.
-  \c nil stops playing any music.
-  The second parameter has no effect in this case.
+  \c nil stops playing any music (the second parameter has no effect in this case).
   If you set the music name to the same music that is already playing, or to
-  the special value \c "same", then this function does nothing.
-  The music keeps playing (it does not restart) and the second parameter
+  the special value \c "same", then this function does nothing:
+  the music keeps playing (it does not restart) and the second parameter
   is ignored.
 - \c action (function or boolean, optional): What to do when the music
   finishes (reaches its end).
@@ -68,15 +79,6 @@ the new one.
   It will be called when the music finishes.
   This allows you to perform an action of your choice, like playing
   another music.
-
-\remark Some musics don't have an end.
-  This is the case of all <tt>.spc</tt> musics because of their special
-  emulation format.
-  Some of them simply play forever, other play an empty sound forever after
-  some point, but they have no end.
-  This can also be the case of some <tt>.it</tt> musics if they
-  contain internal loop information to play forever.
-  The \c action parameter has no effect on such musics.
 
 \subsection lua_api_audio_get_music sol.audio.get_music()
 
@@ -114,6 +116,9 @@ and by the engine.
 - \c volume (number): The new volume of sound effects, as an integer
   between \c 0 (mute) and \c 100 (full volume).
 
+\remark When the quest is run from the Solarus GUI, the user can also
+  change the volume from the menus of the GUI.
+
 \subsection lua_api_audio_get_music_volume sol.audio.get_music_volume()
 
 Returns the current volume of musics.
@@ -122,6 +127,9 @@ This volume applies to all musics played by \ref lua_api_audio_play_music.
 "sol.audio.play_music()"
 - Return value (number): The current volume of musics, as an integer
   between \c 0 (no sound effects) and \c 100 (full volume).
+
+\remark When the quest is run from the Solarus GUI, the user can also
+  change the volume from the menus of the GUI.
 
 \subsection lua_api_audio_set_music_volume sol.audio.set_music_volume(volume)
 

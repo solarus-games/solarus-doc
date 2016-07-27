@@ -26,6 +26,23 @@ The script of that equipment item can call methods of
 this API to dynamically tune the behavior
 of the pickable treasure.
 
+\subsection lua_api_pickable_overview_sprites Pickable treasure sprites
+
+Two sprites for a pickable treasure are automatically created by the engine.
+You can access them like for any other entity, specifying their name in
+\ref lua_api_entity_get_sprite "entity:get_sprite([name])".
+- \c "treasure": Main sprite representing the treasure.
+  Its animation set is \c "entities/items",
+  with the animation of the treasure item's name
+  and the direction of the treasure's variant.
+  This is the default one in
+  \ref lua_api_entity_get_sprite "entity:get_sprite([name])".
+- \c "shadow": Optional shadow displayed under the treasure.
+  Its animation set is \c "entities/shadow",
+  with the animation specified in
+  \ref lua_api_item_set_shadow "item:set_shadow()"
+  (\c nil means no shadow sprite).
+
 \section lua_api_pickable_inherited_methods Methods inherited from map entity
 
 Pickable treasures are particular \ref lua_api_entity "map entities".
@@ -34,12 +51,6 @@ Therefore, they inherit all methods from the type map entity.
 See \ref lua_api_entity_methods to know these methods.
 
 \section lua_api_pickable_methods Methods of the type pickable
-
-\subsection lua_api_pickable_get_sprite pickable:get_sprite()
-
-Returns the sprite of this pickable treasure.
-- Return value (\ref lua_api_sprite "sprite"): The sprite of this pickable
-  treasure.
 
 \subsection lua_api_pickable_has_layer_independent_collisions pickable:has_layer_independent_collisions()
 

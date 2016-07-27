@@ -121,26 +121,13 @@ Sets the direction of this custom entity.
 Sprites of your custom entity that have such a direction automatically take it.
 - Return value 1 (number): The direction.
 
-\subsection lua_api_custom_entity_get_sprite custom_entity:get_sprite()
-
-Returns the \ref lua_api_sprite "sprite" of this custom entity.
-It may have been created at the creation of the custom entity,
-or when you called
-\ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
-- Return value (\ref lua_api_sprite "sprite"): The first sprite created for
-  this custom_entity.
-  Returns \c nil if the custom entity has no sprite.
-
-\remark If the custom entity has several sprites, the first one created is returned.
-  For the other sprites, you cannot use this function.
-  However, it is easy to store the return values of your calls to
-  \ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
-
-\subsection lua_api_custom_entity_create_sprite custom_entity:create_sprite(sprite_name)
+\subsection lua_api_custom_entity_create_sprite custom_entity:create_sprite(animation_set_id, [sprite_name])
 
 Creates a \ref lua_api_sprite "sprite" for this custom entity.
-- \c sprite_name (string): Name of the animation set of the
-  sprite to create.
+- \c animation_set_id (string): Animation set to use for the sprite.
+- \c sprite_name (string, optional): An optional name to identify the created
+  sprite. Only useful for entities with multiple sprites (see
+  \ref lua_api_entity_get_sprite "entity:get_sprite()").
 - Return value (\ref lua_api_sprite "sprite"): The sprite created.
 
 \subsection lua_api_custom_entity_remove_sprite custom_entity:remove_sprite([sprite])
@@ -151,7 +138,7 @@ Removes and destroys a
 It may have been created at the creation of the custom entity,
 or when you called
 \ref lua_api_custom_entity_create_sprite "custom_entity:create_sprite()".
-- \c sprite (\ref lua_api_sprite "sprite"): The sprite to remove.
+- \c sprite (\ref lua_api_sprite "sprite", optional): The sprite to remove.
   The default value is the first sprite that was created.
 
 \subsection lua_api_custom_entity_is_drawn_in_y_order custom_entity:is_drawn_in_y_order()
@@ -275,11 +262,11 @@ while the \c "low wall" ground cannot.
 - \c traversable (boolean): Whether your custom entity can
   traverse this kind of ground.
 
-\subsection lua_api_custom_entity_add_collision_test custom_entity:add_collision_test(collision_test, callback)
+\subsection lua_api_custom_entity_add_collision_test custom_entity:add_collision_test(collision_mode, callback)
 
 Registers a function to be called when your custom entity detects a collision
 when another entity.
-- \c collision_test (string or function): Specifies what kind of collision you
+- \c collision_mode (string or function): Specifies what kind of collision you
   want to test. This may be one of:
   - \c "overlapping": Collision if the
     \ref lua_api_entity_get_bounding_box "bounding box"
@@ -292,7 +279,8 @@ when another entity.
   - \c "center": Collision if the \ref lua_api_entity_get_center_position
     "center point" of the other entity is inside the bounding box of your
     custom entity.
-  - \c "facing": Collision if the facing point of the other
+  - \c "facing": Collision if the
+    \ref lua_api_entity_get_facing_position "facing position" of the other
     entity's bounding box is touching your custom entity's bounding box.
     Bounding boxes don't necessarily overlap, but they are in
     contact: there is no space between them.
@@ -326,6 +314,10 @@ when another entity.
   custom entity, and the fourth parameter is the sprite of the other entity.
   This may be useful when your entities have several sprites, otherwise you can
   just ignore these additional sprite parameters.
+
+\remark See also
+  \ref lua_api_entity_overlaps_entity "entity:overlaps()"
+  to directly test a collision rather than registering a callback.
 
 \subsection lua_api_custom_entity_clear_collision_tests custom_entity:clear_collision_tests()
 
@@ -365,7 +357,7 @@ Returns the kind of
 (terrain) defined by this custom entity on the map.
 - Return value (string): The ground defined by this custom entity, or \c nil
   if this custom entity does not modify the ground.
-  See \ref lua_api_map_get_ground "map:get_ground()" for the list of grounds.
+  See \ref lua_api_map_get_ground "map:get_ground()" for the list of possible grounds.
 
 \subsection lua_api_custom_entity_set_modified_ground custom_entity:set_modified_ground(modified_ground)
 
@@ -387,11 +379,11 @@ Your custom entity can move: the ground will still be correctly applied.
 - \c modified_ground (string): The ground defined by this custom entity,
   or \c nil (or \c "empty") to make this custom entity stop modifying the
   ground.
-  See \ref lua_api_map_get_ground "map:get_ground()" for the list of grounds.
+  See \ref lua_api_map_get_ground "map:get_ground()" for the list of possible grounds.
 
 \remark If you only need to modify the ground of the map dynamically,
 for example to make a moving platform over holes, a
-\ref lua_api_dynamic_tile "dynamic_tile"
+\ref lua_api_dynamic_tile "dynamic tile"
 with a
 \ref lua_api_movement "movement"
 may be enough.
@@ -472,7 +464,7 @@ or when because another entity changes it.
 
 Called when the \ref lua_api_hero "hero" interacts
 with this custom entity, that is,
-when the player presses the \ref lua_api_game_intro_commands "action command"
+when the player presses the \ref lua_api_game_overview_commands "action command"
 while facing this custom entity.
 
 \remark This event is also available with
@@ -482,7 +474,7 @@ while facing this custom entity.
 
 Called when the \ref lua_api_hero "hero" uses any
 \ref lua_api_item "equipment item"
-(the player pressed an \ref lua_api_game_intro_commands "item command") while
+(the player pressed an \ref lua_api_game_overview_commands "item command") while
 facing this custom entity.
 - \c item_used (\ref lua_api_item "item"): The item currently used by
   the player.

@@ -6,7 +6,7 @@
 This module provides functions to manually read and write files from the
 quest data directory and from quest write directory.
 
-\section lua_api_file_intro Overview
+\section lua_api_file_overview Overview
 
 Data files of the quest are located either in a
 \c data/ directory or in a \c data.solarus or \c data.solarus.zip archive.
@@ -33,7 +33,7 @@ priority.
 
 Examples of use:
 - You can implement your own savegame system if
- \ref lua_api_game_intro_save "the built-in one"
+ \ref lua_api_game_overview_save "the built-in one"
  does not fit your needs.
 - You can save a file that contain some user settings, and have a default
   version of that file in the data directory.

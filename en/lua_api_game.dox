@@ -5,9 +5,9 @@
 
 This module provides a datatype "game" that represents a savegame.
 
-\section lua_api_game_intro Overview
+\section lua_api_game_overview Overview
 
-\subsection lua_api_game_intro_save Saved data
+\subsection lua_api_game_overview_save Saved data
 
 On a game object, you can access and modify everything that is saved.
 The data saved and restored by the engine are the following:
@@ -27,7 +27,7 @@ When a game is running, more features are available
 (like pausing the game, handling game commands, etc.).
 Only one game can be running at a time.
 
-\subsection lua_api_game_intro_commands Game commands
+\subsection lua_api_game_overview_commands Game commands
 
 An important concept that comes with the game is the notion of
 game commands.
@@ -65,7 +65,7 @@ joypad input (but if you want to, you can, and the callbacks are exactly the
 sames as in \ref
 lua_api_main "sol.main" and in \ref lua_api_menu "menus").
 
-\subsection lua_api_game_intro_table Accessing the game like tables
+\subsection lua_api_game_overview_table Accessing the game like tables
 
 Objects of the game type are userdata, but like most Solarus
 Lua types, they can also be accessed like tables.
@@ -154,9 +154,41 @@ Only one game can be running at a time.
 \subsection lua_api_game_is_suspended game:is_suspended()
 
 Returns whether this game is currently suspended.
-- Return value (boolean): \c true if this game is suspended, for example
-  because it is paused or because there is a camera sequence.
+
+The game is suspended when at least one of the following conditions is true:
+- the game is \ref lua_api_game_is_paused "paused",
+- or a \ref lua_api_game_is_dialog_enabled "dialog" is active,
+- or the \ref lua_api_game_is_game_over_enabled "game-over sequence" is active,
+- or a transition between two maps is playing,
+- or you explicitly called
+  \ref lua_api_game_set_suspended "game:set_suspended(true)".
+
+&nbsp;
+
+- Return value (boolean): \c true if this game is currently suspended.
   Only possible when the game is running.
+
+\subsection lua_api_game_set_suspended game:set_suspended([suspended])
+
+Suspends or unsuspends the game.
+
+Note that the game is also automatically suspended by the engine in the
+following situations:
+- when the game is \ref lua_api_game_is_paused "paused",
+- or when a \ref lua_api_game_is_dialog_enabled "dialog" is active,
+- or when the \ref lua_api_game_is_game_over_enabled "game-over sequence" is
+  active,
+- or when a transition between two maps is playing.
+
+Therefore, if you call
+\c game:set_suspended(false) during one of these sequences,
+it will only take effect at the end of it.
+- \c suspended (boolean, optional): \c true to suspend the game,
+  \c false to resume it.
+  No value means \c true.
+
+\note When the hero goes to another map, the game is automatically
+  unsuspended after the map opening transition.
 
 \subsection lua_api_game_is_paused game:is_paused()
 
@@ -185,7 +217,7 @@ Sets whether the player can pause or unpause the \ref lua_api_game "game".
   game. No value means \c true.
 
 \remark This function applies to the built-in \ref
-  lua_api_game_intro_commands "pause command".
+  lua_api_game_overview_commands "pause command".
   Your script can still pause the game explicitly by calling
   \ref lua_api_game_set_paused "game:set_paused()".
 
@@ -446,9 +478,15 @@ restarted.
 
 \remark When the hero moves from a map to another map that belongs to a
   different world (for example, from a dungeon to the outside world) using a
-  destination entity, the starting location is automatically set to this point.
+  destination entity, by default, the starting location is automatically set
+  to this point.
   If this behavior is okay for your quest, you never need to call this function
   except the first time: when initializing a new savegame file.
+  This behavior can be changed by setting the "Save starting location"
+  property of destinations, from the quest editor or from a script
+  (with
+  \ref lua_api_destination_set_starting_location_mode
+  "destination:set_starting_location_mode()").
 
 \subsection lua_api_game_get_life game:get_life()
 
@@ -605,6 +643,8 @@ actions like attacking, swimming or running.
   - \c "shield": Protection against enemies.
     Determines whether the hero can avoid some kinds of attacks.
   - \c "lift": Ability to lift heavy objects.
+  - \c "jump_over_water": Automatically jump when arriving into
+    water without the \c "swim" ability.
   - \c "swim": Ability to swim in deep water.
   - \c "run": Ability to run when pressing the action command.
   - \c "detect_weak_walls": Notifies the player with a sound when a weak wall
@@ -908,8 +948,9 @@ when you need to draw the dialog box on the screen, etc.
   It is a table with at least the following two entries:
   - \c dialog_id (string): Id of the dialog.
   - \c text (string): Text of the dialog in the current language.
-  It may have several lines.
-  When it is not empty, it always ends with a newline character.
+    It may have several lines.
+    When it is not empty, it always ends with a newline character.
+
   The table also contains all custom entries defined in
   \ref quest_language_dialogs "text/dialogs.dat"
   for this dialog.
@@ -1124,6 +1165,18 @@ You can use this event to override the normal built-in behavior of the game comm
 
 Called when the user presses a mouse button while the game is running.
 - \c button (string): Name of the mouse button that was pressed.
+  Possible values are \c "left", \c "middle", \c "right", \c "x1" and \c "x2".
+- \c x (integer): The x position of the mouse in
+  \ref lua_api_video_get_quest_size "quest size" coordinates.
+- \c y (integer): The y position of the mouse in
+  \ref lua_api_video_get_quest_size "quest size" coordinates.
+- Return value (boolean): Indicates whether the event was handled. If you
+  return \c true, the event won't be propagated to other objects.
+
+\subsection lua_api_game_on_mouse_released game:on_mouse_released(button, x, y)
+
+Called when the user releases a mouse button while the game is running.
+- \c button (string): Name of the mouse button that was released.
   Possible values are \c "left", \c "middle", \c "right", \c "x1" and \c "x2".
 - \c x (integer): The x position of the mouse in
   \ref lua_api_video_get_quest_size "quest size" coordinates.

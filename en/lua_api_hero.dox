@@ -24,9 +24,7 @@ and
 \ref lua_api_game_get_hero "game:get_hero()"
 to retrieve the hero more easily.
 
-His size is always 16x16 pixels and his sprites
-(tunic, sword, shield, shadow, etc.)
-are managed by the engine.
+His size is always 16x16 pixels.
 
 The hero entity persists accross map changes.
 In other words, the effect of functions like
@@ -37,6 +35,29 @@ Similarly, events that you define on the hero
 continue to get called on any map while the game is active.
 
 We describe here the Lua API that you can use to change the hero's state.
+
+\subsection lua_api_hero_overview_sprites Hero sprites
+
+Multiple sprites for the hero are automatically created by the engine.
+You can access them like for any other entity, specifying their name in
+\ref lua_api_entity_get_sprite "entity:get_sprite([name])".
+
+Here is the list of hero sprites created by the engine and their names:
+- \c "tunic": Main sprite of the hero. It always exists.
+  This is the default one in
+  \ref lua_api_entity_get_sprite "entity:get_sprite([name])".
+- \c "shield": Shield if any.
+- \c "sword": Sword if any.
+- \c "sword_stars": Small stars sparkling near the sword in some states.
+- \c "shadow": Shadow displayed under the hero in some states.
+- \c "trail": Trail of dust displayed under the hero when running.
+- \c "ground": Ground displayed under the hero when walking on special terrain
+  like shallow water or grass.
+
+Keep in mind that depending on the hero's equipment, his state
+and the ground below him,
+all of these built-in sprites don't always exist,
+and some of them may exist at some point but without being currently displayed.
 
 \section lua_api_hero_inherited_methods Methods inherited from map entity
 
@@ -63,7 +84,7 @@ Teletransports the hero to a different place.
   or the special keyword \c "_same" to keep the same coordinates.
   Can also be the special keyword \c "_side0", \c "_side1", \c "_side2" or
   \c "_side3" to arrive near the East, North, West or South frontier of the map
-  respectively. But the hero should be near the corresponding side or the
+  respectively. But the hero should be near the corresponding side of the
   original map for this to look okay. This is usually used in combination with
   scrolling transitions.
   No value means the default destination entity of the map.
@@ -119,16 +140,28 @@ This speed is automatically reduced when the hero walks on special ground like
 grass, ladders or holes.
 - \c walking speed (number): The speed of normal walk in pixels par second.
 
-\subsection lua_api_hero_save_solid_ground hero:save_solid_ground([x, y, layer])
+\subsection lua_api_hero_save_solid_ground hero:save_solid_ground([x, y, layer]), hero:save_solid_ground(callback)
 
-Memorizes a position to go back to if the hero falls into a hole or other bad
+Sets a position to go back to if the hero falls into a hole or other bad
 ground.
 
 This replaces the usual behavior which is going back to the last
 solid position before the fall.
-- \c x (number, optional): X coordinate to memorize (default: current position).
-- \c y (number, optional): Y coordinate to memorize (default: current position).
-- \c layer (number, optional): Layer to memorize (default: current position).
+
+The position can be specified either as coordinates and a layer,
+or as a function that returns coordinates and a layer.
+Using a function allows to decide the position at the last moment.
+
+To memorize a position directly:
+- \c x (number, optional): X coordinate to memorize (no value means the current position).
+- \c y (number, optional): Y coordinate to memorize (no value means the current position).
+- \c layer (number, optional): Layer to memorize (no value means the current position).
+
+To set a function that indicates the position to go back to:
+- \c callback (function): A function to be called whenever the hero falls into
+  bad ground. The function should return 2 or 3 values: x, y and optionally
+  the layer (no layer value means keeping the layer unchanged).
+  A \c nil value unsets any position or function that was previously set.
 
 \subsection lua_api_hero_reset_solid_ground hero:reset_solid_ground()
 
@@ -139,6 +172,9 @@ The initial behavior is restored: the hero will now get
 back to where he was just before falling, instead going to of a memorized
 position.
 
+This is equivalent to
+<tt>hero:save_solid_ground(nil)</tt>.
+
 \subsection lua_api_hero_get_solid_ground_position hero:get_solid_ground_position()
 
 Returns the position where the hero gets back if he falls into a hole or
@@ -147,6 +183,10 @@ other bad ground now.
 This is the position that was previously memorized by the last call to
 \ref lua_api_hero_save_solid_ground "hero:save_solid_ground()",
 if any.
+If the position was passed to
+\ref lua_api_hero_save_solid_ground "hero:save_solid_ground()"
+as a function, then this function is called to get a position.
+
 Otherwise, this is the position of the hero the last time he was on solid
 ground.
 - Return value 1 (number): X coordinate where to get back to solid ground,
@@ -347,7 +387,7 @@ Returns the name of the current built-in state of the hero.
   \c "falling",
   \c "forced walking",
   \c "free",
-  \c "freezed",
+  \c "frozen",
   \c "grabbing",
   \c "hookshot",
   \c "hurt",
@@ -406,6 +446,40 @@ Makes the hero jump towards the specified direction.
   traverse obstacles during this movement (default \c false).
   Make sure the movement does not end inside an obstacle.
 
+\subsection lua_api_hero_start_attack hero:start_attack()
+
+Makes the hero perform his main attack (swinging his sword).
+
+This function does the same as what happens when the player presses
+the \c "attack" game \ref lua_api_game_overview_commands "command".
+You can use it to trigger the attack from your script instead of from a
+game command.
+
+If the player is not allowed to perform the attack now
+(because he does not have the sword
+\ref lua_api_game_get_ability "ability"
+or because the hero is currently busy in another state), then nothing happens.
+
+\subsection lua_api_hero_start_item hero:start_item(item)
+
+Makes the hero use an \ref lua_api_item "equipment item".
+
+The \ref lua_api_item_on_using "item:on_using()" event will be called and
+the player won't be able to control the hero until you call
+\ref lua_api_item_set_finished "item:set_finished()". See the documentation
+of \ref lua_api_item "equipment items" for more information.
+
+This function does the same as what happens when the player presses
+a game \ref lua_api_game_overview_commands "command" corresponding to this
+equipment item.
+You can use it to trigger the item from your script instead of from a
+game command.
+
+If the player is not allowed to use the item now
+(because he does not have it, because the item cannot be used explicitly,
+or because the hero is currently busy in another state), then nothing happens.
+- \c item (\ref lua_api_item "item"): The equipment item to start using.
+
 \subsection lua_api_hero_start_treasure hero:start_treasure(treasure_item, [treasure_variant, [treasure_savegame_variable, [callback]]])
 
 Gives a treasure to the player. The hero will brandish the treasure.
@@ -434,20 +508,6 @@ Makes the hero brandish his sword for a victory.
   If you define it, you can do other things, like teletransporting the hero
   somewhere else. To restore the control to the player, call
   \ref lua_api_hero_unfreeze "hero:unfreeze()".
-
-\subsection lua_api_hero_start_item hero:start_item(item)
-
-Makes the hero use an \ref lua_api_item "equipment item".
-
-The \ref lua_api_item_on_using "item:on_using()" event will be called and
-the player won't be able to control the hero until you call
-\ref lua_api_item_set_finished "item:set_finished()". See the documentation
-of \ref lua_api_item "equipment items" for more information.
-
-If the player is not allowed to use the item now
-(because he does not have it, because the item cannot be used explicitly,
-or because the hero is currently busy in another state), then nothing happens.
-- \c item (\ref lua_api_item "item"): The equipment item to start using.
 
 \subsection lua_api_hero_start_boomerang hero:start_boomerang(max_distance, speed, tunic_preparing_animation, sprite_name)
 

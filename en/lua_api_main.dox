@@ -9,6 +9,35 @@ of the program, no matter if a game or some menus are running.
 
 \section lua_api_main_functions Functions of sol.main
 
+\subsection lua_api_main_get_solarus_version sol.main.get_solarus_version()
+
+Returns the current Solarus version.
+
+The Solarus version includes three numbers: x.y.z,
+where x is the major version,
+y is the minor version
+and z is the patch version.
+
+Changes of major and minor versions may introduce some incompatibilities
+in the Lua API.
+Patch versions are only for bug fixing and never introduce incompatibilities.
+See the
+<a href="http://wiki.solarus-games.org/doku.php?id=migration_guide">migration
+guide</a> for instructions about how to upgrade your quest to the latest
+version.
+
+- Return value (string): The Solarus version.
+
+\subsection lua_api_main_get_quest_format sol.main.get_quest_format()
+
+Returns the format of this quest.
+
+This corresponds to a version of Solarus
+with major and minor version numbers (no patch number),
+for example \c "1.5".
+
+- Return value (string): The format of this quest.
+
 \subsection lua_api_main_load_file sol.main.load_file(script_name)
 
 Loads a Lua file (but does not run it).
@@ -120,29 +149,40 @@ dynamically for some reason.
 
 Loads and applies the built-in settings from a file previously saved with
 \ref lua_api_main_save_settings "sol.main.save_settings()".
-The settings include the language, the video mode and the audio volume.
+Settings from the file include user preferences such as the language,
+the video mode and the audio volume.
+
+Note that all these settings can already be modified individually with the Lua
+API, so you can either use this function or implement something more fitted
+to your needs.
 
 A valid quest write directory must be set (in your
 \ref quest_properties_file "quest.dat" file
 or by calling
 \ref lua_api_main_set_quest_write_dir "sol.main.set_quest_write_dir()"),
 otherwise this function generates a Lua error.
-- \c file_name (string, optional): %Settings file to read, relative to the
+- \c file_name (string, optional): Settings file to read, relative to the
   quest write directory. The default file name is \c settings.dat.
 - Return value (boolean): \c true if settings were successfully loaded and
   applied.
 
-\remark All these settings can already be modified individually with the Lua
-  API, so you can either
-  use this function or implement something more fitted to your needs.
+\remark When you launch a quest from the Solarus GUI,
+  user preferences that are currently set in the menus of the GUI are
+  automatically written to \c settings.dat before the quest starts and are
+  automatically applied as soon as the quest starts.
 
 \subsection lua_api_main_save_settings sol.main.save_settings([file_name])
 
-Saves the built-in settings into a file.
+Saves the current built-in settings into a file.
 This file can be reloaded later with \ref lua_api_main_load_settings
 "sol.main.load_settings()" to
 restore the saved settings.
-The settings include the language, the video mode and the audio volume.
+Settings saved include user preferences such as the current language,
+the current video mode and the current audio volume.
+
+Note that all these settings can already be modified individually with the Lua
+API, so you can either use this function or implement something more fitted
+to your needs.
 
 A valid quest write directory must be set (in your
 \ref quest_properties_file "quest.dat" file
@@ -153,9 +193,10 @@ otherwise this function generates a Lua error.
   quest write directory. The default file name is \c settings.dat.
 - Return value (boolean): \c true if settings were successfully saved.
 
-\remark All these settings can already be modified individually with the Lua
-  API, so you can either
-  use this function or implement something more fitted to your needs.
+\remark When you launch a quest from the Solarus GUI,
+  user preferences that are currently set in the menus of the GUI are
+  automatically written to \c settings.dat before the quest starts and are
+  automatically applied as soon as the quest starts.
 
 \subsection lua_api_main_get_distance sol.main.get_distance(x1, y1, x2, y2)
 
@@ -506,6 +547,18 @@ Called when the user moves a joypad hat.
 
 Called when the user presses a mouse button.
 - \c button (string): Name of the mouse button that was pressed.
+  Possible values are \c "left", \c "middle", \c "right", \c "x1" and \c "x2".
+- \c x (integer): The x position of the mouse in
+  \ref lua_api_video_get_quest_size "quest size" coordinates.
+- \c y (integer): The y position of the mouse in
+  \ref lua_api_video_get_quest_size "quest size" coordinates.
+- Return value (boolean): Indicates whether the event was handled. If you
+  return \c true, the event won't be propagated to other objects.
+
+\subsection lua_api_main_on_mouse_released sol.main:on_mouse_released(button, x, y)
+
+Called when the user releases a mouse button.
+- \c button (string): Name of the mouse button that was released.
   Possible values are \c "left", \c "middle", \c "right", \c "x1" and \c "x2".
 - \c x (integer): The x position of the mouse in
   \ref lua_api_video_get_quest_size "quest size" coordinates.

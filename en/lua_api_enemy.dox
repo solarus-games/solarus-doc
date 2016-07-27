@@ -203,8 +203,7 @@ Returns the style of sounds and animations to play when this enemy is hurt.
 \subsection lua_api_enemy_set_hurt_style enemy:set_hurt_style(hurt_style)
 
 Sets the style of sounds and animations to play when this enemy is hurt.
-The default values are \c "normal" for usual enemies
-and \c "boss" for bosses and minibosses.
+The default values is \c "normal".
 - \c hurt_style (string): \c "normal", \c "monster" or \c "boss".
 
 \subsection lua_api_enemy_get_can_attack enemy:get_can_attack()
@@ -296,7 +295,7 @@ unless you override some of them with
   \ref lua_api_enemy_get_attack_consequence
   "enemy:get_attack_consequence()".
 
-\subsection lua_api_enemy_get_attack_consequence_sprite enemy:get_attack_consequence_sprite(sprite, attack):
+\subsection lua_api_enemy_get_attack_consequence_sprite enemy:get_attack_consequence_sprite(sprite, attack)
 
 Returns how this enemy reacts when one of his \ref lua_api_sprite "sprites"
 receives an attack.
@@ -318,7 +317,7 @@ the reaction of the enemy for a particular sprite with
   \ref lua_api_enemy_get_attack_consequence
   "enemy:get_attack_consequence()".
 
-\subsection lua_api_enemy_set_attack_consequence_sprite enemy:set_attack_consequence_sprite(sprite, attack, consequence):
+\subsection lua_api_enemy_set_attack_consequence_sprite enemy:set_attack_consequence_sprite(sprite, attack, consequence)
 
 Sets how this enemy reacts when one of his \ref lua_api_sprite "sprites"
 receives an attack.
@@ -416,7 +415,7 @@ Sets the \ref lua_api_pickable
 
 \subsection lua_api_enemy_is_traversable enemy:is_traversable()
 
-Returns whether this enemy is traversed by other entities.
+Returns whether this enemy can be traversed by other entities.
 - Return value (boolean): \c true if this enemy is traversable.
 
 \subsection lua_api_enemy_set_traversable enemy:set_traversable([traversable])
@@ -524,24 +523,13 @@ Immobilizes this enemy for a while if possible.
 
 After a few seconds, the enemy shakes and then restarts.
 
-\subsection lua_api_enemy_get_sprite enemy:get_sprite()
-
-Returns the \ref lua_api_sprite "sprite" of this enemy,
-as created by
-\ref lua_api_enemy_create_sprite "enemy:create_sprite()".
-- Return value (\ref lua_api_sprite "sprite"): The first sprite created for
- this enemy.
-
-\remark If the enemy has several sprites, the first one created is returned.
-  For the other sprites, you cannot use this function.
-  However, you can just store the return values of your calls to
-  \ref lua_api_enemy_create_sprite "enemy:create_sprite()".
-
-\subsection lua_api_enemy_create_sprite enemy:create_sprite(sprite_name)
+\subsection lua_api_enemy_create_sprite enemy:create_sprite(animation_set_id, [sprite_name])
 
 Creates a \ref lua_api_sprite "sprite" for this enemy.
-- \c sprite_name (string): Name of the animation set of the
-  sprite to create.
+- \c animation_set_id (string): Animation set to use for the sprite.
+- \c sprite_name (string, optional): An optional name to identify the created
+  sprite. Only useful for entities with multiple sprites (see
+  \ref lua_api_entity_get_sprite "entity:get_sprite()").
 - Return value (\ref lua_api_sprite "sprite"): The sprite created.
 
 \remark If you don't create a sprite, your enemy will be invisible.
@@ -572,8 +560,9 @@ and the layer is the one of the current enemy by default.
     \c "_2", \c "_3", etc.) will be automatically appended to keep entity names
     unique.
     No value means no name.
-  - \c layer (number, optional): The layer, between \c 0 (he lowest one) and
-    \ref lua_map_api_get_num_layers() "map:get_num_layers()" - 1.
+  - \c layer (number, optional): The layer, between
+    \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+    \ref lua_api_map_get_max_layer "map:get_max_layer()".
     No value means the same layer as the current enemy.
   - \c x (number, optional): X coordinate on the map, relative to the current
     enemy. The default value is \c 0.
@@ -582,10 +571,6 @@ and the layer is the one of the current enemy by default.
   - \c direction (number, optional): Initial direction of the enemy, between
     \c 0 (East) and \c 3 (South). The default value is \c 3.
   - \c breed (string): Model of enemy to create.
-  - \c rank (number, optional): \c 0 for a normal enemy (default),
-    \c 1 for a miniboss, \c 2 for a boss.
-    This property will be removed in a future version.
-    Its only effect is to change the initial hurt style.
   - \c savegame_variable (string, optional): Name of the boolean value that
     stores in the \ref lua_api_game "savegame" whether this enemy is dead.
     No value means that the enemy is not saved.
@@ -772,7 +757,7 @@ is played.
 The details of the dying animation and the sound played depend on the
 \ref lua_api_enemy_set_hurt_style "hurt style" property.
 If the hurt style is \c "enemy" or \c "monster", any sprite you created
-on the enemy is automatically removed and replaced by sprite
+on the enemy is automatically removed and replaced by the sprite
 \c "enemies/enemy_killed".
 If the hurt style is \c "boss", your sprites continue to exist and to play
 animation "hurt", while explosions appear on the enemy.

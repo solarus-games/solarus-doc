@@ -1,7 +1,7 @@
 /**
 \page quest_musics Musics
 
-The \c musics directory contains all musics files used by both the quest.
+The \c musics directory contains all musics files used by the quest.
 For now, the following formats are recognized:
 - OGG: Ogg Vorbis audio file,
 - IT: Impulse Tracker Module,
@@ -10,13 +10,39 @@ For now, the following formats are recognized:
 The SPC format is supported but not recommended because it is slow to decode.
 Therefore, it is recommended to convert SPC musics to IT musics.
 
-Don't forget to add all musics files to the
-quest tree in the editor (or by editing
-\ref quest_resource_file "project_db.dat" by hand).
-Otherwise, you won't be able to select musics in the editor's interface,
-for example to choose the music of a map.
+Future releases may support more music formats.
 
-Future releases may support more music formats. You can ask me.
+\section quest_musics_loop Loop settings
+
+When starting a map, its music is automatically played
+and will loop to the beginning if it finishes.
+When you play a music from a script
+(using
+\ref lua_api_audio_play_music "sol.audio.play_music()"),
+you can specify the action to do when the music finishes.
+By default, this action is also to loop the music to the beginning.
+
+However, some musics already have their own loop internal loop.
+It means that they don't finish (they loop by themselves)
+so the rules above have no effect on them.
+Instead, such musics are able to loop to a specific point rather than
+to the beginning.
+- This is the case of SPC musics because of their special
+  emulation format.
+  Some of them simply play forever, other play an empty sound forever after
+  some point, but SPC musics have no end.
+- This can also be the case of IT musics
+  if they contain internal loop information to play forever.
+- For OGG musics, Solarus detects the metadata tags \c LOOPSTART,
+  \c LOOPEND and \c LOOPLENGTH.
+  These tags are all optional. They should be set to a number of PCM samples.
+  There will be an internal loop if \c LOOPSTART is specified.
+  You can then use either \c LOOPEND or \c LOOPLENGTH to indicate from
+  where you want the music to loop (by default: from the end of the file).
+  If \c LOOPEND is specified, the music will loop from position \c LOOPEND
+  to position \c LOOPSTART.
+  Otherwise, if \c LOOPLENGTH is specified, the music will loop from position
+  <tt>LOOPSTART + LOOPLENGTH</tt> to position \c LOOPSTART.
 
 */
 
