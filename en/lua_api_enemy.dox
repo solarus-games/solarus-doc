@@ -745,7 +745,7 @@ and he has just lost some life.
 
 \remark In the case of a \c "sword" attack, this event is called
   right after
-  \ref lua_api_enemy_on_hurt_by_sword "enemy:on_hurt_by_sword()"
+  \ref lua_api_enemy_on_hurt_by_sword "enemy:on_hurt_by_sword()".
 
 \subsection lua_api_enemy_on_dying enemy:on_dying()
 
