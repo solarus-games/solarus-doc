@@ -102,9 +102,9 @@ associated to this item.
 - Return value (string): The savegame variable that stores the possessed
   amount of this item, or \c nil if this item has no associated amount.
 
-\subsection lua_api_item_set_amount_savegame_variable item:set_amount_savegame_variable()
+\subsection lua_api_item_set_amount_savegame_variable item:set_amount_savegame_variable(amount_savegame_variable)
 
-Returns the name of the integer savegame value that stores the amount
+Sets the name of the integer savegame value that stores the amount
 of this item.
 
 You should call this function at initialization time if you want your item to
