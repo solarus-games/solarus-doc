@@ -15,8 +15,8 @@ It can also be created dynamically with
 \section lua_api_crystal_overview Overview
 
 A crystal is essentially a solid switch that
-\ref lua_api_map_change_crystal_state "inverts the
-configuration" of \ref lua_api_crystal_block "crystal blocks"
+\ref lua_api_map_change_crystal_state "inverts the configuration"
+of \ref lua_api_crystal_block "crystal blocks"
 when activated.
 
 \subsection lua_api_crystal_overview_sprites Crystal sprites
