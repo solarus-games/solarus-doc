@@ -286,7 +286,7 @@ Returns the metatable of a Solarus userdata type.
 This function is very powerful and should be used with care.
 
 All userdata objects of a type share the same metatable.
-So there is a metatable for maps, a metatable for games, a metatables for
+So there is a metatable for maps, a metatable for games, a metatable for
 enemies, etc.
 
 The metatable of a type stores what is common
