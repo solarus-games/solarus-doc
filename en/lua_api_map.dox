@@ -1109,7 +1109,7 @@ on the map.
   - \c pushable (boolean): \c true to allow the block to be pushed.
   - \c pullable (boolean): \c true to allow the block to be pulled.
   - \c maximum_moves (number): \c Indicates how many times the block can be
-    moved (\c 0: none, \c 1: once, \c 2: infinite).
+    moved (\c 0: none, \c positive: that number, \c -1: infinite).
 - Return value (\ref lua_api_block "block"): the block created.
 
 \subsection lua_api_map_create_dynamic_tile map:create_dynamic_tile(properties)
