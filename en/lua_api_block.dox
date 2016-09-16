@@ -16,7 +16,7 @@ It can also be created dynamically with
 
 Blocks that can move may be pushable, pullable
 or both pushable and pullable.
-A block can be moved either once or have an unlimited number of moves.
+A block can be moved a finite or infinite number of times.
 It can be moved to any direction (the four main directions)
 or to a specific direction only.
 
@@ -54,7 +54,7 @@ Restores the block at its initial position and resets
 its counter of moves.
 
 It means that the hero will be able to move again
-a block that could be moved only once and that already moved.
+a block that has been moved the max number of times.
 
 \subsection lua_api_block_is_pushable block:is_pushable()
 
@@ -98,7 +98,7 @@ This function returns the maximum moves value that was set at creation time
 or by \ref lua_api_block_set_maximum_moves "block:set_maximum_moves()",
 no matter if the block was moved then.
 - Return value (integer): How many times the block can be moved:
-  \c 0: none, \c 1: once, \c nil: infinite.
+  \c 0: none, \c positive: the number, \c nil: infinite.
 
 \subsection lua_api_block_set_maximum_moves block:set_maximum_moves(maximum_moves)
 
@@ -106,7 +106,7 @@ Sets the maximum number of times the block can be moved.
 
 This resets the remaining allowed moves.
 - \c maximum_moves (integer): How many times the block can be moved:
-  \c 0: none, \c 1: once, \c nil: infinite.
+  \c 0: none, \c positive: that amount, \c nil: infinite.
 
 \section lua_api_block_inherited_events Events inherited from map entity
 

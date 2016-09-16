@@ -721,7 +721,7 @@ Additional properties:
 - \c pushable (boolean): \c true to allow the block to be pushed.
 - \c pullable (boolean): \c true to allow the block to be pulled.
 - \c maximum_moves (number): \c Indicates how many times the block can be
-  moved (\c 0: none, \c 1: once, \c 2: infinite).
+  moved (\c 0: none, \c positive: that number, \c nil: infinite).
 
 Example of block:
 \verbatim
