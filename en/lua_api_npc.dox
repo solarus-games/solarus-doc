@@ -27,10 +27,10 @@ Interactions with an %NPC may start a dialog or be forwarded to Lua.
 More precisely, what happens can be one of the following.
 - A dialog starts.
 - A Lua event is called on the %NPC itself,
-  for instance \ref lua_api_npc_on_interaction "npc:on_interaction()".
+  for instance \ref lua_api_npc_on_interaction "npc:on_interaction()"
   or \ref lua_api_npc_on_interaction_item "npc:on_interaction_item()".
-- A Lua event is called on an \ref lua_api_item "equipment item"
-  for instance \ref lua_api_item_on_npc_interaction "item:on_npc_interaction()".
+- A Lua event is called on an \ref lua_api_item "equipment item",
+  for instance \ref lua_api_item_on_npc_interaction "item:on_npc_interaction()"
   or \ref lua_api_item_on_npc_interaction_item "item:on_npc_interaction_item()".
 
 An %NPC can move if you apply a movement to it by calling
@@ -38,7 +38,7 @@ An %NPC can move if you apply a movement to it by calling
 
 The size of an %NPC is always 16x16 pixels
 (like the \ref lua_api_hero "hero")
-and the %NPC is an obstacle for most \ref lua_api_entity "map entities",
+and by default, the %NPC is an obstacle for most \ref lua_api_entity "map entities",
 including the hero.
 
 Usual NPCs (i.e. non-generalized ones)
@@ -47,12 +47,12 @@ They must have a sprite with at least four directions, and with animations
 named \c "stopped" and (if you move them) \c "walking".
 These predefined animations are automatically started by the engine when you
 make the %NPC move.
-When the hero talks to them, their sprite automatically stop its animation and
+When the hero talks to them, their sprite automatically stops its animation and
 looks into his direction.
 
 Example of use of a usual %NPC: a non-playing character walking randomly in a town.
 
-Generalized NPCs are highly customizable.
+Generalized NPCs are more customizable.
 They are solid entities that the hero can interact with, and there is essentially
 nothing more predefined by the engine.
 They may even have no sprite.
