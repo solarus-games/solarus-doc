@@ -439,9 +439,9 @@ The player cannot control him during the movement.
 Makes the hero jump towards the specified direction.
 - \c direction8 (number): Direction of the jump, between \c 0 and \c 7
   (see \ref lua_api_jump_movement_set_direction8
-  jump_movement:set_direction8()).
+  "jump_movement:set_direction8()").
 - \c distance (number): Distance of the jump in pixels
-  (see \ref lua_api_jump_movement_set_distance jump_movement:set_distance()).
+  (see \ref lua_api_jump_movement_set_distance "jump_movement:set_distance()").
 - \c ignore_obstacles (boolean, optional): \c true to allow the hero to
   traverse obstacles during this movement (default \c false).
   Make sure the movement does not end inside an obstacle.
