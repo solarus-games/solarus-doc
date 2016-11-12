@@ -83,7 +83,7 @@ The weight corresponds to the \c "lift"
   \c 0 allows the player to lift the object unconditionally.
   The special value \c -1 means that the object can never be lifted.
 
-\subsection lua_api_destructible_set_weight destructible:set_weight()
+\subsection lua_api_destructible_set_weight destructible:set_weight(weight)
 
 Sets the weight of this destructible object.
 The weight corresponds to the \c "lift"
