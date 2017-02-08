@@ -284,7 +284,7 @@ Returns the position of this entity on the \ref lua_api_map "map"
   \ref lua_api_map_get_min_layer "map:get_min_layer()" and
   \ref lua_api_map_get_max_layer "map:get_max_layer()".
 
-\subsection lua_api_entity_set_position entity:set_position(x, y, [layer]):
+\subsection lua_api_entity_set_position entity:set_position(x, y, [layer])
 
 Changes instantly the position of this entity on the map
 (coordinates and layer).
