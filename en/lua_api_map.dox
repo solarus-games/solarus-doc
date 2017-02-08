@@ -398,8 +398,6 @@ It is your responsability to make sure that
 the new tileset is be compatible with the previous one:
 every tile of the previous tileset must exist in the new one
 and have the exact same properties, and only the images can differ.
-Internally, this function actually keeps the data of the previous tileset
-and only loads the image of the new tileset.
 - \c tileset_id (string): Id of the new tileset to set.
 
 \remark If the new tileset is not compatible with the previous one,
