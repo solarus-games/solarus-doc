@@ -89,5 +89,30 @@ Returns whether a mouse button is currently down.
   Possible values are \c "left", \c "middle", \c "right", \c "x1" and \c "x2".
 - Return value (boolean): \c true if mouse button is down.
 
+\subsection lua_api_input_get_finger_position sol.input.get_finger_position(finger)
+
+Returns the current position of a finger if it exists.
+- \c finger (integer): The finger ID to check.
+- Return value 1 (integer): The \c x position of the finger in
+  \ref lua_api_video_get_quest_size "quest size" coordinates.
+  Return \c nil if the finger is not pressed.
+- Return value 2 (integer): The \c y position of the finger in
+  \ref lua_api_video_get_quest_size "quest size" coordinates.
+  Unused if the finger is not pressed.
+
+\subsection lua_api_input_get_finger_pressure sol.input.get_finger_pressure(finger)
+
+Returns the current pressure of a finger if it exists.
+- \c finger (integer): The finger ID to check.
+- Return value 1 (number): The \c pressure of the finger in
+  \ref lua_api_video_get_quest_size "quest size" coordinates.
+  Return \c nil if the finger is not pressed.
+
+\subsection lua_api_input_is_finger_pressed sol.input.is_finger_pressed(finger)
+
+Returns whether a finger is currently pressed.
+- \c finger (integer): The finger ID to check.
+- Return value (boolean): \c true if the finger is down.
+
 */
 
