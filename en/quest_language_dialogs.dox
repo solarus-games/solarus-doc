@@ -47,7 +47,7 @@ Each dialog must have at least the following two properties:
 
 - \c text (multi-line string, optional): Contents of this dialog.
   If you are translating dialogs, \c text is the property to translate.
-  The text has usually several lines, but can be empty.
+  The text usually has several lines, but can be empty.
   The text should be enclosed between \c [[ and \c ]], which is
   the notation for multiline strings.
   The closing marker \c ]] should be on a new line.
