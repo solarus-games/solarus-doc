@@ -29,8 +29,9 @@ The definition of your quest properties
 starts with \c quest{ and ends with \c }.
 Each property is declared with the syntax <tt>key = value</tt> and
 separated with commas. It is allowed to have an extra comma after
-the last property. String values are enclosed within
-double quotes.
+the last property.
+String values should be enclosed within
+double quotes, except when specified otherwise.
 
 The recognized properties are listed below.
 Only \c solarus_version and \c title are mandatory, but
@@ -42,7 +43,9 @@ Only \c solarus_version and \c title are mandatory, but
   Patch versions are ignored because they don't break compatibility.
 - \c title (string): Name of your quest.
 - \c short_description (string, optional): A one-line description of the quest.
-- \c long_description (string, optional): A longer description of the quest.
+- \c long_description (multi-line string, optional): A longer description of the quest.
+  The text should be enclosed between \c [[ and \c ]], which is
+  the notation for multiline strings.
 - \c author (string, optional): Person or team who created the quest.
 - \c quest_version (string, optional): Current version of your quest.
 - \c release_date (string, optional): Date of your last quest release
@@ -98,12 +101,20 @@ Example of \c quest.dat file:
 
 \verbatim
 quest{
-  solarus_version = "1.4",
+  solarus_version = "1.5",
+  title = "My incredible quest",
   write_dir = "my_quest",
-  title_bar = "My incredible quest",
-  normal_quest_size = "320x240",  -- Works on most configurations.
-  min_quest_size = "320x200",     -- Might make fullscreen compatible with more systems.
-  max_quest_size = "400x240",     -- Suited for Android and other mobile devices.
+  short_description = "This is the best game ever",
+  long_description = [[
+Travel the world and save the princess.
+You will encounter great characters, epic battles and awesome puzzles.]],
+  author = "John Doe",
+  quest_version = "1.0",
+  release_date = "",
+  website = "http://www.example.com",
+  normal_quest_size = "320x240",
+  min_quest_size = "320x240",
+  max_quest_size = "320x240",
 }
 \endverbatim
 
