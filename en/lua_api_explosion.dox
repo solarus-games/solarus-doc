@@ -3,7 +3,7 @@
 
 \tableofcontents
 
-This 
+This
 is an explosion whose sprite hurts the
 \ref lua_api_hero "hero" and
 \ref lua_api_enemy "enemies".

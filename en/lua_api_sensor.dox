@@ -12,7 +12,7 @@ It can also be created dynamically with
 \ref lua_api_map_create_sensor "map:create_sensor()".
 
 \section lua_api_sensor_overview Overview
- 
+
 Unlike \ref lua_api_switch "switches",
 \ref lua_api_sensor "sensors" cannot be avoided by a jump.
 If you want the \ref lua_api_hero "hero"

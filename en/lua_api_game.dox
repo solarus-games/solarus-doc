@@ -241,7 +241,7 @@ This function returns immediately, but you can provide a callback that will
 be executed when the dialog finishes.
 The game is suspended during the dialog, like when it is paused.
 
-If the event 
+If the event
 \ref lua_api_game_on_dialog_started "game:on_dialog_started()"
 is not defined, then the engine will show a default, minimal dialog system
 without decoration.
@@ -263,7 +263,7 @@ The game will be suspended until you call
   file of the current
   \ref lua_api_language "language".
 - \c info (any type, optional): Any
-  information you want to pass to the 
+  information you want to pass to the
   \ref lua_api_game_on_dialog_started "game:on_dialog_started()" event.
   You can use this parameter to include in the dialog any information that is
   only known at runtime, for example the name of the player, the best score of
@@ -336,7 +336,7 @@ function another_npc:on_interaction()
         -- ... The rest is unchanged.
 \endverbatim
 To make this example work, you need a dialog box system
-that 
+that
 performs the substitution when \c info is set.
 See \ref lua_api_game_on_dialog_started "game:on_dialog_started()".
 
@@ -361,7 +361,7 @@ wants to close the dialog.
 The
 \ref lua_api_game_on_dialog_finished "game:on_dialog_finished()"
 event is first called (if it is defined).
-Then, the callback that was passed to 
+Then, the callback that was passed to
 \ref lua_api_game_start_dialog "game:start_dialog()"
 is called (if it was defined)
 with the \c status argument.
@@ -718,7 +718,7 @@ effect changes a lot depending on the context.
   - For command \c "down": \c "move_down" or \c nil.
 
 \remark All these built-in game commands are initially mapped to some default
-keyboard and joypad inputs. You can use 
+keyboard and joypad inputs. You can use
 \ref lua_api_game_set_command_keyboard_binding "game:set_command_keyboard_binding()",
 \ref lua_api_game_set_command_joypad_binding "game:set_command_joypad_binding()"
 and
@@ -959,7 +959,7 @@ when you need to draw the dialog box on the screen, etc.
   in this table by their string representation,
   and values that were defined as booleans are
   replaced by the string \c "1" for \c true and \c "0" for \c false.
-- \c info (any value, optional): Some additional information for this 
+- \c info (any value, optional): Some additional information for this
   particular dialog. You can get here some data that is only known at runtime.
   See the examples of \ref lua_api_game_start_dialog "game:start_dialog()".
 

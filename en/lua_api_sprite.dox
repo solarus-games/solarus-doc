@@ -125,7 +125,7 @@ This delay is defined by the current animation but may be overriden
 by \ref lua_api_sprite_set_frame_delay "set_frame_delay()".
 - Return value (number): The delay in milliseconds between two frames in
   the current animation. \c nil means infinite and
-  it is only allowed for single-frame animations. 
+  it is only allowed for single-frame animations.
 
 \subsection lua_api_sprite_set_frame_delay sprite:set_frame_delay(delay)
 

@@ -3,7 +3,7 @@
 
 \tableofcontents
 
-An equipment item represents something that the player can obtain 
+An equipment item represents something that the player can obtain
 (one or more times, in various forms and with several variants) and possibly
 keep.
 The Lua item type described in this page provides various functions to
@@ -275,7 +275,7 @@ brandishes a treasure of this kind.
 The hero can brandish treasures in various situations: when opening a
 \ref lua_api_chest "chest", when buying a
 \ref lua_api_shop_treasure "shop treasure",
-when picking up a \ref lua_api_pickable "pickable treasure" (unless  
+when picking up a \ref lua_api_pickable "pickable treasure" (unless
 you called \ref lua_api_item_set_brandish_when_picked
 "item:set_brandish_when_picked(false)"), and also when you call
 \ref lua_api_hero_start_treasure "hero:start_treasure()" directly.

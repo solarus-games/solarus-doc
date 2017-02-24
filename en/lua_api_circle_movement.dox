@@ -164,7 +164,7 @@ Sets the delay after which this movement restarts.
 
 \remark This delay is applied if the movement get stopped by reaching the
 \ref lua_api_circle_movement_get_max_rotations "maximum number of rotations"
-or the 
+or the
 \ref lua_api_circle_movement_get_duration "maximum duration".
 
 \remark When the movement restarts, the radius starts from 0 and gets back

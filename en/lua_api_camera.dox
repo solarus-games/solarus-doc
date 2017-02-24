@@ -26,7 +26,7 @@ to switch to manual state, and
 \ref lua_api_camera_start_tracking "camera:start_tracking()"
 to switch to tracking state.
 Starting a
-\ref lua_api_movement "movement" on the camera 
+\ref lua_api_movement "movement" on the camera
 also switches it to manual state.
 
 \subsection lua_api_camera_constraints Movements and constraints

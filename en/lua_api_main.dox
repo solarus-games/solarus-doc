@@ -431,7 +431,7 @@ If you prefer, you can also start immediately a game.
 Called at the end of the program.
 
 This function is called when Lua is about to be shut down, i.e.,
-just before the program stops or is reset. 
+just before the program stops or is reset.
 
 \subsection lua_api_main_on_update sol.main:on_update()
 
@@ -499,7 +499,7 @@ Called when the user enters text.
 (indicating the raw key)
 and \ref lua_api_main_on_character_pressed "sol.main:on_character_pressed()"
 (indicating the utf-8 character).
-If you need to input text from the user, 
+If you need to input text from the user,
 \ref lua_api_main_on_character_pressed "sol.main:on_character_pressed()"
 is what you want because it
 considers the keyboard's layout and gives you international utf-8

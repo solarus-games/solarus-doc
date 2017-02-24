@@ -42,7 +42,7 @@ prefix and end by <tt>_open</tt> or <tt>_closed</tt>
 are automatically
 enabled or disabled, respectively.
 This helps a lot to make tiles follow harmoniously the state of doors.
-See 
+See
 \ref lua_api_map_open_doors "map:open_doors()"
 for more information about these mechanisms.
 

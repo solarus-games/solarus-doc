@@ -14,7 +14,7 @@ It can also be created dynamically with
 \section lua_api_stairs_overview Overview
 
 %Stairs are here to provide class transitions between two
-\ref lua_api_map "maps" or two 
+\ref lua_api_map "maps" or two
 \ref lua_api_map_overview_position "layers" on the same map,
 linked by
 \ref lua_api_tile "tiles" that look like stairs.

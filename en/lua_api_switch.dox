@@ -81,7 +81,7 @@ However, it can still changed programmatically by calling
 \ref lua_api_switch_set_activated "switch:set_activated()".
 - Return value (boolean): \c true if this switch is currently activated.
 
-\subsection lua_api_switch_set_locked switch:set_locked([locked]) 
+\subsection lua_api_switch_set_locked switch:set_locked([locked])
 
 Locks this switch in its current state or unlocks it.
 

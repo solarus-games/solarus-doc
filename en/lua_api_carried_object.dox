@@ -16,7 +16,7 @@ Map entities that can be lifted include
 \ref lua_api_destructible "destructible objects"
 and \ref lua_api_bomb "bombs".
 The carried object takes the sprite and the features of the lifted entity
-it is created from. 
+it is created from.
 
 The hero can then walk with his carried object and throw it.
 He can even go to another map: the carried object is preserved.

@@ -120,7 +120,7 @@ This event is triggered when you call \ref lua_api_menu_start
 Called when your menu is stopped.
 
 This event is triggered when you call \ref lua_api_menu_stop "sol.menu.stop()"
-or when the context of your menu finishes. 
+or when the context of your menu finishes.
 
 \subsection lua_api_menu_on_update menu:on_update()
 

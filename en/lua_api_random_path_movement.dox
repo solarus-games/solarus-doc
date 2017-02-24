@@ -6,7 +6,7 @@
 The random path movement is a particular case of
 \ref lua_api_path_movement "path movement",
 where the path is chosen automatically.
-The resulting movement is composed of repeated random steps 
+The resulting movement is composed of repeated random steps
 in the four main directions only and with a length that is a multiple of
 8 pixels.
 

@@ -36,7 +36,7 @@ If you need to implement more customized interactions, you can use a
 
 Dialogs of shop treasures need special care because everything is built-in with
 shop treasures, but dialogs are entirely customizable.
-You can skip this section if you are not making your own dialog box system. 
+You can skip this section if you are not making your own dialog box system.
 
 Dialogs that are displayed when interacting with a shop treasure are quite
 elaborate because they have both a parameter (the price: a number) and a result
