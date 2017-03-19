@@ -114,5 +114,19 @@ Returns whether a finger is currently pressed.
 - \c finger (integer): The finger ID to check.
 - Return value (boolean): \c true if the finger is down.
 
+\subsection lua_api_input_simulate_key_pressed sol.input.simulate_key_pressed(key)
+
+Simulate pressing a keyboard key.
+Note that every call to this function should have an associated call to
+sol.input.simulate_key_released(key) for internal reasons, unless repeating keys is allowed.
+- \c key (string): The keyboard key to simulate.
+
+\subsection lua_api_input_simulate_key_released sol.input.simulate_key_released(key)
+
+Simulate releasing a keyboard key.
+Note that every call to this function should have an associated call to
+sol.input.simulate_key_pressed(key) for internal reasons, unless repeating keys is allowed.
+- \c key (string): The keyboard key to simulate.
+
 */
 
