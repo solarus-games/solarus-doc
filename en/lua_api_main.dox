@@ -410,6 +410,10 @@ If the correct OS name is not available, returns a string
 beginning with the text \c "Unknown".
 - Return value (string): The name of the running OS.
 
+\subsection lua_api_main_api_get_quest_version sol.main.get_quest_version()
+
+Returns the version of the currently running quest as specified in the \ref quest_properties_file.
+
 \section lua_api_main_events Events of sol.main
 
 Events are callback methods automatically called by the engine if you define
