@@ -28,9 +28,17 @@ version.
 
 - Return value (string): The Solarus version.
 
+\subsection lua_api_main_api_get_quest_version sol.main.get_quest_version()
+
+Returns the version of the currently running quest as specified in the
+\ref quest_properties_file "Quest Properties file".
+
+- Return value (string): The quest version, or \c nil if no quest version
+  was set the quest properties.
+
 \subsection lua_api_main_get_quest_format sol.main.get_quest_format()
 
-Returns the format of this quest.
+Returns the Solarus compatibility format of this quest.
 
 This corresponds to a version of Solarus
 with major and minor version numbers (no patch number),
@@ -409,10 +417,6 @@ Returns the name of the running OS. Possible values are :
 If the correct OS name is not available, returns a string
 beginning with the text \c "Unknown".
 - Return value (string): The name of the running OS.
-
-\subsection lua_api_main_api_get_quest_version sol.main.get_quest_version()
-
-Returns the version of the currently running quest as specified in the \ref quest_properties_file.
 
 \section lua_api_main_events Events of sol.main
 
