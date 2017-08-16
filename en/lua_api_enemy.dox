@@ -736,7 +736,8 @@ His hurting animation and sound have just started
 and he has just lost some life.
 - \c attack (string): The attack that was received:
   \c "sword", \c "thrown_item", \c "explosion",
-  \c "arrow", \c "hookshot", \c "boomerang" or \c "fire".
+  \c "arrow", \c "hookshot", \c "boomerang",
+  \c "fire", or \c "script".
 
 \remark In the case of a \c "sword" attack, this event is called
   right after
