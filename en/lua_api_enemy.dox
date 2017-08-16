@@ -637,11 +637,6 @@ When this happens, all \ref lua_api_entity "map entities" stop moving and most
 - \c suspended (boolean): \c true if the map was just suspended, \c
   false if it was resumed.
 
-\subsection lua_api_enemy_on_created enemy:on_created()
-
-called when this enemy has just been created on the
-\ref lua_api_map "map".
-
 \subsection lua_api_enemy_on_enabled enemy:on_enabled()
 
 called when this enemy has just been
