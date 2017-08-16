@@ -734,10 +734,10 @@ hurting the enemy.
 At this point, the enemy is in the state of being hurt.
 His hurting animation and sound have just started
 and he has just lost some life.
-- \c attack (string, script): The attack that was received:
+- \c attack (string): The attack that was received:
   \c "sword", \c "thrown_item", \c "explosion",
   \c "arrow", \c "hookshot", \c "boomerang",
-  \c "fire", or the script that called \ref lua_api_enemy_hurt.
+  \c "fire", or \c "script".
 
 \remark In the case of a \c "sword" attack, this event is called
   right after
