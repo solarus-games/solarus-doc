@@ -25,14 +25,12 @@ there are three files:
 - \c xx.tiles.png: The PNG image containing all tiles patterns of this tileset.
 - \c xx.dat: The definition of each tile in \c xx.tiles.png and their
   properties. We detail the syntax of this file below.
-- \c xx.entities.png: some dynamic entities (i.e. other that tiles),
-  such as doors and blocks, that also have graphics that depend
-  on the skin.
-  A door inside a dungeon has different graphics and colors from a door
-  inside a cave.
-  This is the purpose of this file:
-  \ref quest_sprite_data_file "sprites" that depend on the tileset pick their
-  frames in this image.
+- \c xx.entities.png (optional): A PNG image containing sprite sheets of
+  dynamic entities (i.e. entities other that tiles)
+  whose graphics depend on the tileset.
+  For instance, doors and block can have different colors for each tileset.
+  This optional PNG file allows to more easily make
+  \ref quest_sprite_data_file "sprites" that depend on the current tileset.
 
 Tile patterns defined in \c xx.tiles.png can be fixed or animated with
 several frames.
