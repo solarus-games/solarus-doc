@@ -480,9 +480,22 @@ If the player is not allowed to use the item now
 or because the hero is currently busy in another state), then nothing happens.
 - \c item (\ref lua_api_item "item"): The equipment item to start using.
 
-\subsection lua_api_hero_start_treasure hero:start_treasure(treasure_item, [treasure_variant, [treasure_savegame_variable, [callback]]])
+\subsection lua_api_hero_start_treasure hero:start_treasure(treasure_name, [treasure_variant, [treasure_savegame_variable, [callback]]])
 
-Gives a treasure to the player. The hero will brandish the treasure.
+Gives a treasure to the player. The hero will brandish the treasure as follows.
+
+The hero sprites take the animation \c "treasure".
+The treasure is displayed above the hero, as the sprite
+\c "entities/items" with animation \c treasure_name
+and direction <tt>treasure_variant - 1</tt>.
+If this sprite, this animation or this direction do not exist,
+then no treasure sprite is displayed above the hero.
+
+If a dialog called \c "_treasure.treasure_name.treasure_variant" exists,
+then this dialog is displayed during the brandishing animation.
+For example, calling <tt>hero:start_treasure("heart", 1)</tt>
+will automatically show the dialog <tt>_treasure.heart.1</tt>.
+
 - \c treasure_name (string, optional): Kind of treasure to give
   (the name of an \ref lua_api_item "equipment item").
   The treasure must be an
@@ -496,8 +509,12 @@ Gives a treasure to the player. The hero will brandish the treasure.
   whether this treasure is found.
   No value means that the state of the treasure is not saved.
   It is allowed (though strange) to give the same saved treasure twice.
-- \c callback (function, optional): A function to call when the treasure's
-  dialog finishes.
+- \c callback (function, optional): A function that will be called when the
+  treasure's dialog finishes, or after a delay of 3 seconds if there is
+  no dialog.
+
+\remark If there is no callback, or if the callback does not change the state
+  of the hero, then he automatically stops the brandishing animation.
 
 \subsection lua_api_hero_start_victory hero:start_victory([callback])
 
