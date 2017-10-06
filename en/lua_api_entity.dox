@@ -426,6 +426,24 @@ exceeds its bounding box.
 - Return value 3 (number): Width of the sprites bounding box.
 - Return value 4 (number): Height of the sprites bounding box.
 
+\subsection lua_api_entity_get_layer entity:get_layer()
+
+Returns the layer of this entity on the \ref lua_api_map "map".
+- Return value (number): Layer where the entity is on the map, between
+  \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+  \ref lua_api_map_get_max_layer "map:get_max_layer()".
+
+\subsection lua_api_entity_set_layer entity:set_layer(layer)
+
+Changes the layer of this entity on the map.
+The X and Y coordinates of the entity are unchanged.
+Any previous movement or action performed by the entity continues normally.
+- \c layer (number, optional): Layer to set, between
+  \ref lua_api_map_get_min_layer "map:get_min_layer()" and
+  \ref lua_api_map_get_max_layer "map:get_max_layer()".
+
+\remark Be careful: this function does not check collisions with obstacles.
+
 \subsection lua_api_entity_overlaps_rectangle entity:overlaps(x, y, [width, height])
 
 Returns whether the
