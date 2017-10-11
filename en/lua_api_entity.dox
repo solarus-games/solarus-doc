@@ -665,7 +665,7 @@ if this map entity was translated.
 - \c dx (number, optional): X component of the translation in pixels
   (\c 0 means the current X position).
   No value means \c 0.
-- \c dx (number, optional): Y component of the translation in pixels
+- \c dy (number, optional): Y component of the translation in pixels
   (\c 0 means the current Y position).
   No value means \c 0.
 - \c layer (number, optional): Layer to test.
