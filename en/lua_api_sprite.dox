@@ -111,18 +111,26 @@ Sets the current frame of this sprite.
 - \c frame (number): The frame to set (the first one is \c 0).
   This frame must exist in the current direction.
 
-\subsection lua_api_sprite_get_num_frames sprite:get_num_frames()
+\subsection lua_api_sprite_get_num_frames sprite:get_num_frames([animation_name, direction])
 
-Returns the number of frames of this sprites in the current animation and
-direction.
+Returns the number of frames of this sprites in an animation and direction.
+- \c animation_name (string, optional): Name of an animation of the sprite.
+  This animation must exist in the animation set.
+  No value means the current animation.
+- \c direction (number, optional): A direction of this animation,
+  between \c 0 and <tt>sprite:get_num_directions(animation_name) - 1</tt>.
+  No value means the current direction.
 - Return value (number): The number of frames.
 
-\subsection lua_api_sprite_get_frame_delay sprite:get_frame_delay()
+\subsection lua_api_sprite_get_frame_delay sprite:get_frame_delay([animation_name])
 
-Returns the delay between two frames of this sprite in the current animation.
+Returns the delay between two frames of this sprite in an animation.
 
-This delay is defined by the current animation but may be overriden
+The delay of the current animation may be overriden
 by \ref lua_api_sprite_set_frame_delay "set_frame_delay()".
+- \c animation_name (string, optional): Name of an animation of the sprite.
+  This animation must exist in the animation set.
+  No value means the current animation.
 - Return value (number): The delay in milliseconds between two frames in
   the current animation. \c nil means infinite and
   it is only allowed for single-frame animations.
@@ -136,17 +144,20 @@ Use this function if you want to override the normal delay
 - \c delay (number): The new delay in milliseconds. \c nil means infinite
   and is only allowed for single-frame animations.
 
-\subsection lua_api_sprite_get_size sprite:get_size()
+\subsection lua_api_sprite_get_size sprite:get_size([animation_name, direction])
 
-Returns the frame size of this sprite in the current animation and direction.
-
-The frame size is the same for all frames of a given animation and direction.
+Returns the frame size of this sprite in an animation and direction.
+- \c animation_name (string, optional): Name of an animation of the sprite.
+  This animation must exist in the animation set.
+  No value means the current animation.
+- \c direction (number, optional): A direction of this animation,
+  between \c 0 and <tt>sprite:get_num_directions(animation_name) - 1</tt>.
 - Return value 1 (number): The width of a frame.
 - Return value 2 (number): The height of a frame.
 
-\subsection lua_api_sprite_get_origin sprite:get_origin()
+\subsection lua_api_sprite_get_origin sprite:get_origin([animation_name, direction])
 
-Returns the coordinates of the origin point of this sprite in the current
+Returns the coordinates of the origin point of this sprite in an 
 animation and direction, relative to the upper left corner of a frame.
 
 The origin is the point of synchronization for sprites that have several
@@ -157,6 +168,11 @@ See \ref lua_api_entity_get_origin "entity:get_origin()" for more details.
 
 In a given animation and direction of a sprite,
 the origin point is the same for all frames.
+- \c animation_name (string, optional): Name of an animation of the sprite.
+  This animation must exist in the animation set.
+  No value means the current animation.
+- \c direction (number, optional): A direction of this animation,
+  between \c 0 and <tt>sprite:get_num_directions(animation_name) - 1</tt>.
 - Return value 1 (number): X coordinate of the origin point.
 - Return value 2 (number): Y coordinate of the origin point.
 
