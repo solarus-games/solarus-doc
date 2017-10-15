@@ -176,6 +176,20 @@ the origin point is the same for all frames.
 - Return value 1 (number): X coordinate of the origin point.
 - Return value 2 (number): Y coordinate of the origin point.
 
+\subsection lua_api_sprite_get_frame_src_xy sprite:get_frame_src_xy([animation_name, direction, frame])
+
+Returns the coordinates of a frame in its source image.
+- \c animation_name (string, optional): Name of an animation of the sprite.
+  This animation must exist in the animation set.
+  No value means the current animation.
+- \c direction (number, optional): A direction of this animation,
+  between \c 0 and <tt>sprite:get_num_directions(animation_name) - 1</tt>.
+  No value means the current direction.
+- \c frame (number, optional): A frame number.
+  No value means the current frame.
+- Return value 1 (number): X coordinate of the upper left corner of the frame in its source image.
+- Return value 2 (number): Y coordinate of the upper left corner of the frame in its source image.
+
 \subsection lua_api_sprite_is_paused sprite:is_paused()
 
 Returns whether this sprite is paused.
