@@ -3,50 +3,36 @@
 
 \tableofcontents
 
-\c sol.video allows you to manage the window and to change the video mode.
+\c sol.video allows you to manage the window and the display.
 
 The area where the game takes place has a fixed size called the quest size.
-The quest size is in a range specified in
-\ref quest_properties_file "quest.dat".
-This quest size defines how much content the player can see on the map.
-It is usually 320x240, but some systems may prefer other sizes,
-like 400x240 on Android.
-You should set a range of quest sizes in the quest properties files:
-this is a good idea for portability.
-However, it requires more work from the quest designer: in particular,
+The quest size is in a range specified in the
+\ref quest_properties_file "quest properties file".
+This quest size is the logical size: it determines
+how much content the player can see on the map.
+
+The quest size is typicall 320x240 pixels,
+but some systems may prefer other sizes, like 400x240 on Android.
+You can set a range of supported quest sizes in the quest properties files
+for portability.
+However, it requires more work on your part: in particular,
 you have to implement menus and a HUD that can adapt to any size in this
 range.
-Note however that the quest size never changes after the program is started.
+And be aware that some players will be able to see more game content
+than others.
 
-At runtime, the video mode can be changed. The video mode determines
-whether a pixel scaling algorithm is applied to the image, and which one.
+The quest can be played in windowed mode or in fullscreen.
+In windowed mode, the window can be resized by the user or by your scripts.
+The quest size is independent from the actual window size:
+when you resize the window, the quest image is scaled to fit the window.
+The pixel ratio is always preserved, possibly by adding black borders.
 
-Any video mode can be played in windowed mode or in fullscreen.
-When the user plays in fullscreen, the quest image is automatically stretched
-and keeps the same pixel ratio, possibly by adding black borders.
-
-The video mode can be saved and loaded with the global settings,
-as well as the language and the volume, independently of any savegame
+Solarus supports OpenGL shaders to modify the rendering,
+for example to apply a smoothing filter.
+The name of the shader applied can be saved and loaded with the global settings,
+(as well as other preferences like the language and the volume),
+independently of any savegame
 (see \ref lua_api_main_load_settings "sol.main.load_settings()").
-
-Video modes are identified by strings in the Lua API.
-The following modes are implemented:
-- \c "normal" (default): The quest screen is unchanged.
-  In windowed mode, the image is stretched by a factor of 2.
-- \c "scale2x": The quest screen is scaled by a factor of 2
-  with the
-  <a href="http://scale2x.sourceforge.net/algorithm.html">Scale2X</a>
-  algorithm.
-- \c "hq2x": The quest screen is scaled by a factor of 2
-  with the <a href="http://en.wikipedia.org/wiki/Hqx">hq2x</a> algorithm.
-- \c "hq3x": The quest screen is scaled by a factor of 3
-  with the <a href="http://en.wikipedia.org/wiki/Hqx">hq3x</a> algorithm.
-- \c "hq4x": The quest screen is scaled by a factor of 4
-  with the <a href="http://en.wikipedia.org/wiki/Hqx">hq4x</a> algorithm.
-
-In windowed mode, the user and the scripts can resize the window.
-The image is then automatically stretched
-and keeps the same pixel ratio, possibly by adding black borders.
 
 \section lua_api_video_functions Functions of sol.video
 
@@ -64,37 +50,6 @@ by its version.
 Both these properties are indicated in the
 \ref quest_properties_file "quest.dat" file.
 - \c window_title (string): The window title to set.
-
-\subsection lua_api_video_get_mode sol.video.get_mode()
-
-Returns the current video mode.
-- Return value (string): Name of the video mode (see the list above).
-
-\subsection lua_api_video_set_mode sol.video.set_mode(video_mode)
-
-Sets the current video mode.
-- \c video_mode (string): Name of the video mode (see the list above).
-
-\remark When the quest is run from the Solarus GUI, the user can also
-  change the video mode from the menus of the GUI.
-
-\subsection lua_api_video_switch_mode sol.video.switch_mode()
-
-Sets the next video mode in the list of video modes supported.
-
-You can use this function if you want to change the video mode without
-specifying which one to use.
-The fullscreen flag is never changed by this function.
-
-\subsection lua_api_video_is_mode_supported sol.video.is_mode_supported(video_mode)
-
-Returns whether a video mode is supported.
-- \c video_mode (string): Name of a video mode (see the list above).
-
-\subsection lua_api_video_get_modes sol.video.get_modes()
-
-Returns an array of all video modes supported.
-- \c Return value (table): An array of names of all video modes supported.
 
 \subsection lua_api_video_is_fullscreen sol.video.is_fullscreen()
 
@@ -123,14 +78,13 @@ Shows or hides the mouse cursor, keeping an equivalent video mode.
 
 \subsection lua_api_video_get_quest_size sol.video.get_quest_size()
 
-Returns the size of the quest screen.
+Returns the logical size of the quest screen.
 
 This quest size is fixed at runtime.
 It is always in the range of allowed quest sizes specified in
 \ref quest_properties_file "quest.dat".
 
-The quest size is independent from the video mode:
-video modes are just various methods to draw the quest on the window.
+The quest size is independent from the actual window size.
 - Return value 1 (number): Width of the quest screen in pixels.
 - Return value 2 (number): Height of the quest screen in pixels.
 
@@ -141,23 +95,15 @@ Returns the size of the window.
 The quest image has a
 \ref lua_api_video_get_quest_size "fixed size"
 determined when the program starts.
-This quest image is then stretched on the window, and the size of the window
-size can be changed by the user or by
+This quest image is then scaled to the window.
+The size of the window can be changed at any moment by the user or by
 \ref lua_api_video_set_window_size "sol.video.set_window_size()".
 Black borders are added if necessary to keep the correct pixel ratio.
 
 When the window is in fullscreen, this function returns the size to be used
 when returning to windowed mode.
 
-By default, the size of the window depends on the
-\ref lua_api_video_get_mode "video mode".
-If no scaling algorithm is used (that is, in \c "normal" mode),
-the window size is initially twice the quest size to avoid a too small
-window.
-If a scaling algorithm is used, the scaling factor is naturally applied to the
-window size.
-For example, with hq2x, if your quest size is 320x240, the window will
-initially have a size of 640x480.
+When Solarus starts, the size of the window is twice the quest size.
 - Return value 1 (number): Width of the window in pixels.
 - Return value 2 (number): Height of the window in pixels.
 
@@ -170,22 +116,111 @@ detailed description of the window size.
 
 When the window is in fullscreen, this function still works: the changes will
 be visible when returning to windowed mode.
-
-Note that when the video mode is changed, the window size is reset to its
-default value for the new video mode.
 - Return value 1 (number): Width of the window in pixels.
 - Return value 2 (number): Height of the window in pixels.
 
+\subsection lua_api_video_get_shader sol.video.get_shader()
+
+Returns the shader currently applied to the rendering, if any.
+- Return value (shader): The current shader, or \c nil if no shader is applied.
+
+\subsection lua_api_video_set_shader sol.video.set_shader(shader)
+
+Sets a shader to be applied to the rendering.
+- shader (shader): The shader to set.
+  It replaces the previous shader if any.
+  A \c nil values means to apply no shader.
+
+\section lua_api_video_functions_deprecated Deprecated functions of sol.video
+
+The following functions are deprecated and may be removed it future releases.
+
+\subsection lua_api_video_get_mode sol.video.get_mode()
+
+Returns the current video mode.
+Video modes are built-in software filters that can scale the rendering.
+The following modes are available:
+- \c "normal" (default): The quest screen is unchanged.
+  In windowed mode, the image is stretched by a factor of 2.
+- \c "scale2x": The quest screen is scaled by a factor of 2
+  with the
+  <a href="http://scale2x.sourceforge.net/algorithm.html">Scale2X</a>
+  algorithm.
+- \c "hq2x": The quest screen is scaled by a factor of 2
+  with the <a href="http://en.wikipedia.org/wiki/Hqx">hq2x</a> algorithm.
+- \c "hq3x": The quest screen is scaled by a factor of 3
+  with the <a href="http://en.wikipedia.org/wiki/Hqx">hq3x</a> algorithm.
+- \c "hq4x": The quest screen is scaled by a factor of 4
+  with the <a href="http://en.wikipedia.org/wiki/Hqx">hq4x</a> algorithm.
+
+- Return value (string): Name of the video mode (see the list above).
+
+\warning This method is deprecated because since Solarus 1.6,
+  OpenGL shaders are the new recommended way to implement video filters.
+
+Use
+\ref lua_api_video_get_shader "sol.video.get_shader()"
+instead.
+
+\subsection lua_api_video_set_mode sol.video.set_mode(video_mode)
+
+Sets the current video mode.
+Video modes are built-in software filters that can scale the rendering.
+The window size is reset to a default value that depends on the video mode.
+- \c video_mode (string): Name of the video mode (see the list above).
+
+\warning This method is deprecated because since Solarus 1.6,
+  OpenGL shaders are the new recommended way to implement video filters.
+
+Use
+\ref lua_api_video_get_shader "sol.video.set_shader()"
+instead.
+
+\subsection lua_api_video_switch_mode sol.video.switch_mode()
+
+Sets the next video mode in the list of video modes supported.
+
+Video modes are built-in software filters that can scale the rendering.
+
+You can use this function if you want to change the video mode without
+specifying which one to use.
+
+\warning This method is deprecated because since Solarus 1.6,
+  OpenGL shaders are the new recommended way to implement video filters.
+
+Use
+\ref lua_api_video_switch_shader "sol.video.switch_shader()"
+instead.
+
+\subsection lua_api_video_is_mode_supported sol.video.is_mode_supported(video_mode)
+
+Returns whether a video mode is supported.
+- \c video_mode (string): Name of a video mode (see the list above).
+
+\warning This method is deprecated because since Solarus 1.6,
+  OpenGL shaders are the new recommended way to implement video filters.
+
+Use
+\ref lua_api_shader_is_valid "shader:is_valid()"
+instead.
+
+\subsection lua_api_video_get_modes sol.video.get_modes()
+
+Returns an array of all video modes supported.
+- \c Return value (table): An array of names of all video modes supported.
+
 \subsection lua_api_video_reset_window_size sol.video.reset_window_size()
 
-Restores the size of the window to its default value.
+Restores the size of the window to a default value that depends on the
+current video mode.
 
-The default size of the window depends on the video mode: see
-\ref lua_api_video_get_window_size "sol.video.get_window_size()"
-for a detailed explanation.
+\warning This method is deprecated because since Solarus 1.6,
+  video modes are deprecated.
+  OpenGL shaders are the new recommended way to implement video filters.
 
-When the window is in fullscreen, this function still works: the changes will
-be visible when returning to windowed mode.
+Use
+\ref lua_api_video_set_window_size "sol.video.set_window_size()"
+instead.
 
 */
 

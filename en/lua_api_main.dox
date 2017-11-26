@@ -158,7 +158,7 @@ dynamically for some reason.
 Loads and applies the built-in settings from a file previously saved with
 \ref lua_api_main_save_settings "sol.main.save_settings()".
 Settings from the file include user preferences such as the language,
-the video mode and the audio volume.
+the video shader and the audio volume.
 
 Note that all these settings can already be modified individually with the Lua
 API, so you can either use this function or implement something more fitted
@@ -186,7 +186,7 @@ This file can be reloaded later with \ref lua_api_main_load_settings
 "sol.main.load_settings()" to
 restore the saved settings.
 Settings saved include user preferences such as the current language,
-the current video mode and the current audio volume.
+the current shader and the current audio volume.
 
 Note that all these settings can already be modified individually with the Lua
 API, so you can either use this function or implement something more fitted
