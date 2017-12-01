@@ -245,6 +245,7 @@ for userdata known by Solarus, it returns the exact Solarus type name.
   \c "surface",
   \c "text_surface",
   \c "sprite",
+  \c "shader",
   \c "timer",
   \c "movement",
   \c "straight_movement",

@@ -56,7 +56,7 @@ It contains functions, types and values that allow you to
 interact with the C++ engine.
 
 Most types of the Lua API
-(\ref lua_api_game "game",
+(like \ref lua_api_game "game",
 \ref lua_api_item "item",
 \ref lua_api_map "map",
 \ref lua_api_entity "entity",
@@ -80,7 +80,8 @@ See the specification page of each feature for more details.
 
 - \subpage lua_api_main "sol.main": some general-purpose features.
 - \subpage lua_api_audio "sol.audio": playing musics and sounds.
-- \subpage lua_api_video "sol.video": setting the video mode.
+- \subpage lua_api_video "sol.video": changing video settings.
+- \subpage lua_api_shader "sol.shader": modifying the rendering. 
 - \subpage lua_api_input "sol.input": checking keyboard and joypad state.
 - \subpage lua_api_file "sol.file": directly accessing data files.
 - \subpage lua_api_menu "sol.menu": showing various information on the screen.

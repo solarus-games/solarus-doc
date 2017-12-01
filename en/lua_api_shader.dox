@@ -1,0 +1,36 @@
+/**
+\page lua_api_shader Shaders
+
+\tableofcontents
+
+\c sol.shader allows you to modify the video rendering,
+for example to apply a smoothing filter or to
+add some visual effects.
+
+Solarus supports OpenGL shaders with the GLSL language.
+
+The name of the shader applied can be saved and loaded with the global settings,
+(as well as other preferences like the language and the volume),
+independently of any savegame.
+See \ref lua_api_main_load_settings "sol.main.load_settings()".
+
+\section lua_api_shader_functions Functions of sol.shader
+
+TODO
+
+- sol.shader.create(shader_id)
+
+\section lua_api_shader_methods Methods of the type shader
+
+TODO
+
+- shader:get_id()
+- shader:is_valid()
+- shader:set_uniform(uniform_name, value: bool/number/surface)
+- shader:get_vertex_file()
+- shader:set_vertex_file()
+- shader:get_fragment_file()
+- shader:set_fragment_file()
+
+*/
+

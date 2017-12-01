@@ -29,10 +29,7 @@ The pixel ratio is always preserved, possibly by adding black borders.
 
 Solarus supports OpenGL shaders to modify the rendering,
 for example to apply a smoothing filter.
-The name of the shader applied can be saved and loaded with the global settings,
-(as well as other preferences like the language and the volume),
-independently of any savegame
-(see \ref lua_api_main_load_settings "sol.main.load_settings()").
+See the \ref lua_api_shader "shader" documentation for more details.
 
 \section lua_api_video_functions Functions of sol.video
 
@@ -122,12 +119,13 @@ be visible when returning to windowed mode.
 \subsection lua_api_video_get_shader sol.video.get_shader()
 
 Returns the shader currently applied to the rendering, if any.
-- Return value (shader): The current shader, or \c nil if no shader is applied.
+- Return value (\ref lua_api_shader "shader"): The current shader,
+  or \c nil if no shader is applied.
 
 \subsection lua_api_video_set_shader sol.video.set_shader(shader)
 
 Sets a shader to be applied to the rendering.
-- shader (shader): The shader to set.
+- shader (\ref lua_api_shader "shader"): The shader to set.
   It replaces the previous shader if any.
   A \c nil values means to apply no shader.
 
@@ -156,7 +154,8 @@ The following modes are available:
 - Return value (string): Name of the video mode (see the list above).
 
 \warning This method is deprecated because since Solarus 1.6,
-  OpenGL shaders are the new recommended way to implement video filters.
+  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  to implement video filters.
 
 Use
 \ref lua_api_video_get_shader "sol.video.get_shader()"
@@ -170,7 +169,8 @@ The window size is reset to a default value that depends on the video mode.
 - \c video_mode (string): Name of the video mode (see the list above).
 
 \warning This method is deprecated because since Solarus 1.6,
-  OpenGL shaders are the new recommended way to implement video filters.
+  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  to implement video filters.
 
 Use
 \ref lua_api_video_get_shader "sol.video.set_shader()"
@@ -186,10 +186,11 @@ You can use this function if you want to change the video mode without
 specifying which one to use.
 
 \warning This method is deprecated because since Solarus 1.6,
-  OpenGL shaders are the new recommended way to implement video filters.
+  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  to implement video filters.
 
 Use
-\ref lua_api_video_switch_shader "sol.video.switch_shader()"
+\ref lua_api_video_get_shader "sol.video.set_shader()"
 instead.
 
 \subsection lua_api_video_is_mode_supported sol.video.is_mode_supported(video_mode)
@@ -198,7 +199,8 @@ Returns whether a video mode is supported.
 - \c video_mode (string): Name of a video mode (see the list above).
 
 \warning This method is deprecated because since Solarus 1.6,
-  OpenGL shaders are the new recommended way to implement video filters.
+  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  to implement video filters.
 
 Use
 \ref lua_api_shader_is_valid "shader:is_valid()"
@@ -216,7 +218,8 @@ current video mode.
 
 \warning This method is deprecated because since Solarus 1.6,
   video modes are deprecated.
-  OpenGL shaders are the new recommended way to implement video filters.
+  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  to implement video filters.
 
 Use
 \ref lua_api_video_set_window_size "sol.video.set_window_size()"
