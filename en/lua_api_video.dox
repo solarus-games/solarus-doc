@@ -154,7 +154,7 @@ The following modes are available:
 - Return value (string): Name of the video mode (see the list above).
 
 \warning This method is deprecated because since Solarus 1.6,
-  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  \ref lua_api_shader "shaders" are the new recommended way
   to implement video filters.
 
 Use
@@ -169,7 +169,7 @@ The window size is reset to a default value that depends on the video mode.
 - \c video_mode (string): Name of the video mode (see the list above).
 
 \warning This method is deprecated because since Solarus 1.6,
-  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  \ref lua_api_shader "shaders" are the new recommended way
   to implement video filters.
 
 Use
@@ -186,7 +186,7 @@ You can use this function if you want to change the video mode without
 specifying which one to use.
 
 \warning This method is deprecated because since Solarus 1.6,
-  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  \ref lua_api_shader "shaders" are the new recommended way
   to implement video filters.
 
 Use
@@ -199,17 +199,21 @@ Returns whether a video mode is supported.
 - \c video_mode (string): Name of a video mode (see the list above).
 
 \warning This method is deprecated because since Solarus 1.6,
-  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  \ref lua_api_shader "shaders" are the new recommended way
   to implement video filters.
 
-Use the result of
+Use
 \ref lua_api_shader_create "sol.shader.create()"
-instead.
+instead and check if it fails.
 
 \subsection lua_api_video_get_modes sol.video.get_modes()
 
 Returns an array of all video modes supported.
 - \c Return value (table): An array of names of all video modes supported.
+
+Use
+\ref lua_api_main_get_resource_ids "sol.main.get_resource_ids(\"shader\")"
+instead.
 
 \subsection lua_api_video_reset_window_size sol.video.reset_window_size()
 
@@ -218,7 +222,7 @@ current video mode.
 
 \warning This method is deprecated because since Solarus 1.6,
   video modes are deprecated.
-  \ref lua_api_shader "OpenGL shaders" are the new recommended way
+  \ref lua_api_shader "shaders" are the new recommended way
   to implement video filters.
 
 Use

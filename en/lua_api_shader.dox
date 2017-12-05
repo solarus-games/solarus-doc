@@ -3,40 +3,41 @@
 
 \tableofcontents
 
-This module provides a datatype "shader" that represents
+This module provides a datatype \c shader that represents
 an OpenGL or OpenGL ES shader program.
 
 \section lua_api_game_overview Overview
 
 Shaders allow you to modify the video rendering,
 for example to apply a smoothing filter or to
-add some advanced visual effects.
+make some advanced visual effects.
 
-Shaders are programs executed directly by the Graphics Processing Unit
-for better performance. They are written in a particular shader language
-and are compiled at runtime when you create them
+Shaders are programs executed by the GPU during a rendering pass.
+They are written in a shading language
+(GLSL or GLSL ES in Solarus).
+Solarus compiles them at runtime when you create them
 with \ref lua_api_shader_create "sol.shader.create()".
+If you activate them with
+\ref lua_api_video_set_shader "sol.video.set_shader()",
+they are then executed on the GPU at each rendering frame.
 
-\subsection lua_api_shader_overview_portability Portability
+A shader program, represented by the \c shader Solarus datatype,
+is composed of a vertex shader and of a fragment shader
+(also called pixel shader).
 
-The exact supported shader language and versions depend
-on the OpenGL version used on every platform.
-Typically, on desktop platforms, Solarus is compiled with OpenGL support
-and the shader language used is GLSL.
-On mobile platforms, OpenGL ES and GLSL ES are normally used.
+At every rendering frame,
+the vertex shader is called for each of the four corners of the input texture.
+If no vertex shader is defined in your shader program,
+then a default one is used.
+The fragment shader is then called for each pixel of the window.
+The fragment shader is mandatory in a Solarus shader program.
+
+The rest of this documentation page 
+explains how to use shaders with the Solarus Lua API.
+We assume that you have some basic
+knowledge of shaders and GLSL or GLSL ES.
 See the documentation of OpenGL and OpenGL ES for more information
-about shaders and the shader languages.
-
-For maximum portability, shaders should either be written independently
-of whether GLSL or GLSL ES is used
-(probably using a lot of portability macros because there are some
-incompatibilities),
-or for more clarity, your scripts can load different shaders
-for GLSL and GLSL ES.
-Use \ref lua_api_shader_get_opengl_version "sol.shader.get_opengl_version()"
-and \ref lua_api_shader_get_shader_language_version
-"sol.shader.get_shader_language_version()"
-to know what is supported by the system as runtime.
+about shaders and shading languages.
 
 \subsection lua_api_shader_overview_current Current shader
 
@@ -51,20 +52,145 @@ with the global settings,
 independently of any savegame.
 See \ref lua_api_main_load_settings "sol.main.load_settings()".
 
+
+\subsection lua_api_shader_overview_built_in_variables Built-in attributes and uniforms
+
+Additionally to the OpenGL or OpenGL ES built-in variables,
+Solarus automatically passes some additional useful variables to your shaders.
+Solarus built-in variables are always prefixed with \c "sol_".
+
+Note that using the Lua API, you can also pass your own variables.
+
+In a vertex shader, the following two attributes are automatically passed
+as input:
+- <tt>attribute vec4 sol_vertex_coord</tt>: Coordinates of the current vertex
+  in the 3D space.
+  Same as \c gl_Vertex in old GLSL versions.
+- <tt>attribute vec4 sol_tex_coord</tt>: Texture coordinates of the
+  current vertex.
+  Same as \c gl_MultiTexCoord0 in old GLSL versions.
+
+TODO Uniforms:
+
+- vec2 sol_input_size
+- vec2 sol_texture_size
+- vec2 sol_output_size
+- int sol_time
+- int sol_frame_count
+- mat4 sol_mvp_matrix
+- sampler2D sol_texture
+
+\subsection lua_api_shader_overview_examples Shader examples
+
+Here is a shader program that does nothing special:
+it just scales the input texture to fit the window,
+just like when no shader is set.
+
+Vertex shader:
+\verbatim
+varying vec2 tex_coord;
+void main() {
+  gl_Position = sol_mvp_matrix * sol_vertex;
+  tex_coord = sol_tex_coord.xy;
+}
+\endverbatim
+
+Fragment shader:
+\verbatim
+uniform sampler2D sol_texture;
+varying vec2 tex_coord;
+void main() {
+  gl_FragColor = texture2D(sol_texture, tex_coord);
+}
+\endverbatim
+
+TODO other examples
+
+\subsection lua_api_shader_overview_portability Portability
+
+The exact supported shader language depends
+on the OpenGL or OpenGL ES version Solarus is compiled with on every platform.
+Typically, on desktop platforms, Solarus is compiled with OpenGL support
+and the shader language used is some version of GLSL.
+On mobile platforms, OpenGL ES and GLSL ES are normally used instead.
+
+For maximum portability, there are two possible approaches:
+- Shaders can be written carefully to make sure that they work
+  with both GLSL and GLSL ES.
+  This requires using a lot of portability macros because there are some
+  incompatibilities.
+  Unfortunately, using the \c \#version macro does not help because
+  GLSL and GLSL ES have their own history of version numbers.
+- For more clarity, another solution is to load different shaders
+  for GLSL and GLSL ES (but there will be some duplicated code).
+  To do this. you can try to load a first shader, and in case of failure,
+  catch the Lua error and try to load an alternative one.
+  Or you can try to guess the correct one using
+  \ref lua_api_shader_get_opengl_version "sol.shader.get_opengl_version()"
+  and/or
+  \ref lua_api_shader_get_shading_language_version
+  "sol.shader.get_shader_language_version()".
+
+In any case, a good practice is to rely on the
+\ref lua_api_shader_overview_built_in_variables "Solarus built-in variables"
+rather than the OpenGL ones,
+since a lot of old OpenGL built-in variables
+(like \c gl_Vertex or \c gl_ModelViewProjectionMatrix)
+are now obsolete
+or simply don't exist
+in recent OpenGL versions and in OpenGL ES.
+
 \section lua_api_shader_functions Functions of sol.shader
 
-TODO
+\subsection lua_api_shader_create sol.shader.create(shader_id)
 
-- sol.shader.create(shader_id)
-- sol.shader.get_opengl_version()
-- sol.shader.get_shader_language_version()
+Loads and returns a shader program.
+
+If the loading or the compilation of the shader program fails,
+a Lua error is raised.
+- \c shader_id (string): Id of the shader program to load
+  (filename without extension, relative to the \c shaders directory).
+- Return value (shader): The shader program created.
+
+\subsection lua_api_shader_get_opengl_version sol.shader.get_opengl_version()
+
+Returns the OpenGL or OpenGL ES version Solarus is being run with.
+- Return value (string): A string describing the OpenGL or OpenGL ES version.
+
+\subsection lua_api_shader_get_shading_language_version sol.shader.get_shading_language_version()
+
+Returns the GLSL or GLSL ES format supported
+by the OpenGL or OpenGL ES version currently used.
+- Return value (string): A string describing the shading language version.
 
 \section lua_api_shader_methods Methods of the type shader
 
-TODO
+\subsection lua_api_shader_get_id shader:get_id()
 
-- shader:get_id()
-- shader:set_uniform(uniform_name, value: bool/number/surface)
+Returns the id of this shader.
+- Return value (string): Id of this shader (filename without extension).
+
+\subsection lua_api_shader_set_uniform shader:set_uniform(uniform_name, value)
+
+Sets a uniform value to this shader.
+
+Uniforms are input values to shader programs that are constant for
+all vertices and pixels during one rendering frame.
+Solarus automatically sets some uniform variables for you
+if you define them
+(see the \ref lua_api_shader_overview_built_in_variables "built-in variables"
+section above).
+
+Use this function if you want to pass additional uniform values.
+- \c uniform_name (string): Name of the uniform in your shader program.
+- value (boolean, number or surface): The value to set.
+  The type of the uniform in your shader source code will depend on the
+  Lua type you pass here:
+  - Lua \c boolean: \c bool in the shader.
+  - Lua \c number: \c float in the shader.
+  - Solarus Lua \ref lua_api_surface "surface": \c sampler2D in the shader.
+
+TODO
 - shader:get_vertex_file()
 - shader:set_vertex_file()
 - shader:get_fragment_file()

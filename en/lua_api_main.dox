@@ -226,6 +226,27 @@ specified vector.
 - Return value (number): The angle in radians between the x axis and this
   vector.
 
+\subsection lua_api_main_get_resource_ids sol.main.get_resource_ids(resource_type)
+
+Returns an array of all resource elements IDs of the given type in the quest.
+- \c resource_type (string): Name of the resource type to list elements from.
+  Can be one of:
+  - \c "enemy",
+  - \c "entity",
+  - \c "font",
+  - \c "item",
+  - \c "language",
+  - \c "map",
+  - \c "music",
+  - \c "shader",
+  - \c "sound",
+  - \c "sprite",
+  - \c "tileset".
+- Return value (table): An array of all elements of this resource type declared
+  in the quest.
+  This is a standard Lua array (the first index is 1),
+  and values are all strings.
+
 \subsection lua_api_main_get_type sol.main.get_type(value)
 
 Returns the type name of a value.
