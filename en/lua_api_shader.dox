@@ -64,7 +64,6 @@ TODO
 TODO
 
 - shader:get_id()
-- shader:is_valid()
 - shader:set_uniform(uniform_name, value: bool/number/surface)
 - shader:get_vertex_file()
 - shader:set_vertex_file()

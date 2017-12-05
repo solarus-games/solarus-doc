@@ -202,8 +202,8 @@ Returns whether a video mode is supported.
   \ref lua_api_shader "OpenGL shaders" are the new recommended way
   to implement video filters.
 
-Use
-\ref lua_api_shader_is_valid "shader:is_valid()"
+Use the result of
+\ref lua_api_shader_create "sol.shader.create()"
 instead.
 
 \subsection lua_api_video_get_modes sol.video.get_modes()
