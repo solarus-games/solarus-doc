@@ -3,13 +3,50 @@
 
 \tableofcontents
 
-\c sol.shader allows you to modify the video rendering,
+This module provides a datatype "shader" that represents
+an OpenGL or OpenGL ES shader program.
+
+\section lua_api_game_overview Overview
+
+Shaders allow you to modify the video rendering,
 for example to apply a smoothing filter or to
-add some visual effects.
+add some advanced visual effects.
 
-Solarus supports OpenGL shaders with the GLSL language.
+Shaders are programs executed directly by the Graphics Processing Unit
+for better performance. They are written in a particular shader language
+and are compiled at runtime when you create them
+with \ref lua_api_shader_create "sol.shader.create()".
 
-The name of the shader applied can be saved and loaded with the global settings,
+\subsection lua_api_shader_overview_portability Portability
+
+The exact supported shader language and versions depend
+on the OpenGL version used on every platform.
+Typically, on desktop platforms, Solarus is compiled with OpenGL support
+and the shader language used is GLSL.
+On mobile platforms, OpenGL ES and GLSL ES are normally used.
+See the documentation of OpenGL and OpenGL ES for more information
+about shaders and the shader languages.
+
+For maximum portability, shaders should either be written independently
+of whether GLSL or GLSL ES is used
+(probably using a lot of portability macros because there are some
+incompatibilities),
+or for more clarity, your scripts can load different shaders
+for GLSL and GLSL ES.
+Use \ref lua_api_shader_get_opengl_version "sol.shader.get_opengl_version()"
+and \ref lua_api_shader_get_shader_language_version
+"sol.shader.get_shader_language_version()"
+to know what is supported by the system as runtime.
+
+\subsection lua_api_shader_overview_current Current shader
+
+During the execution, a shader may be applied to the rendering.
+Use \ref lua_api_video_get_shader "sol.video.get_shader()"
+and \ref lua_api_video_set_shader "sol.video.set_shader()"
+to control this.
+
+The id of the shader applied if any can be saved and loaded
+with the global settings,
 (as well as other preferences like the language and the volume),
 independently of any savegame.
 See \ref lua_api_main_load_settings "sol.main.load_settings()".
@@ -19,6 +56,8 @@ See \ref lua_api_main_load_settings "sol.main.load_settings()".
 TODO
 
 - sol.shader.create(shader_id)
+- sol.shader.get_opengl_version()
+- sol.shader.get_shader_language_version()
 
 \section lua_api_shader_methods Methods of the type shader
 
