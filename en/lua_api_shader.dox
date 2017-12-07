@@ -52,7 +52,6 @@ with the global settings,
 independently of any savegame.
 See \ref lua_api_main_load_settings "sol.main.load_settings()".
 
-
 \subsection lua_api_shader_overview_built_in_variables Built-in attributes and uniforms
 
 Additionally to the OpenGL or OpenGL ES built-in variables,
@@ -152,7 +151,7 @@ For maximum portability, there are two possible approaches:
   with both GLSL and GLSL ES.
   This requires using a lot of portability macros because there are some
   incompatibilities.
-  Unfortunately, using the \c \#version macro does not help because
+  If you use the \c \#version macro, be careful because
   GLSL and GLSL ES have their own history of version numbers.
 - For more clarity, another solution is to load different shaders
   for GLSL and GLSL ES (but there will be some duplicated code).
