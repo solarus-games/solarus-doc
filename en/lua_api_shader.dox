@@ -200,8 +200,8 @@ by the OpenGL or OpenGL ES version currently used.
 
 \subsection lua_api_shader_get_id shader:get_id()
 
-Returns the id of this shader.
-- Return value (string): Id of this shader (filename without extension).
+Returns the id of this shader program.
+- Return value (string): Id of this shader program (filename without extension).
 
 \subsection lua_api_shader_get_vertex_file shader:get_vertex_file()
 
@@ -234,7 +234,7 @@ Use this function if you want to pass additional uniform values.
   Lua type you pass here:
   - A \c boolean: should be declared as \c bool in the shader.
   - A \c number: should be declared as \c float in the shader.
-  - A \ref lua_api_surface "surface": should be decalred as \c sampler2D
+  - A \ref lua_api_surface "surface": should be declared as \c sampler2D
   in the shader.
 
 */
