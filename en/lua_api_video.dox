@@ -211,6 +211,11 @@ instead and check if it fails.
 Returns an array of all video modes supported.
 - \c Return value (table): An array of names of all video modes supported.
 
+\warning This method is deprecated because since Solarus 1.6,
+  video modes are deprecated.
+  \ref lua_api_shader "shaders" are the new recommended way
+  to implement video filters.
+
 Use
 \ref lua_api_main_get_resource_ids "sol.main.get_resource_ids(\"shader\")"
 instead.
