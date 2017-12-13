@@ -216,7 +216,7 @@ Returns the name of the fragment shader file of this shader program.
 - Return value (string): The fragment shader file name,
   relative to the \c "shaders" directory.
 
-\subsection lua_api_shader_set_uniform shader:set_uniform(uniform_name, value)
+\subsection lua_api_shader_set_uniform shader:set_uniform(uniform_name, value, [value_2])
 
 Sets a uniform value to this shader.
 
@@ -228,14 +228,20 @@ if you define them
 section above).
 
 Use this function if you want to pass additional uniform values.
+
+The type of the uniform in your shader source code will depend on the
+Lua type you pass here:
+- A \c boolean: should be declared as \c bool in the shader.
+- A \c number: should be declared as \c float in the shader.
+- Two <tt>number<tt>s: should be declared as \c vec2 in the shader.
+- A \ref lua_api_surface "surface": should be declared as \c sampler2D
+  in the shader.
+
+If the shader has no uniform with the given name, then this method
+has no effect.
 - \c uniform_name (string): Name of the uniform in your shader program.
 - value (boolean, number or surface): The value to set.
-  The type of the uniform in your shader source code will depend on the
-  Lua type you pass here:
-  - A \c boolean: should be declared as \c bool in the shader.
-  - A \c number: should be declared as \c float in the shader.
-  - A \ref lua_api_surface "surface": should be declared as \c sampler2D
-  in the shader.
+- value_2 (number, optional): The second value if any.
 
 */
 
