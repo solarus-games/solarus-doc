@@ -216,14 +216,14 @@ Returns the name of the fragment shader file of this shader program.
 - Return value (string): The fragment shader file name,
   relative to the \c "shaders" directory.
 
-\subsection lua_api_shader_set_uniform shader:set_uniform(uniform_name, value, [value_2])
+\subsection lua_api_shader_set_uniform shader:set_uniform(uniform_name, value, [value_2, [value_3, [value_4]]])
 
 Sets a uniform value to this shader.
 
 Uniforms are input values to shader programs that are constant for
 all vertices and pixels during one rendering frame.
 Solarus automatically sets some uniform variables for you
-if you define them
+if you define them in the shader
 (see the \ref lua_api_shader_overview_built_in_variables "built-in variables"
 section above).
 
@@ -233,7 +233,9 @@ The type of the uniform in your shader source code will depend on the
 Lua type you pass here:
 - A \c boolean: should be declared as \c bool in the shader.
 - A \c number: should be declared as \c float in the shader.
-- Two <tt>number<tt>s: should be declared as \c vec2 in the shader.
+- Two <tt>number</tt>s: should be declared as \c vec2 in the shader.
+- Three <tt>number</tt>s: should be declared as \c vec3 in the shader.
+- Four <tt>number</tt>s: should be declared as \c vec4 in the shader.
 - A \ref lua_api_surface "surface": should be declared as \c sampler2D
   in the shader.
 
@@ -242,6 +244,8 @@ has no effect.
 - \c uniform_name (string): Name of the uniform in your shader program.
 - value (boolean, number or surface): The value to set.
 - value_2 (number, optional): The second value if any.
+- value_3 (number, optional): The third value if any.
+- value_4 (number, optional): The fourth value if any.
 
 */
 
