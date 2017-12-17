@@ -216,7 +216,7 @@ Returns the name of the fragment shader file of this shader program.
 - Return value (string): The fragment shader file name,
   relative to the \c "shaders" directory.
 
-\subsection lua_api_shader_set_uniform shader:set_uniform(uniform_name, value, [value_2, [value_3, [value_4]]])
+\subsection lua_api_shader_set_uniform shader:set_uniform(uniform_name, value)
 
 Sets a uniform value to this shader.
 
@@ -233,19 +233,20 @@ The type of the uniform in your shader source code will depend on the
 Lua type you pass here:
 - A \c boolean: should be declared as \c bool in the shader.
 - A \c number: should be declared as \c float in the shader.
-- Two <tt>number</tt>s: should be declared as \c vec2 in the shader.
-- Three <tt>number</tt>s: should be declared as \c vec3 in the shader.
-- Four <tt>number</tt>s: should be declared as \c vec4 in the shader.
+- An array of two <tt>number</tt>s: should be declared as
+  \c vec2 in the shader.
+- An array of three <tt>number</tt>s: should be declared as
+  \c vec3 in the shader.
+- An array of four <tt>number</tt>s: should be declared as
+  \c vec4 in the shader.
 - A \ref lua_api_surface "surface": should be declared as \c sampler2D
   in the shader.
 
 If the shader has no uniform with the given name, then this method
-has no effect.
+does nothing.
 - \c uniform_name (string): Name of the uniform in your shader program.
-- value (boolean, number or surface): The value to set.
-- value_2 (number, optional): The second value if any.
-- value_3 (number, optional): The third value if any.
-- value_4 (number, optional): The fourth value if any.
+- value (boolean, number, table or surface): The value to set.
+  If it is a table, it should be an array of 2, 3 or 4 numbers.
 
 */
 
