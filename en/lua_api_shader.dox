@@ -62,7 +62,7 @@ Note that using the Lua API, you can also pass your own variables.
 
 In a vertex shader, the following two attributes are automatically passed
 as input:
-- <tt>attribute vec4 sol_vertex_coord</tt>: Coordinates of the current vertex
+- <tt>attribute vec4 sol_vertex</tt>: Coordinates of the current vertex
   in the 3D space
   (same as \c gl_Vertex in old GLSL versions).
 - <tt>attribute vec4 sol_tex_coord</tt>: Texture coordinates of the
@@ -75,17 +75,15 @@ in a vertex shader or in a fragment shader:
 - <tt>uniform mat4 sol_mvp_matrix</tt>: The model-view projection matrix
   (same as \c gl_ModelViewProjectionMatrix in old GLSL versions).
 - <tt>uniform sampler2D sol_texture</tt>: The input texture to render.
-- <tt>uniform vec2 sol_input_size</tt>: Size of actual video
-  data in pixels in the input texture \c sol_texture.
+- <tt>uniform vec2 sol_input_size</tt>: Size of the input texture
+  \c sol_texture.
   Equal to
   \ref lua_api_video_get_quest_size "sol.video.get_quest_size()".
-- <tt>uniform vec2 sol_texture_size</tt>: Real size of \c sol_texture
-  in pixels
-  (a power of two greater than or equal to \c sol_input_size).
 - <tt>uniform vec2 sol_output_size</tt>: Size of the output rendering
   area.
   Equal to
-  \ref lua_api_video_get_window_size "sol.video.get_window_size()".
+  \ref lua_api_video_get_window_size "sol.video.get_window_size()"
+  minus the black bars if any.
 - <tt>uniform int sol_time</tt>: Simulated time elapsed since
   Solarus was started.
   Equal to
@@ -100,7 +98,7 @@ just like when no shader is set.
 \verbatim
 // Vertex shader:
 
-varying vec2 tex_coord;
+in vec2 tex_coord;
 void main() {
   gl_Position = sol_mvp_matrix * sol_vertex;
   tex_coord = sol_tex_coord.xy;
@@ -109,7 +107,7 @@ void main() {
 // Fragment shader:
 
 uniform sampler2D sol_texture;
-varying vec2 tex_coord;
+in vec2 tex_coord;
 void main() {
   gl_FragColor = texture2D(sol_texture, tex_coord);
 }
@@ -130,7 +128,7 @@ void main() {
 // Fragment shader:
 
 uniform sampler2D sol_texture;
-varying vec2 tex_coord;
+in vec2 tex_coord;
 void main() {
   vec3 color  = texture2D(sol_texture, tex_coord);
   color.r = 0.0;
