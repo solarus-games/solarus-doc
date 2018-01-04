@@ -76,14 +76,15 @@ in a vertex shader or in a fragment shader:
   (same as \c gl_ModelViewProjectionMatrix in old GLSL versions).
 - <tt>uniform sampler2D sol_texture</tt>: The input texture to render.
 - <tt>uniform vec2 sol_input_size</tt>: Size of the input texture
-  \c sol_texture.
+  \c sol_texture before any scaling.
   Equal to
   \ref lua_api_video_get_quest_size "sol.video.get_quest_size()".
-- <tt>uniform vec2 sol_output_size</tt>: Size of the output rendering
-  area.
-  Equal to
+- <tt>uniform vec2 sol_output_size</tt>: Size of the output area,
+  including the black bars if any.
+  In windowed mode, equal to
   \ref lua_api_video_get_window_size "sol.video.get_window_size()"
-  minus the black bars if any.
+  In fullscreen mode, equal to
+  the screen resolution.
 - <tt>uniform int sol_time</tt>: Simulated time elapsed since
   Solarus was started.
   Equal to
