@@ -247,5 +247,10 @@ does nothing.
 - value (boolean, number, table or surface): The value to set.
   If it is a table, it should be an array of 2, 3 or 4 numbers.
 
+\remark The value is always passed by copy to the shader, including if it is
+  an object like an array of number or a surface.
+  If you modify the object later, you need to call this function again if you
+  want the update the shader with the new value.
+
 */
 
