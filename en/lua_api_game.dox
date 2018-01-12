@@ -635,19 +635,31 @@ Returns the level of a built-in ability.
 
 Built-in ability levels indicate whether the hero can perform some built-in
 actions like attacking, swimming or running.
+The initial value is \c 0 unless specified otherwise.
 - \c ability_name (string): Name of the ability to get.
   Valid ability names are:
-  - \c "sword": Ability to use the sword and with which sprite.
+  - \c "sword": Using the sword when pressing the action command.
+    Determines the default sword sprite.
   - \c "sword_knowledge": Ability to make the super spin-attack.
-  - \c "tunic": Tunic (determines the sprite used for the hero's body).
+  - \c "tunic": Resistance level that reduces the damage received by the hero.
+    Determines the default sprite used for the hero's body.
+    The initial value is \c 1.
   - \c "shield": Protection against enemies.
-    Determines whether the hero can avoid some kinds of attacks.
-  - \c "lift": Ability to lift heavy objects.
-  - \c "jump_over_water": Automatically jump when arriving into
-    water without the \c "swim" ability.
+    Allows to avoid some attacks.
+    Determines the default shield sprite.
+  - \c "lift": Ability to lift heavy
+    \ref lua_api_destructible "destructible objects".
   - \c "swim": Ability to swim in deep water.
-  - \c "run": Ability to run when pressing the action command.
-  - \c "detect_weak_walls": Notifies the player with a sound when a weak wall
+  - \c "jump_over_water": Automatically jumping when arriving into
+    water without the \c "swim" ability.
+  - \c "run": Running when pressing the action command.
+  - \c "push": Trying to push when walking towards an obstacle.
+    The initial value is \c 1.
+  - \c "grab": Grabbing the faced obstacle when pressing the action command.
+    The initial value is \c 1.
+  - \c "pull": Pulling the faced obstacle the hero is grabbing.
+    The initial value is \c 1.
+  - \c "detect_weak_walls": Notifying the player with a sound when a weak wall
     is nearby.
 - Return value (number): Level of this ability
   (\c 0 means not having this ability yet).
