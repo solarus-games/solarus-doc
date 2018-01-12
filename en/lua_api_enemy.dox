@@ -222,15 +222,15 @@ set to \c true.
 - \c can_attack (boolean, optional): \c true to allow the enemy to attack the hero.
   No value means \c true.
 
-\subsection lua_api_enemy_get_attack_collision_mode enemy:get_attack_collision_mode()
+\subsection lua_api_enemy_get_attacking_collision_mode enemy:get_attacking_collision_mode()
 
 Returns the kind of collision test performed to detect when the hero should
 be hurt by this enemy.
 - Return value (string): A collision mode name.
-  See \ref lua_api_enemy_set_attack_collision_mode "enemy:set_attack_collision_mode()"
+  See \ref lua_api_enemy_set_attacking_collision_mode "enemy:set_attacking_collision_mode()"
   for the possible values.
 
-\subsection lua_api_enemy_set_attack_collision_mode enemy:set_attack_collision_mode(collision_mode)
+\subsection lua_api_enemy_set_attacking_collision_mode enemy:set_attacking_collision_mode(collision_mode)
 
 Sets the kind of collision test performed to detect when the hero should
 be hurt by this enemy.
@@ -475,7 +475,7 @@ enemy become an obstacle.
   since their sprites cannot overlap anymore
   (unless if the enemy's sprite is bigger than its bounding box).
   You can use
-  \ref lua_api_enemy_set_attack_collision_mode "enemy:set_attack_collision_mode(\"touching\")"
+  \ref lua_api_enemy_set_attacking_collision_mode "enemy:set_attacking_collision_mode(\"touching\")"
   to make the enemy still hurt the hero when touching him without overlapping.
 
 \subsection lua_api_enemy_get_obstacle_behavior enemy:get_obstacle_behavior()
@@ -864,7 +864,7 @@ During this short period, he is temporarily invincible.
   enemy has several sprites with different behaviors.
   This value is \c nil if the attack does not come from a sprite collision test
   (see
-  \ref lua_api_enemy_set_attack_collision_mode "enemy:set_attack_collision_mode()").
+  \ref lua_api_enemy_set_attacking_collision_mode "enemy:set_attacking_collision_mode()").
 
 \remark If you call \ref lua_api_hero_start_hurt_entity "hero:start_hurt()",
   you will obtain something equivalent to the default behavior.
