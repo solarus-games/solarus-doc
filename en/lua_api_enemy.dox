@@ -222,6 +222,47 @@ set to \c true.
 - \c can_attack (boolean, optional): \c true to allow the enemy to attack the hero.
   No value means \c true.
 
+\subsection lua_api_enemy_get_attack_collision_mode enemy:get_attack_collision_mode()
+
+Returns the kind of collision test performed to detect when the hero should
+be hurt by this enemy.
+- Return value (string): A collision mode name.
+  See \ref lua_api_enemy_set_attack_collision_mode "enemy:set_attack_collision_mode()"
+  for the possible values.
+
+\subsection lua_api_enemy_set_attack_collision_mode enemy:set_attack_collision_mode(collision_mode)
+
+Sets the kind of collision test performed to detect when the hero should
+be hurt by this enemy.
+- collision_mode (string): A collision mode name. This may be one of:
+  - \c "overlapping": Collision if the
+    \ref lua_api_entity_get_bounding_box "bounding box"
+    of the enemy and the hero overlap.
+  - \c "containing": Collision if the bounding box of the hero is
+    fully inside the bounding box of this enemy.
+  - \c "origin": Collision if the \ref lua_api_entity_get_origin "origin point"
+    or the hero is inside the bounding box of this enemy.
+  - \c "center": Collision if the \ref lua_api_entity_get_center_position
+    "center point" of the hero is inside the bounding box of this
+    enemy.
+  - \c "facing": Collision if the
+    \ref lua_api_entity_get_facing_position "facing position" of the
+    hero's bounding box is touching this enemy's bounding box.
+    Bounding boxes don't necessarily overlap, but they are in
+    contact: there is no space between them.
+    When you consider the bounding box of the hero,
+    which is a rectangle with four sides,
+    the facing point is the middle point of the side the hero is oriented to.
+  - \c "touching": Like \c "facing", but accepts all four sides of the hero's
+    bounding box, no matter its direction.
+    This \c "touching" collision test is useful when the hero cannot
+    traverse your enemy (see
+    \ref lua_api_enemy_set_traversable "enemy:set_traversable()").
+  - \c "sprite": Collision if the tunic sprite of the hero overlaps a sprite of
+    this enemy.
+    The collision test is pixel precise.
+    This is the default value.
+
 \subsection lua_api_enemy_get_minimum_shield_needed enemy:get_minimum_shield_needed()
 
 Returns the level of protection (if any)
@@ -427,10 +468,15 @@ For example, if you want to prevent the
 \ref lua_api_enemy "hero"
 to pass without killing the enemy, you can use this function to make the
 enemy become an obstacle.
-But make sure that the enemy's sprite is greater than its bounding box,
-otherwise, the enemy cannot touch the hero (and hurt him) anymore.
 - \c traversable (boolean, optional): \c true to make this enemy traversable.
   No value means \c true.
+
+\remark When the enemy is not traversable, the enemy can no longer hurt the hero
+  since their sprites cannot overlap anymore
+  (unless if the enemy's sprite is bigger than its bounding box).
+  You can use
+  \ref lua_api_enemy_set_attack_collision_mode "enemy:set_attack_collision_mode(\"touching\")"
+  to make the enemy still hurt the hero when touching him without overlapping.
 
 \subsection lua_api_enemy_get_obstacle_behavior enemy:get_obstacle_behavior()
 
