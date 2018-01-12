@@ -862,6 +862,9 @@ During this short period, he is temporarily invincible.
 - \c enemy_sprite (\ref lua_api_sprite "sprite"): The sprite of the enemy that
   caused the collision with the hero. You may use this information if your
   enemy has several sprites with different behaviors.
+  This value is \c nil if the attack does not come from a sprite collision test
+  (see
+  \ref lua_api_enemy_set_attack_collision_mode "enemy:set_attack_collision_mode()").
 
 \remark If you call \ref lua_api_hero_start_hurt_entity "hero:start_hurt()",
   you will obtain something equivalent to the default behavior.
