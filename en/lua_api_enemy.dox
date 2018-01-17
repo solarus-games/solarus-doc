@@ -414,7 +414,7 @@ Restores the default attack consequences for a particular sprite of this enemy.
 Makes this enemy ignore all attacks.
 
 Equivalent to calling
-<tt>lua_api_enemy_set_attack_consequence(attack, "ignored")</tt>
+\ref lua_api_enemy_set_attack_consequence "enemy:set_attack_consequence(attack, \"ignored\")"
 for each attack.
 
 \subsection lua_api_enemy_set_invincible_sprite enemy:set_invincible_sprite(sprite)
@@ -422,7 +422,7 @@ for each attack.
 Makes a sprite of this enemy ignore all attacks.
 
 Equivalent to calling
-<tt>lua_api_enemy_set_attack_consequence_sprite(sprite, attack, "ignored")</tt>
+\ref lua_api_enemy_set_attack_consequence_sprite "enemy:set_attack_consequence(sprite, attack, \"ignored\")"
 for each attack.
 - \c sprite (\ref lua_api_sprite "sprite"): A sprite of this enemy.
 
