@@ -6,7 +6,7 @@
 This module provides a datatype \c shader that represents
 an OpenGL or OpenGL ES shader program.
 
-\section lua_api_game_overview Overview
+\section lua_api_shader_overview Overview
 
 Shaders allow you to modify the video rendering,
 for example to apply a smoothing filter or to
