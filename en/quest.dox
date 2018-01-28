@@ -56,7 +56,7 @@ of a quest and the syntax of each file.
 - \c languages/: contains the language-specific files.
   - \subpage quest_language_strings "languages/xx/text/strings.dat": strings of
     language \c "xx".
-  - \subpage quest_language_dialogs "languages/xx/text/dialogs.txt": dialogs of
+  - \subpage quest_language_dialogs "languages/xx/text/dialogs.dat": dialogs of
     language \c "xx".
   - languages/xx/images/: contains all images
     that have text in them in language \c "xx".
