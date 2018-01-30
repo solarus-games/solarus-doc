@@ -174,9 +174,13 @@ The definition of a map entity starts with \c entity_type{ and ends with
 \c }, where \c entity_type is a type of entity (see below).
 Inside the braces, the properties of the entity are specified.
 Properties are declared with the syntax <tt>key = value</tt> and
-separated with commas. It is allowed to have an extra comma after
-the last property. String values should be enclosed within
-double quotes.
+separated with commas.
+It is allowed to have an extra comma after the last property.
+String values should be enclosed within double quotes and cannot have
+line breaks.
+Table values are enclosed within braces: \c { and \c }
+and contain elements separated by commas
+(an extra comma is allowed after the last element).
 
 In each layer,
 entities are ordered like they are declared in the map data file:
@@ -208,9 +212,38 @@ The following properties exist for all types of entities:
   placed at these coordinates (for tiles, it is the upper-left corner).
 - \c y (number): Y coordinate of the entity relative to the upper-left corner
   of the map.
+- \c properties (table, optional): Array of additional properties.
+  The engine does nothing special with them,
+  but your scripts can use them to store some custom extra information.
+  Each property is itself a table with the following two elements,
+  where an element has the syntax <tt>x = something</tt>.
+  - \c key (string): The name of the property.
+    Must be a valid identifier
+    (only alphanumeric ASCII characters or \c '_').
+  - \c value (string): Value of the property. 
 
-\c name, \c x, \c y and \c layer are common to all types of entities
+\c name, \c x, \c y, \c layer and \c properties
+are common to all types of entities
 (except \c name for \ref quest_map_data_file_syntax_tile "tiles").
+
+Example of entity that has a custom property:
+
+\verbatim
+sensor{
+  layer = 0,
+  x = 912,
+  y = 453,
+  width = 16,
+  height = 16,
+  properties = {
+    {
+      key = "sound",
+      value = "fanfare",
+    },
+  }
+}
+\endverbatim
+
 We now detail the specific properties of each type of entity.
 
 \subsubsection quest_map_data_file_syntax_tile Tile
