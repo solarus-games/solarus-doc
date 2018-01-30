@@ -226,7 +226,7 @@ The following properties exist for all types of entities:
 are common to all types of entities
 (except \c name for \ref quest_map_data_file_syntax_tile "tiles").
 
-Example of entity that has a custom property:
+Example of entity that includes additional properties:
 
 \verbatim
 sensor{
@@ -239,6 +239,10 @@ sensor{
     {
       key = "sound",
       value = "fanfare",
+    },
+    {
+      key = "image",
+      value = "smiley.png",
     },
   }
 }
