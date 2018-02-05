@@ -785,6 +785,54 @@ Returns the current movement of this map entity.
 
 Stops the current movement of this map entity if any.
 
+\subsection lua_api_entity_get_property entity:get_property(key)
+
+Returns the value of a user-defined property of this entity.
+
+User-defined properties are arbitrary key-value pairs that you can set to
+any entity.
+The engine does nothing special with them, but you can use them in your scripts
+to store extra information.
+- \c key (string): Name of the property to get.
+- Return value (string): The corresponding value,
+  or \c nil if there is no such property.
+
+\subsection lua_api_entity_set_property entity:set_property(key, value)
+
+Sets a user-defined property for this entity.
+
+If the property does not exist yet, it will be created.
+
+User-defined properties are arbitrary key-value pairs that you can set to
+any entity.
+The engine does nothing special with them, but you can use them in your scripts
+to store extra information.
+- \c key (string): Name of the property to set.
+  It must be a valid identifier
+  (only alphanumeric ASCII characters or \c '_').
+- \c value (string or nil): The value to set,
+  or \c nil to remove the property.
+
+\subsection lua_api_entity_get_properties entity:get_properties()
+
+Returns the user-defined properties of this entity.
+- Return value (table): An array of properties.
+  Each property is a table with two fields:
+  - \c key (string): Name of the property.
+  - \c value (string): Value of the property.
+
+\subsection lua_api_entity_set_properties entity:set_properties(properties)
+
+Sets the user-defined properties of this entity.
+
+Existing properties if any are removed.
+- \c properties (table): An array of properties.
+  Each property is a table with two fields:
+  - \c key (string): Name of the property.
+    It must be a valid identifier
+    (only alphanumeric ASCII characters or \c '_').
+  - \c value (string): Value of the property.
+
 \section lua_api_entity_events Events of all entity types
 
 Events are callback methods automatically called by the engine if you define

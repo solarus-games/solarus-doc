@@ -218,7 +218,7 @@ The following properties exist for all types of entities:
   Each property is itself a table with the following two elements,
   where an element has the syntax <tt>x = something</tt>.
   - \c key (string): The name of the property.
-    Must be a valid identifier
+    It must be a valid identifier
     (only alphanumeric ASCII characters or \c '_').
   - \c value (string): Value of the property. 
 
