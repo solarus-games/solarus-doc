@@ -809,6 +809,9 @@ on the map.
     Only one destination can be the default one on a map.
     If no default destination is set, then the first one declared becomes the
     default one.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_destination "destination"): The destination
   created.
 
@@ -850,6 +853,9 @@ on the map.
     or the special value \c "_side" to place on hero on the corresponding side
     of an adjacent map (normally used with the scrolling transition style).
     No value means the default destination entity of the map.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_teletransporter "teletransporter"): The
   teletransporter created.
 
@@ -884,6 +890,9 @@ on the map.
     No value means that the treasure is not saved.
     If the treasure is saved and the player already has it, then no entity
     is be created and \c nil is returned.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_pickable "pickable treasure"): The pickable
   treasure created, or \c nil if the item is not set, not
   \ref lua_api_item_is_obtainable "obtainable", or if the pickable treasure is
@@ -953,6 +962,9 @@ on the map.
     to make the object traversable, or for example \c "grass" to make it
     traversable too but with an additional grass sprite below the hero.
     The default value is \c "wall".
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_destructible "destructible object"): The
   destructible object created.
 
@@ -1040,6 +1052,9 @@ on the map.
   - \c cannot_open_dialog (string, optional): Id of the dialog to show
     if the hero fails to open the chest.
     If you don't set this value, no dialog is shown.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_chest "chest"): The treasure chest created.
 
 \remark The state of the \ref lua_api_chest "treasure chest"
@@ -1073,6 +1088,9 @@ on the map.
     If the direction is diagonal, the size must be square.
   - \c jump_length (number): Length of the baseline of the jump in pixels
     (see the \ref lua_api_jump_movement "jump movement" page for details).
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_jumper "jumper"): The jumper created.
 
 \subsection lua_api_map_create_enemy map:create_enemy(properties)
@@ -1118,6 +1136,9 @@ on the map.
     No value means that the state of the treasure is not saved.
     If the treasure is saved and the player already has it, then the
     enemy won't drop anything.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_enemy "enemy" or \ref lua_api_pickable
   "pickable treasure"): The enemy created, except when it is a saved enemy
   that is already dead.
@@ -1169,6 +1190,9 @@ on the map.
       "equipment item" script
       (for example, calls the \ref lua_api_item_on_npc_interaction
       "on_interaction()" event of the equipment item with id \c XXXX).
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_npc "NPC"): the NPC created.
 
 \subsection lua_api_map_create_block map:create_block(properties)
@@ -1197,6 +1221,9 @@ on the map.
   - \c pullable (boolean): \c true to allow the block to be pulled.
   - \c maximum_moves (number): \c Indicates how many times the block can be
     moved (\c 0: none, \c 1: once, \c 2: infinite).
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_block "block"): the block created.
 
 \subsection lua_api_map_create_dynamic_tile map:create_dynamic_tile(properties)
@@ -1225,6 +1252,9 @@ on the map.
     the tileset.
   - \c enabled_at_start (boolean): \c true to make the dynamic tile initially
     enabled, \c false to make it initially disabled.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_dynamic_tile "dynamic tile"): the dynamic tile
   created.
 
@@ -1265,6 +1295,9 @@ on the map.
     inactivated when the \ref lua_api_hero "hero" or the \ref
     lua_api_block "block"
     leaves it (only for a walkable switch).
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_switch "switch"): the switch created.
 
 \subsection lua_api_map_create_wall map:create_wall(properties)
@@ -1305,6 +1338,9 @@ on the map.
     and
     \ref lua_api_boomerang "the boomerang".
     No value means \c false.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_wall "wall"): the wall created.
 
 \subsection lua_api_map_create_sensor map:create_sensor(properties)
@@ -1325,6 +1361,9 @@ on the map.
   - \c y (number): Y coordinate on the map.
   - \c width (number): Width of the entity in pixels.
   - \c height (number): Height of the entity in pixels.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_sensor "sensor"): the sensor created.
 
 \subsection lua_api_map_create_crystal map:create_crystal(properties)
@@ -1343,6 +1382,9 @@ on the map.
     \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_crystal "crystal"): the crystal created.
 
 \subsection lua_api_map_create_crystal_block map:create_crystal_block(properties)
@@ -1365,6 +1407,9 @@ on the map.
   - \c height (number): Height of the entity in pixels.
   - \c subtype (number): Kind of crystal block to create: \c 0 for a
     block initially lowered (orange), \c 1 for a block initially raised (blue).
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_crystal_block "crystal block"): the crystal block
   created.
 
@@ -1404,6 +1449,9 @@ on the map.
     No value means that the state of the treasure is not saved.
     If the treasure is saved and the player already has it, then the
     shop treasure is not created and \c nil is returned.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_shop_treasure "shop treasure"): The shop
   treasure created, or \c nil if the item is not
   \ref lua_api_item_is_obtainable "obtainable", or if the shop treasure was
@@ -1450,6 +1498,9 @@ on the map.
   - \c allow_item (boolean, optional): Whether the player can use equipment
     items when he is on the stream.
     The default value is \c true.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_stream "stream"): the
   stream created.
 
@@ -1529,6 +1580,9 @@ on the map.
   - \c cannot_open_dialog (string, optional): Id of the dialog to show
     if the hero fails to open the door.
     If you don't set this value, no dialog is shown.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_door "door"): The \ref lua_api_door
   "door" created.
 
@@ -1558,6 +1612,9 @@ on the map.
     - \c 3: Straight staircase going downstairs.
     - \c 4: Small stairs inside a single floor (change the layer of the
       \ref lua_api_hero "hero").
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_stairs "stairs"): the
   stairs created.
 
@@ -1577,6 +1634,9 @@ on the map.
     \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_bomb "bomb"): the
   bomb created.
 
@@ -1596,6 +1656,9 @@ on the map.
     \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_explosion "explosion"): the
   explosion created.
 
@@ -1615,6 +1678,9 @@ on the map.
     \ref lua_api_map_get_max_layer "map:get_max_layer()".
   - \c x (number): X coordinate on the map.
   - \c y (number): Y coordinate on the map.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_fire "fire"): the
   fire created.
 
@@ -1637,6 +1703,9 @@ on the map.
   - \c width (number): Width of the entity in pixels.
   - \c height (number): Height of the entity in pixels.
     One of \c width or \c height must be 16 pixels.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_separator "separator"): The
   separator created.
 
@@ -1673,6 +1742,9 @@ on the map.
     especially in different maps.
     \c nil means no model: in this case, no particular script will be called
     but you can still define the behavior of your entity in the map script.
+  - \c properties (table, optional): Additional user-defined properties.
+    See \ref lua_api_entity_set_properties "entity:set_properties()"
+    for the specification.
 - Return value (\ref lua_api_custom_entity "custom entity"): The
   custom entity created.
 
