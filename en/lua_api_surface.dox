@@ -77,5 +77,20 @@ Sets the opacity of this surface.
 All surfaces are initially opaque.
 - \c opacity (integer): The opacity: \c 0 (transparent) to \c 255 (opaque).
 
+\subsection lua_api_surface_get_pixels surface:get_pixels()
+
+Returns all pixel values of this surface.
+- Return value (string): The pixels as a pack of bytes in 32-bit RGBA format.
+  Every pixel is stored on 4 bytes (red, green, blue, alpha).
+
+\subsection lua_api_surface_set_pixels surface:set_pixels(pixels)
+
+Sets all pixel values of this surface.
+
+The number of pixels should match the size of the surface
+(the size does not change).
+- \c pixels (string): The pixels as a pack of bytes in 32-bit RGBA format.
+  Every pixel is stored on 4 bytes (red, green, blue, alpha).
+
 */
 
