@@ -13,7 +13,7 @@ pixels.
 When placed on a map, tiles can have different sizes
 and can overlap each other.
 
-A tileset is a list of tiles that a map can use.
+A tileset is a list of patterns that tiles on a map can use.
 You can call it the skin of the map.
 For example, there may exist a tileset for the outside world,
 another one for houses,
@@ -22,8 +22,8 @@ another one for dungeons, etc.
 The \c tilesets directory contains all tilesets and their images.
 For a tileset with id \c xx,
 there are three files:
-- \c xx.tiles.png: The PNG image containing all tiles patterns of this tileset.
-- \c xx.dat: The definition of each tile in \c xx.tiles.png and their
+- \c xx.tiles.png: The PNG image containing all tile patterns of this tileset.
+- \c xx.dat: The definition of each tile pattern in \c xx.tiles.png and their
   properties. We detail the syntax of this file below.
 - \c xx.entities.png (optional): A PNG image containing sprite sheets of
   dynamic entities (i.e. entities other that tiles)
@@ -65,9 +65,10 @@ Example of background color definition:
 background_color{ 104, 184, 104 }
 \endverbatim
 
-\subsection quest_tileset_data_file_syntax_tile_patterns Tile pattern definitions
+\subsection quest_tileset_data_file_syntax_tile_patterns Tile patterns
 
-The rest of the tileset data file defines all tile patterns of the tileset.
+After the background color definition,
+the tileset data file defines all tile patterns of the tileset.
 The definition of a tile pattern starts with \c tile_pattern{ and ends with
 \c }.
 Inside the braces, the properties of the tile pattern are specified.
@@ -76,8 +77,9 @@ separated with commas. It is allowed to have an extra comma after
 the last property. String values should be enclosed within
 double quotes.
 Each tile pattern must have the following properties:
-- \c id (string): Id of the tile pattern. Maps refer to this id when they want
-  to use the tile pattern. It must be unique in the tileset.
+- \c id (string): Id of the tile pattern.
+  Maps refer to this id when they want to use the tile pattern.
+  It must be unique among tile patterns in the tileset.
 - \c ground (string): Kind of ground. Must be one of:
   - \c "empty": There is no ground, this tile is purely decorative.
     Keep the ground of the tile below instead (if any).
@@ -185,7 +187,91 @@ Each tile pattern must have the following properties:
   flexible and will remain valid if one day we decide to remove the rules about
   the number of frames or their adjacent position in the tileset image.
 
-Example of a valid tileset file:
+Example of a tile pattern:
+\verbatim
+tile_pattern{
+  id = "wall.1",
+  ground = "wall",
+  default_layer = 0,
+  x = 64,
+  y = 48,
+  width = 24,
+  height = 16,
+  repeat_mode = "vertical",
+}
+\endverbatim
+
+\subsection quest_tileset_data_file_syntax_border_set Border sets
+
+After the definition of all tile patterns,
+the tileset data file may contain the definition of border sets.
+Border sets are useful for auto-tiling.
+The quest editor uses them to allow the user to
+automatically generate borders around some selected entities in the map editor.
+Border sets currently have no effect in the engine itself:
+they are only used by the quest editor and they generate regular tiles.
+
+A border set is a list of 12 tile pattern ids that correspond to
+4 edges, 4 convex corners and 4 concave corners.
+
+The definition of a border set starts with \c border_set{
+and ends with \c }.
+Inside the braces, the properties of the border set are specified.
+Properties are declared with the syntax <tt>key = value</tt> and
+separated with commas. It is allowed to have an extra comma after
+the last property.
+String values should be enclosed within double quotes.
+Each border set has the following properties:
+- \c id (string): Id of the border set.
+  It must be unique among border sets in the tileset.
+- \c inner (boolean, optional):
+  Whether borders should be generated inside the current selection
+  or outside it in the quest editor.
+  No value means \c false.
+- \c pattern_0 (string, optional): Id of the East border pattern.
+- \c pattern_1 (string, optional): Id of the North border pattern
+- \c pattern_2 (string, optional): Id of the West border pattern.
+- \c pattern_3 (string, optional): Id of the South border pattern.
+- \c pattern_4 (string, optional): Id of the North-East convex corner pattern.
+- \c pattern_5 (string, optional): Id of the North-West convex corner pattern.
+- \c pattern_6 (string, optional): Id of the South-West convex corner pattern.
+- \c pattern_7 (string, optional): Id of the South-East convex corner pattern.
+- \c pattern_8 (string, optional): Id of the North-East concave corner pattern.
+- \c pattern_9 (string, optional): Id of the North-West concave corner pattern.
+- \c pattern_10 (string, optional): Id of the South-West concave corner pattern.
+- \c pattern_11 (string, optional): Id of the South-East concave corner pattern.
+
+The properties \c pattern_0 to \c pattern_11, if defined,
+should all be ids of existing patterns in this tileset.
+These properties are all optional: if some of them are unset,
+it means that no border tile
+should be generated for the corresponding edges or corners.
+It is possible that several of these properties refer
+to the same pattern: it means that the same pattern can be used
+for several different edges or corners.
+
+Example of a border set:
+\verbatim
+border_set{
+  id = "wall",
+  pattern_0 = "wall.4",
+  pattern_1 = "wall.1",
+  pattern_2 = "wall.3",
+  pattern_3 = "wall.2",
+  pattern_4 = "wall.corner.2",
+  pattern_5 = "wall.corner.1",
+  pattern_6 = "wall.corner.3",
+  pattern_7 = "wall.corner.4",
+  pattern_8 = "wall.corner_reverse.2",
+  pattern_9 = "wall.corner_reverse.1",
+  pattern_10 = "wall.corner_reverse.3",
+  pattern_11 = "wall.corner_reverse.4",
+}
+\endverbatim
+
+\subsection quest_tileset_data_file_syntax_example Tileset data file example
+
+Here is an example of a valid tileset file:
 \verbatim
 background_color{ 104, 184, 104 }
 
