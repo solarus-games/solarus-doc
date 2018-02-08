@@ -65,9 +65,11 @@ Sets the speed of this movement.
 
 Returns the angle of the trajectory in radians.
 
-East is 0, North is <tt>math.pi / 2</tt>, West is \c math.pi, South is
-<tt>3 * math.pi / 2</tt> and any intermediate value is possible.
-
+East is <tt>0</tt>,
+North is <tt>math.pi / 2</tt>,
+West is <tt>math.pi</tt>,
+South is  <tt>3 * math.pi / 2</tt>
+and any intermediate value is possible.
 - Return value (number): The angle in radians.
 
 \remark If you prefer a value in a 4-direction system, see

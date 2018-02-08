@@ -44,6 +44,19 @@ Returns the speed of this movement.
 Sets the speed of this movement.
 - \c speed (number): The new speed in pixels per second.
 
+\subsection lua_api_random_path_movement_get_angle random_path_movement:get_angle()
+
+Returns the angle of the current trajectory in radians.
+
+East is <tt>0</tt>,
+North is <tt>math.pi / 2</tt>,
+West is <tt>math.pi</tt>,
+South is  <tt>3 * math.pi / 2</tt>.
+- Return value (number): The angle in radians.
+
+\remark If you prefer a value in a 4-direction system, see
+\ref lua_api_movement_get_direction4 "movement:get_direction4()".
+
 \section lua_api_random_path_movement_inherited_events Events inherited from movement
 
 Random path movements are particular \ref lua_api_movement "movement" objects.

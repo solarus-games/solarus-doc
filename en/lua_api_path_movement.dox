@@ -97,6 +97,19 @@ not attached to a \ref lua_api_entity "map entity".
 - \c snap (boolean, optional): \c true to make this movement automatically snap its map
   entity to the map grid. No value means \c true.
 
+\subsection lua_api_path_movement_get_angle path_movement:get_angle()
+
+Returns the angle of the current trajectory in radians.
+
+East is <tt>0</tt>,
+North is <tt>math.pi / 2</tt>,
+West is <tt>math.pi</tt>,
+South is  <tt>3 * math.pi / 2</tt>.
+- Return value (number): The angle in radians.
+
+\remark If you prefer a value in a 4-direction system, see
+\ref lua_api_movement_get_direction4 "movement:get_direction4()".
+
 \section lua_api_path_movement_inherited_events Events inherited from movement
 
 Path movements are particular \ref lua_api_movement "movement" objects.
