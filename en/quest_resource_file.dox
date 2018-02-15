@@ -1,19 +1,23 @@
 /**
-\page quest_resource_file Resource list
+\page quest_database_file Quest database file
+
+\tableofcontents
 
 The \c project_db.dat file declares all resources
 (maps, musics, sprites, items, enemies, fonts, etc.) of your quest
-and their user-friendly names.
-Each resource usually corresponds to a data file.
+and contains other information about files.
+Each resource usually corresponds to one or several files.
 
 The engine needs this file to preload or initialize some resources when the
 program starts.
-
 The quest editor needs this file to provide graphical components that let the
 user choose a resource in a list of user-friendly names.
-For instance, when the user creates a teletransporter on the map, a graphical
-list lets him choose the destination map of the teletransporter.
-This list contains the user-friendly name of each map.
+
+\section quest_database_file_syntax Syntax of the tileset data file
+
+Solarus Quest Editor fully supports the edition of the quest database.
+You should not have to edit this file by hand unless you know what you
+are doing.
 
 We give here the syntax of \c project_db.dat.
 
@@ -22,6 +26,10 @@ The sequence of characters \c \-\- (two dashes) marks
 the beginning of a comment.
 After them, the rest of the line is ignored.
 Empty lines are also ignored.
+
+\subsection quest_database_file_resources Resources
+
+TODO define "resource"
 
 The definition of each resource starts with the name of a resource type
 (\c map, \c tileset, \c sound, \c music, \c sprite, \c item, \c enemy
@@ -63,7 +71,13 @@ Each resource must have the following two properties:
   It may contain spaces. It is useful to show to userse something more
   user-friendly than the id.
 
-Example of a quest resource list file:
+\subsection quest_database_file_files Files information
+
+TODO
+
+\subsection quest_database_file_example Example
+
+Here is an example of a valid quest database file:
 
 \verbatim
 map{      id = "outside",      description = "Outside World" }
