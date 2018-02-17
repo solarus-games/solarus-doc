@@ -97,7 +97,10 @@ Each resource element must have the following two properties:
 \subsection quest_database_file_files File authors and licenses
 
 The quest database file can keep track of the author and license of
-the files in the quest.
+the files in your quest.
+The engine does not use these properties at runtime,
+but they may help you keep up-to-date information about your files
+in a complex project.
 
 Resources described above (maps, sounds, etc.)
 are the core game elements recognized by the engine,
