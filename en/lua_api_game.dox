@@ -460,7 +460,7 @@ Returns the location where the hero is placed when this game is started or
 restarted.
 - Return value 1 (string): Id of the starting map.
   \c nil means that it was not set: in this case, the first map declared in
-  \ref quest_resource_file "project_db.dat" will be used.
+  \ref quest_database_file "project_db.dat" will be used.
 - Return value 2 (string): Name of the destination where the hero will be
   placed on that map.
   \c nil means that it was not set: in this case, the default destination
@@ -472,7 +472,7 @@ Sets the location where the hero should be placed when this game is started or
 restarted.
 - \c map_id (string, optional): Id of the starting map. By default, the first
   map declared in
-  \ref quest_resource_file "project_db.dat" is used.
+  \ref quest_database_file "project_db.dat" is used.
 - \c destination_name (string, optional): Name of the destination where the hero should
   be placed on that map. By default, the default destination of the map is used.
 

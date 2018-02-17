@@ -6,7 +6,7 @@ quest.
 Solarus supports both outline fonts and bitmap fonts.
 
 Like maps, musics, languages, etc., fonts are a resource declared in the
-\ref quest_resource_file "quest resource list".
+\ref quest_database_file "quest database file".
 
 \section quest_fonts_outline Outline fonts
 

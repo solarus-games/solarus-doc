@@ -24,8 +24,8 @@ Creates a text surface with the specified properties.
   - \c font (string, default the first one in alphabetical order):
     Name of the font file to use, relative to the
     \c fonts directory and without extension.
-    It must be a declared in the quest
-    \ref quest_resource_file "resource list".
+    It must be a declared in the resource list of the
+    \ref quest_database_file "quest database".
     The following extensions are
     auto-detected in this order:
     \c <tt>.png</tt>,
@@ -102,8 +102,8 @@ Returns the font used to draw this text surface.
 Sets the font used to draw this text surface.
 - \c font_id (string): Name of the font file to use, relative to the
   \c fonts directory and without extension.
-  It must be a declared in the quest
-  \ref quest_resource_file "resource list".
+  It must be a declared in the resource list of the
+  \ref quest_database_file "quest database".
   The following extensions are
   auto-detected in this order:
   \c <tt>.png</tt>,

@@ -38,8 +38,8 @@ Here is the full structure of the \c data directory / \c data.solarus archive
 of a quest and the syntax of each file.
 
 - \subpage quest_properties_file "quest.dat": global properties of your quest.
-- \subpage quest_resource_file "project_db.dat": list of all resources
-  (maps, sprites, enemies...) with their id and human-readable name.
+- \subpage quest_database_file "project_db.dat": list of all resources
+  (maps, sprites, enemies...) and gives other information about quest files.
 - \subpage quest_main_script "main.lua": main Lua script of your quest.
 - \c *.lua: other Lua scripts, possibly organized in subdirectories.
 - \subpage quest_logos "logos/": icons and logos of your quest, used

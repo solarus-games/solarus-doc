@@ -7,7 +7,7 @@ Sounds files must have the extension \c .ogg (Ogg Vorbis).
 
 Don't forget to add all sound files to the
 quest tree in the editor (or by editing
-\ref quest_resource_file "project_db.dat" by hand).
+\ref quest_database_file "project_db.dat" by hand).
 
 Here is a list of sound effects played by the engine in various situations.
 All these sound effects should exist in the \c sounds directory.

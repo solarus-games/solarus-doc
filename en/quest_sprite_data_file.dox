@@ -213,12 +213,6 @@ animation{
 }
 \endverbatim
 
-Don't forget to add all sprite animation sets to the
-quest tree in the editor (or by editing
-\ref quest_resource_file "project_db.dat" by hand).
-Otherwise, they won't show up when you configure entities with sprites (like
-non-playing characters) in the editor.
-
 \remark The syntax of sprite data files is actually valid Lua.
   The engine and the editor internally use Lua to parse it.
 
