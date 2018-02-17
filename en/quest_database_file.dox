@@ -5,13 +5,13 @@
 
 The \c project_db.dat file declares all resources
 (maps, musics, sprites, items, enemies, fonts, etc.) of your quest
-and contains other additional information about files.
+and stores other additional information about quest files.
 Each resource has an id and a description,
 and usually corresponds to one or several files.
 
 The engine needs this database file to preload or initialize some resources
 when the program starts.
-The quest editor needs this file to provide graphical components that let the
+The quest editor needs it to provide graphical components that let the
 user choose a resource in a list of user-friendly names.
 
 \section quest_database_file_syntax Syntax of the database file
@@ -41,13 +41,14 @@ There are 9 types of resources:
 - \c enemy,
 - \c language
 - \c shader.
-This file declares the list of all resources, with their id and their
-user-friendly description.
+
+The \c project_db.dat file declares the list of such resources,
+with their id and their user-friendly description.
 The id of a resource element determines the name of the file(s)
 where this element is stored: for example,
 an enemy with id \c "soldier" will be defined in the script file
 \c "enemies/soldier.lua".
-See the documentation of each resource type for more details.
+See below for more details.
 
 The definition of each resource element starts with the name of a resource type
 (from the list above),
@@ -59,6 +60,7 @@ the last property. String values are enclosed within double quotes.
 Each resource element must have the following two properties:
 - \c id (string): Id of the element. It should not contain spaces.
   The id determines the data file(s) of this element.
+  The id is always a file name without extension:
   - For a map: the id is the name of the
     \ref quest_map_data_file "map data file" without its extension,
     relative to the \c maps directory.
@@ -84,15 +86,54 @@ Each resource element must have the following two properties:
     directory.
   - For a font: the id is the font file name without its extension,
     relative to the \c fonts directory.
-  - For a shader: the id is the shader data file without its extension,
+  - For a shader: the id is the
+    \ref quest_shader_data_file "shader data file" without its extension,
     relative to the \c shaders directory.
 - \c description (string): A human-readable name that describes this element.
-  It may contain spaces. It is useful to show to users something more
+  It may contain spaces. The engine does not uses this description,
+  but the quest editor may use it to show to users something more
   user-friendly than the id.
 
-\subsection quest_database_file_files Files information
+\subsection quest_database_file_files File authors and licenses
 
-TODO
+The quest database file can keep track of the author and license of
+the files in the quest.
+
+Resources described above (maps, sounds, etc.)
+are the core game elements recognized by the engine,
+but a quest is more general than that.
+A quest is a directory (or an archive)
+that contains various files and directories.
+Some of these files and directories correspond to resources,
+but there may also be a lot of files that are not resources,
+like additional Lua scripts or PNG files used by sprites.
+
+After the list of resources, the \c project_db.dat file
+gives information about individual files and directories,
+independently of whether they are resources or not.
+
+Files that are not resources do not have to be declared
+in the quest database file, but if they are,
+it allows to store useful information about them.
+
+Information about a file or directory start with
+\c file{ and ends with \c}.
+Inside the braces, the properties of the file or directory are specified.
+Properties are declared with the syntax <tt>key = value</tt> and
+separated with commas.
+It is allowed to have an extra comma after the last property.
+String values are enclosed within double quotes.
+Each file or directory declared here
+has the following properties:
+- \c path (string): Path of the file or directory
+  relative to the quest \c data directory.
+  including the file name with its extension,
+- \c author (string, optional): Author of the file.
+- \c license (string, optional): License of the file.
+
+\remark Information attached to a directory are considered to apply
+to all its files and directories except if they specify
+their own information as well.
 
 \subsection quest_database_file_example Example
 
@@ -126,7 +167,10 @@ language{ id = "en",           description = "English" }
 
 font{     id = "8_bit",        description = "8 bit font" }
 
+file{     path = "sprites/enemies/soldier.dat", author = "John", license = "CC BY-SA 4.0" }
 file{     path = "sprites/enemies/soldier.png", author = "John", license = "CC BY-SA 4.0" }
+file{     path = "sprites/enemies/dragon.dat",  author = "Jack", license = "CC BY-SA 4.0" }
+file{     path = "sprites/enemies/dragon.png",  author = "Jack", license = "CC BY-SA 4.0" }
 
 \endverbatim
 
