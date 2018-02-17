@@ -5,17 +5,19 @@
 
 The \c project_db.dat file declares all resources
 (maps, musics, sprites, items, enemies, fonts, etc.) of your quest
-and contains other information about files.
-Each resource usually corresponds to one or several files.
+and contains other additional information about files.
+Each resource has an id and a description,
+and usually corresponds to one or several files.
 
-The engine needs this file to preload or initialize some resources when the
-program starts.
+The engine needs this database file to preload or initialize some resources
+when the program starts.
 The quest editor needs this file to provide graphical components that let the
 user choose a resource in a list of user-friendly names.
 
-\section quest_database_file_syntax Syntax of the tileset data file
+\section quest_database_file_syntax Syntax of the database file
 
-Solarus Quest Editor fully supports the edition of the quest database.
+Solarus Quest Editor fully supports the edition of the quest database file
+\c project_db.dat.
 You should not have to edit this file by hand unless you know what you
 are doing.
 
@@ -29,17 +31,32 @@ Empty lines are also ignored.
 
 \subsection quest_database_file_resources Resources
 
-TODO define "resource"
+There are 9 types of resources:
+- \c map,
+- \c tileset,
+- \c sound,
+- \c music,
+- \c sprite,
+- \c item,
+- \c enemy,
+- \c language
+- \c shader.
+This file declares the list of all resources, with their id and their
+user-friendly description.
+The id of a resource element determines the name of the file(s)
+where this element is stored: for example,
+an enemy with id \c "soldier" will be defined in the script file
+\c "enemies/soldier.lua".
+See the documentation of each resource type for more details.
 
-The definition of each resource starts with the name of a resource type
-(\c map, \c tileset, \c sound, \c music, \c sprite, \c item, \c enemy
-or \c language),
+The definition of each resource element starts with the name of a resource type
+(from the list above),
 followed by an opening brace, and ends with a closing brace.
 Inside the braces, the properties of the resource are specified.
 Properties are declared with the syntax <tt>key = value</tt> and
 separated with commas. It is allowed to have an extra comma after
 the last property. String values are enclosed within double quotes.
-Each resource must have the following two properties:
+Each resource element must have the following two properties:
 - \c id (string): Id of the element. It should not contain spaces.
   The id determines the data file(s) of this element.
   - For a map: the id is the name of the
@@ -67,8 +84,10 @@ Each resource must have the following two properties:
     directory.
   - For a font: the id is the font file name without its extension,
     relative to the \c fonts directory.
+  - For a shader: the id is the shader data file without its extension,
+    relative to the \c shaders directory.
 - \c description (string): A human-readable name that describes this element.
-  It may contain spaces. It is useful to show to userse something more
+  It may contain spaces. It is useful to show to users something more
   user-friendly than the id.
 
 \subsection quest_database_file_files Files information
@@ -106,6 +125,9 @@ enemy{    id = "dragon",       description = "Dragon" }
 language{ id = "en",           description = "English" }
 
 font{     id = "8_bit",        description = "8 bit font" }
+
+file{     path = "sprites/enemies/soldier.png", author = "John", license = "CC BY-SA 4.0" }
+
 \endverbatim
 
 In the quest editor, you can add, remove and change the id and the description
