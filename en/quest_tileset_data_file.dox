@@ -118,11 +118,10 @@ Each tile pattern must have the following properties:
   If it is a number, the tile pattern will be a single-frame
   tile pattern.
   If it is a table, it must have the syntax
-  <tt>{ x1, x2, x3 }</tt> or <tt>{ x1, x2, x3, x2 }</tt> and the tile pattern
+  <tt>{ x1, x2, ... }</tt> and the tile pattern
   will be a multi-frame tile pattern (an animated one).
-  Multi-frame tile patterns play a sequence of three frames,
-  either by repeating the x1-x2-x3 sequence or the x1-x2-x3-x2 sequence.
-  The three rectangles of multi-frame tile patterns must be adjacent in the
+  Multi-frame tile patterns play a sequence of successive frames.
+  The successive rectangles of multi-frame tile patterns must be adjacent in the
   tileset image, and placed horizontally (from left to right) or vertically
   (from top to bottom).
 - \c y (number or table): Y coordinate(s) of the upper-left corner of the
@@ -131,21 +130,21 @@ Each tile pattern must have the following properties:
   Note that in the case of a multi-frame tile pattern,
   the table must have the same number of elements as \c x,
   and that due to the horizontal or
-  vertical placement of the three frames in the tileset image, one of \c x
-  or \c y will necessarily be a table with three identical values.
+  vertical placement of the frames in the tileset image, one of \c x
+  or \c y will necessarily be a table with identical values.
 - \c width (number): Width of the pattern's rectangle(s) in pixels in the
   tileset image.
   In the case of a multi-frame tile pattern, this is the width of an
-  individual rectangle. All three rectangles have the same size.
+  individual rectangle. All rectangles have the same size.
   Note that there is a redundancy:
-  since the three rectangle must be adjacent,
+  since the rectangles must be adjacent,
   the size is actually implied by \c x and \c y.
 - \c height (number): Height of the pattern's rectangle(s) in pixels in the
   tileset image.
   In the case of a multi-frame tile pattern, this is the height of an
-  individual rectangle. All three rectangles have the same size.
+  individual rectangle. All rectangles have the same size.
   Note that there is a redundancy:
-  since the three rectangle must be adjacent,
+  since the rectangles must be adjacent,
   the size is actually implied by \c x and \c y.
 - \c scrolling (string, optional): Applies a scrolling effect on the tile
   pattern. No value means no special scrolling. If this value is defined, it
@@ -182,10 +181,6 @@ Each tile pattern must have the following properties:
   - \c "horizontal": The pattern can only be repeated horizontally.
   - \c "vertical": The pattern can only be repeated vertically.
   - \c "none": The pattern cannot be repeated.
-
-\remark While the syntax of multi-frame patterns is redundant, it is
-  flexible and will remain valid if one day we decide to remove the rules about
-  the number of frames or their adjacent position in the tileset image.
 
 Example of a tile pattern:
 \verbatim
