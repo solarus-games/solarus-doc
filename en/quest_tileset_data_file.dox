@@ -146,6 +146,9 @@ Each tile pattern must have the following properties:
   Note that there is a redundancy:
   since the rectangles must be adjacent,
   the size is actually implied by \c x and \c y.
+- frame_delay (number, optional): Delay in milliseconds between two frames.
+  Only allowed for multi-frame patterns.
+  The default value is \c 250 ms.
 - \c scrolling (string, optional): Applies a scrolling effect on the tile
   pattern. No value means no special scrolling. If this value is defined, it
   must be one of:
@@ -306,4 +309,3 @@ tile_pattern{
   The engine and the editor internally use Lua to parse it.
 
 */
-
