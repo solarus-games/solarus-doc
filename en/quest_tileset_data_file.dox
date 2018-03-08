@@ -149,6 +149,14 @@ Each tile pattern must have the following properties:
 - frame_delay (number, optional): Delay in milliseconds between two frames.
   Only allowed for multi-frame patterns.
   The default value is \c 250 ms.
+- mirror_loop (boolean, optional): For animated patterns, whether to continue
+  the animation in reverse after the last frame is played.
+  Only allowed for multi-frame patterns.
+  If \c false (the default), the animation repeats normally from the
+  first frame
+  (for example with 4 frames: 1-2-3-4-1-2-3-4...).
+  If \c true, the animation is played backwards before it repeats:
+  (for example with 4 frames: 1-2-3-4-3-2-1-2-3-4-3-2...).
 - \c scrolling (string, optional): Applies a scrolling effect on the tile
   pattern. No value means no special scrolling. If this value is defined, it
   must be one of:
