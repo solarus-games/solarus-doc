@@ -74,6 +74,17 @@ when you call
     without degrading its content.<br>
     <tt>dstRGB = srcRGB * dstRGB</tt>
 
+\subsection lua_api_drawable_get_shader drawable:get_shader()
+
+Get the shader applied to this object.
+
+- Return value (\ref lua_api_shader "shader"): The shader, nil if none is set.
+
+\subsection lua_api_drawable_set_shader drawable:set_shader([shader])
+
+Set the shader used to draw this entity. Default drawing is done with no shader (nil).
+- \c shader(\ref lua_api_shader "shader"): An optional shader, passing no shader will reset drawing to normal.
+
 \subsection lua_api_drawable_fade_in drawable:fade_in([delay], [callback])
 
 Starts a fade-in effect on this object.
