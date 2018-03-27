@@ -127,7 +127,7 @@ Returns the shader currently applied to the rendering, if any.
 Sets a shader to be applied to the rendering.
 - shader (\ref lua_api_shader "shader"): The shader to set.
   It replaces the previous shader if any.
-  A \c nil values means to apply no shader.
+  A \c nil value means to apply no shader.
 
 \section lua_api_video_functions_deprecated Deprecated functions of sol.video
 
