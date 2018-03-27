@@ -52,28 +52,35 @@ with the global settings,
 independently of any savegame.
 See \ref lua_api_main_load_settings "sol.main.load_settings()".
 
+\subsection lua_api_shader_overview_drawables Shader on drawable
+
+Shaders can also alter how drawables are put to the screen.
+See \ref lua_api_drawable_set_shader "drawable:set_shader()" 
+
 \subsection lua_api_shader_overview_built_in_variables Built-in attributes and uniforms
 
-Additionally to the OpenGL or OpenGL ES built-in variables,
+Additionally to the modern OpenGL or OpenGL ES built-in variables,
 Solarus automatically passes some additional useful variables to your shaders.
 Solarus built-in variables are always prefixed with \c "sol_".
 
 Note that using the Lua API, you can also pass your own variables.
 
-In a vertex shader, the following two attributes are automatically passed
+In a vertex shader, the following three attributes are automatically passed
 as input:
-- <tt>attribute vec4 sol_vertex</tt>: Coordinates of the current vertex
+- <tt>attribute vec2 sol_vertex</tt>: Coordinates of the current vertex
   in the 3D space
   (same as \c gl_Vertex in old GLSL versions).
-- <tt>attribute vec4 sol_tex_coord</tt>: Texture coordinates of the
+- <tt>attribute vec2 sol_tex_coord</tt>: Texture coordinates of the
   current vertex
   (same as \c gl_MultiTexCoord0 in old GLSL versions).
+- <tt>attribute vec4 sol_color</tt>: Color of the vertex 
 
 The following uniforms
 are automatically passed as input if they are declared
 in a vertex shader or in a fragment shader:
 - <tt>uniform mat4 sol_mvp_matrix</tt>: The model-view projection matrix
   (same as \c gl_ModelViewProjectionMatrix in old GLSL versions).
+- <tt>uniform mat3 sol_uv_matrix</tt>: The texture transform matrix.
 - <tt>uniform sampler2D sol_texture</tt>: The input texture to render.
 - <tt>uniform vec2 sol_input_size</tt>: Size of the input texture
   \c sol_texture before any scaling.
@@ -94,46 +101,57 @@ in a vertex shader or in a fragment shader:
 
 Here is a shader program that does nothing special:
 it just scales the input texture to fit the window,
-just like when no shader is set.
+just like when no shader is set. Note that <tt>#version 100</tt> tells
+glsl compiler to treat this shader as GLSL ES. It ensure that this
+shader work on every platform.
 
 \verbatim
 // Vertex shader:
+#version 100
+precision mediump float;
 
-in vec2 tex_coord;
+uniform mat4 sol_mvp_matrix;
+uniform mat3 sol_uv_matrix;
+attribute vec2 sol_vertex;
+attribute vec2 sol_tex_coord;
+attribute vec4 sol_color;
+
+varying vec2 sol_vtex_coord;
+varying vec4 sol_vcolor;
 void main() {
-  gl_Position = sol_mvp_matrix * sol_vertex;
-  tex_coord = sol_tex_coord.xy;
+  gl_Position = sol_mvp_matrix * vec4(sol_vertex,0,1);
+  sol_vcolor = sol_color;
+  sol_vtex_coord = (sol_uv_matrix * vec3(sol_tex_coord,1)).xy;
 }
 
 // Fragment shader:
-
+#version 100
+precision mediump float;
 uniform sampler2D sol_texture;
-in vec2 tex_coord;
+varying vec2 sol_vtex_coord;
+varying vec4 sol_vcolor;
 void main() {
-  gl_FragColor = texture2D(sol_texture, tex_coord);
+  vec4 tex_color = texture2D(sol_texture,sol_vtex_coord);
+  gl_FragColor = tex_color*sol_vcolor;
 }
+
 \endverbatim
 
 Now, another example of a shader program
 that removes the red component of all pixels:
 
 \verbatim
-// Vertex shader:
-
-varying vec2 tex_coord;
-void main() {
-  gl_Position = sol_mvp_matrix * sol_vertex;
-  tex_coord = sol_tex_coord.xy;
-}
+// No vertex shader:
 
 // Fragment shader:
-
+#version 100
+precision mediump float;
 uniform sampler2D sol_texture;
-in vec2 tex_coord;
+varying vec2 sol_vtex_coord;
+varying vec4 sol_vcolor;
 void main() {
-  vec3 color  = texture2D(sol_texture, tex_coord);
-  color.r = 0.0;
-  gl_FragColor = color;
+  vec4 tex_color = texture2D(sol_texture,sol_vtex_coord);
+  gl_FragColor = tex_color*sol_vcolor*vec4(0,1,1,1);
 }
 \endverbatim
 
@@ -145,7 +163,9 @@ Typically, on desktop platforms, Solarus is compiled with OpenGL support
 and the shader language used is some version of GLSL.
 On mobile platforms, OpenGL ES and GLSL ES are normally used instead.
 
-For maximum portability, there are two possible approaches:
+For maximum portability, there are three possible approaches:
+- Write every shader in GLSL ES 1.0 using <tt>#version 100</tt> which should
+  be supported on every platforms. This is a low version but still modern and  powerfull.
 - Shaders can be written carefully to make sure that they work
   with both GLSL and GLSL ES.
   This requires using a lot of portability macros because there are some
@@ -162,15 +182,11 @@ For maximum portability, there are two possible approaches:
   \ref lua_api_shader_get_shading_language_version
   "sol.shader.get_shader_language_version()".
 
-In any case, a good practice is to rely on the
+In any case, the legacy opengl variables such as \c gl_ModelViewProjectionMatrix
+are not supported and will result in undefined behaviour. Same for the attributes
+(\c gl_Vertex and so on), they are likely to fail. Use exclusively
 \ref lua_api_shader_overview_built_in_variables "Solarus built-in variables"
-(plus your own ones)
-rather than the OpenGL ones,
-since a lot of old OpenGL built-in variables
-(like \c gl_Vertex or \c gl_ModelViewProjectionMatrix)
-are now obsolete
-or simply don't exist
-in recent OpenGL versions and in OpenGL ES.
+(plus your own ones).
 
 \section lua_api_shader_functions Functions of sol.shader
 
