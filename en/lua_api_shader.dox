@@ -165,7 +165,7 @@ On mobile platforms, OpenGL ES and GLSL ES are normally used instead.
 
 For maximum portability, there are three possible approaches:
 - Write every shader in GLSL ES 1.0 using <tt>#version 100</tt> which should
-  be supported on every platforms. This is a low version but still modern and  powerfull.
+  be supported on every platform. This is a low version but still modern and  powerfull.
 - Shaders can be written carefully to make sure that they work
   with both GLSL and GLSL ES.
   This requires using a lot of portability macros because there are some
