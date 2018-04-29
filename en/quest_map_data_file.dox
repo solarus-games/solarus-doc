@@ -268,6 +268,9 @@ Additional properties:
 - \c pattern (string): Id of the
   \ref quest_tileset_data_file_syntax_tile_patterns
   "tile pattern" to use.
+- \c tileset (string, optional): Id of the
+  \ref quest_tileset_data_file "tileset" to use.
+  The default value is the tileset of the map.
 - \c width (number): Width of the tile in pixels.
   It must be a multiple of the width of the pattern.
   The pattern will be repeated horizontally to fit this width.
@@ -301,6 +304,9 @@ Additional properties:
 - \c pattern (string): Id of the
   \ref quest_tileset_data_file_syntax_tile_patterns
   "tile pattern" to use.
+- \c tileset (string, optional): Id of the
+  \ref quest_tileset_data_file "tileset" to use.
+  The default value is the tileset of the map.
 - \c width (number): Width of the tile in pixels.
   It must be a multiple of the width of the pattern.
   The pattern will be repeated horizontally to fit this width.
