@@ -329,18 +329,11 @@ unless you override some of them with
 - \c attack (string): Name of an attack against the enemy:
   \c "sword", \c "thrown_item", \c "explosion", \c "arrow", \c "hookshot",
   \c "boomerang" or \c "fire".
-- \c consequence (number or string): Indicates what happens when this enemy
-  receives the attack. It may be:
-  - A positive integer: The enemy is hurt and loses this number of life points.
-    In the particular case of a sword attack, this number will by default
-    be increased by the level of the sword
-    (see \ref lua_api_enemy_on_hurt_by_sword "enemy:on_hurt_by_sword()").
-  - \c "ignored": Nothing happens. The weapon (if any) traverses the enemy.
-  - \c "protected": The enemy stops the attack. An attack failure sound is
-    played.
-  - \c "immobilized": The enemy is immobilized for a few seconds.
-  - \c "custom": Event \ref lua_api_enemy_on_custom_attack_received
-    "enemy:on_custom_attack_received()" is called.
+- \c consequence (number, string or function): Indicates what happens when this enemy
+  receives the attack.
+  The possible values are the same as in
+  \ref lua_api_enemy_get_attack_consequence
+  "enemy:get_attack_consequence()".
 
 \subsection lua_api_enemy_set_attack_consequence enemy:set_attack_consequence(attack, consequence)
 
@@ -354,11 +347,21 @@ unless you override some of them with
 - \c attack (string): Name of an attack against the enemy:
   \c "sword", \c "thrown_item", \c "explosion", \c "arrow", \c "hookshot",
   \c "boomerang" or \c "fire".
-- \c consequence (number or string): Indicates what happens when this enemy
-  receives the attack.
-  The possible values are the same as in
-  \ref lua_api_enemy_get_attack_consequence
-  "enemy:get_attack_consequence()".
+- \c consequence (number, string or function): Indicates what happens when
+  this enemy receives the attack. It may be:
+  - A positive integer: The enemy is hurt and loses this number of life points.
+    In the particular case of a sword attack, this number will by default
+    be increased by the level of the sword
+    (see \ref lua_api_enemy_on_hurt_by_sword "enemy:on_hurt_by_sword()").
+  - \c "ignored": Nothing happens. The weapon (if any) traverses the enemy.
+  - \c "protected": The enemy stops the attack. An attack failure sound is
+    played.
+  - \c "immobilized": The enemy is immobilized for a few seconds.
+  - \c "custom": Event \ref lua_api_enemy_on_custom_attack_received
+    "enemy:on_custom_attack_received()" is called.
+    Note: Since Solarus 1.6, we recommend to use a function parameter instead
+    for more simplicity (see below).
+  - \c A function: A function to be called when this enemy receives the attack.
 
 \subsection lua_api_enemy_get_attack_consequence_sprite enemy:get_attack_consequence_sprite(sprite, attack)
 
@@ -376,8 +379,8 @@ the reaction of the enemy for a particular sprite with
 - \c attack (string): Name of an attack against the enemy:
   "sword", "thrown_item", "explosion", "arrow", "hookshot",
   "boomerang" or "fire".
-- \c consequence (number or string): Indicates what happens when this sprite
-  receives the attack.
+- \c consequence (number, string or function): Indicates what happens when
+  this sprite receives the attack.
   The possible values are the same as in
   \ref lua_api_enemy_get_attack_consequence
   "enemy:get_attack_consequence()".
@@ -394,8 +397,8 @@ by \ref lua_api_enemy_set_attack_consequence
 - \c attack (string): Name of an attack against the enemy:
   "sword", "thrown_item", "explosion", "arrow", "hookshot",
   "boomerang" or "fire".
-- \c consequence (number or string): Indicates what happens when this sprite
-  receives the attack.
+- \c consequence (number, string or function): Indicates what happens when
+  this sprite receives the attack.
   The possible values are the same as in
   \ref lua_api_enemy_get_attack_consequence
   "enemy:get_attack_consequence()".
@@ -738,9 +741,17 @@ special reaction, etc.
 - \c attack (string): The attack that was received:
   \c "sword", \c "thrown_item", \c "explosion",
   \c "arrow", \c "hookshot", \c "boomerang" or \c "fire".
+  In the particular case of a \c "sword" attack, the sword state is stopped
+  and the hero goes back to state \c "free".
 - \c sprite (\ref lua_api_sprite "sprite"): The sprite of this enemy
   that receives the attack, or \c nil if the attack does not come from a
   pixel-precise collision.
+
+\remark Instead of using this event and the attack consequence \c "custom",
+  you can now simply pass a callback parameter to
+  \ref lua_api_enemy_set_attack_consequence "enemy:set_attack_consequence()"
+  or to
+  \ref lua_api_enemy_set_attack_consequence_sprite "enemy:set_attack_consequence_sprite()".
 
 \subsection lua_api_enemy_on_hurt_by_sword enemy:on_hurt_by_sword(hero, enemy_sprite)
 
