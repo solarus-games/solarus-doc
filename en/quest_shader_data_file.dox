@@ -1,0 +1,39 @@
+/**
+\page quest_shader_data_file Shader description file
+
+\tableofcontents
+
+Shaders allow you to modify the video rendering of the window or of
+drawable objects like sprites, surfaces and text surfaces.
+
+For example, shaders can be used to apply a smoothing filter or to
+make some advanced visual effects.
+
+Shaders are programs executed by the GPU during a rendering pass.
+They are written in a shading language
+(GLSL or GLSL ES in Solarus).
+
+We explain here the syntax of shader files in Solarus.
+See the \ref lua_api_shader "shader API" to know how to apply shaders at
+runtime.
+
+TODO explain how shader description file != shader GLSL code files
+
+\section quest_shader_data_file_syntax Syntax of the shader description file
+
+Solarus Quest Editor fully supports the edition of shader description files
+(not to be confused with shaders themselves, that is, GLSL code files).
+You should not have to edit shader description files by hand unless you know
+what you are doing.
+
+We now specify the syntax of a shader description file.
+
+The sequence of characters \c \-\- (two dashes) marks
+the beginning of a comment.
+After them, the rest of the line is ignored by the engine.
+Empty lines are also ignored.
+
+TODO
+
+*/
+
