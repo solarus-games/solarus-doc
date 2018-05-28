@@ -7,7 +7,8 @@ Shaders allow you to modify the video rendering of the window or of
 drawable objects like sprites, surfaces and text surfaces.
 
 For example, shaders can be used to apply a smoothing filter or to
-make some advanced visual effects.
+make some advanced visual effects to a sprite, to a surface or to
+the whole screen.
 
 Shaders are programs executed by the GPU during a rendering pass.
 They are written in a shading language
