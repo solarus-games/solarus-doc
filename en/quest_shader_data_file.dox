@@ -15,8 +15,8 @@ They are written in a shading language
 (GLSL or GLSL ES in Solarus).
 
 We explain here the syntax of shader files in Solarus.
-See the \ref lua_api_shader "shader API" to know how to apply shaders at
-runtime.
+See the \ref lua_api_shader "shader API" to know how to use shaders at
+runtime from your Lua scripts.
 
 TODO explain how shader description file != shader GLSL code files
 
@@ -37,4 +37,3 @@ Empty lines are also ignored.
 TODO
 
 */
-
