@@ -89,9 +89,8 @@ of a quest and the syntax of each file.
     properties and the behavior of the custom entity model \c "xx".
 - \c shaders/: contain all shaders and their description files.
   - \subpage quest_shader_data_file "shaders/xx.dat": description file of
-    shader \c "xx".
-  - \c shaders/yy.glsl: Vertex shader or fragment shader in GLSL or GLSL ES
-    language, that can be referenced by one or several shader description files.
+    shader program \c "xx".
+  - \c shaders/\asterisk.glsl: Vertex shaders and fragment shaders in GLSL or
+    GLSL ES language.
 
 */
-
