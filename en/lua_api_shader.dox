@@ -30,7 +30,8 @@ the vertex shader is called for each of the four corners of the input texture.
 If no vertex shader is defined in your shader program,
 then a default one is used.
 The fragment shader is then called for each pixel of the window.
-The fragment shader is mandatory in a Solarus shader program.
+If no fragment shader is defined in your shader program,
+then a default one that keeps pixels unchanged is used.
 
 The rest of this documentation page
 explains how to use shaders with the Solarus Lua API.
