@@ -120,7 +120,7 @@ in the quest database file, but if they are,
 it allows to store useful information about them.
 
 Information about a file or directory start with
-\c file{ and ends with \c}.
+\c file{ and ends with \c }.
 Inside the braces, the properties of the file or directory are specified.
 Properties are declared with the syntax <tt>key = value</tt> and
 separated with commas.

@@ -30,9 +30,10 @@ the vertex shader is called for each of the four corners of the input texture.
 If no vertex shader is defined in your shader program,
 then a default one is used.
 The fragment shader is then called for each pixel of the window.
-The fragment shader is mandatory in a Solarus shader program.
+If no fragment shader is defined in your shader program,
+then a default one that keeps pixels unchanged is used.
 
-The rest of this documentation page 
+The rest of this documentation page
 explains how to use shaders with the Solarus Lua API.
 We assume that you have some basic
 knowledge of shaders and GLSL or GLSL ES.
@@ -55,7 +56,7 @@ See \ref lua_api_main_load_settings "sol.main.load_settings()".
 \subsection lua_api_shader_overview_drawables Shader on drawable
 
 Shaders can also alter how drawables are put to the screen.
-See \ref lua_api_drawable_set_shader "drawable:set_shader()" 
+See \ref lua_api_drawable_set_shader "drawable:set_shader()"
 
 \subsection lua_api_shader_overview_built_in_variables Built-in attributes and uniforms
 
@@ -73,7 +74,7 @@ as input:
 - <tt>attribute vec2 sol_tex_coord</tt>: Texture coordinates of the
   current vertex
   (same as \c gl_MultiTexCoord0 in old GLSL versions).
-- <tt>attribute vec4 sol_color</tt>: Color of the vertex 
+- <tt>attribute vec4 sol_color</tt>: Color of the vertex
 
 The following uniforms
 are automatically passed as input if they are declared
@@ -226,7 +227,8 @@ Returns the name of the vertex shader file of this shader program.
 
 Returns the name of the fragment shader file of this shader program.
 - Return value (string): The fragment shader file name,
-  relative to the \c "shaders" directory.
+  relative to the \c "shaders" directory,
+  or \c nil if no fragment shader file was set.
 
 \subsection lua_api_shader_set_uniform shader:set_uniform(uniform_name, value)
 
@@ -266,4 +268,3 @@ does nothing.
   want the update the shader with the new value.
 
 */
-

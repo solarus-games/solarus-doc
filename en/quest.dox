@@ -87,6 +87,10 @@ of a quest and the syntax of each file.
 - \c entities/: contains all custom entity Lua scripts.
   - \ref lua_api_custom_entity "entities/xx.lua": Lua script that defines the
     properties and the behavior of the custom entity model \c "xx".
+- \c shaders/: contain all shaders and their description files.
+  - \subpage quest_shader_data_file "shaders/xx.dat": description file of
+    shader program \c "xx".
+  - \c shaders/\asterisk.glsl: Vertex shaders and fragment shaders in GLSL or
+    GLSL ES language.
 
 */
-
