@@ -74,6 +74,20 @@ when you call
     without degrading its content.<br>
     <tt>dstRGB = srcRGB * dstRGB</tt>
 
+
+\subsection lua_api_drawable_get_opacity drawable:get_opacity()
+
+Returns the opacity of this drawable.
+- Return value (integer): The opacity: \c 0 (transparent) to \c 255 (opaque).
+
+\subsection lua_api_drawable_set_opacity drawable:set_opacity(opacity)
+
+Sets the opacity of this drawable.
+
+All drawables are initially opaque.
+- \c opacity (integer): The opacity: \c 0 (transparent) to \c 255 (opaque).
+
+
 \subsection lua_api_drawable_get_shader drawable:get_shader()
 
 Get the shader applied to this object.
