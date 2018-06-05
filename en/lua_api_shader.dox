@@ -102,9 +102,8 @@ in a vertex shader or in a fragment shader:
 
 Here is a shader program that does nothing special:
 it just scales the input texture to fit the window,
-just like when no shader is set. Note that <tt>\#version 100</tt> tells
-the GLSL compiler to treat this shader as GLSL ES. It ensure that this
-shader works on every platform.
+just like when no shader is set. Note that <tt>#version 100</tt> tells
+glsl compiler to treat this shader as GLSL ES.
 
 \verbatim
 // Vertex shader:
@@ -165,9 +164,6 @@ and the shader language used is some version of GLSL.
 On mobile platforms, OpenGL ES and GLSL ES are normally used instead.
 
 For maximum portability, there are three possible approaches:
-- Write every shader in GLSL ES 1.0 using <tt>\#version 100</tt> which should
-  be supported on every platform. This is a low version but still modern and
-  powerful.
 - Shaders can be written carefully to make sure that they work
   with both GLSL and GLSL ES.
   This requires using a lot of portability macros because there are some
