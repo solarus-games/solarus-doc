@@ -16,7 +16,7 @@ Most of the data types defined in the C++ engine (like
 \ref lua_api_sprite "sprites",
 \ref lua_api_entity "map entities",
 \ref lua_api_movement "movements",
-\ref lua_api_game "savagames", etc.)
+\ref lua_api_game "savegames", etc.)
 are exported as Lua types in the scripting API of Solarus.
 We give here the full reference of these types and the functions available
 for each type.
