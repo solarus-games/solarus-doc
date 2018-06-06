@@ -102,7 +102,7 @@ in a vertex shader or in a fragment shader:
 
 Here is a shader program that does nothing special:
 it just scales the input texture to fit the window,
-just like when no shader is set. Note that <tt>#version 100</tt> tells
+just like when no shader is set. Note that <tt>\#version 100</tt> tells
 glsl compiler to treat this shader as GLSL ES.
 
 \verbatim
