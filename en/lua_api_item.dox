@@ -113,6 +113,10 @@ This is typically used for items like the bow and the counter of bombs.
 - Return value (string): The savegame variable that should store the possessed
   amount of this item, or \c nil to make this item have no associated amount.
 
+\subsection lua_api_item_is_being_used item:is_being_used()
+
+Returns whether the item is currently being used somehow.
+
 \subsection lua_api_item_is_obtainable item:is_obtainable()
 
 Returns whether the player is allowed to obtain this item.
